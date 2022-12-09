@@ -1,4 +1,4 @@
-/// {@template enhanced}
+/// {@template typeset}
 /// This supports the input from backend to be formatted with different formats.
 /// As seen in WhatsApp, Bold, Italic, Underline
 /// {@endtemplate}
@@ -55,11 +55,11 @@ import 'package:flutter/widgets.dart';
 //The space complexity of the code is also O(n) because the code creates a
 //new list of text spans, which has the same length as the input text.
 
-class Enhanced extends StatelessWidget {
+class TypeSet extends StatelessWidget {
   ///[text] is required field
   ///[style] is not required and nullable
 
-  const Enhanced({super.key, required this.text, this.style});
+  const TypeSet({super.key, required this.text, this.style});
 
   ///[text] is the text that will be formatted
 

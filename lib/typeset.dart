@@ -1,4 +1,4 @@
 /// This supports the input from backend to be formatted with different formatters
-library enhanced;
+library typeset;
 
-export 'src/enhanced.dart';
+export 'src/typeset.dart';

@@ -3,7 +3,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Enhanced', () {
+  group('typeset', () {
     test('can be instantiated', () {});
   });
 }
