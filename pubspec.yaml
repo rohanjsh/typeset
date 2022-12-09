@@ -1,6 +1,6 @@
 name: typeset
 description: This supports the input from backend to be formatted with different formatters
-version: 0.1.0+1
+version: 0.1.0+2
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
