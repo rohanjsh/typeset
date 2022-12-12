@@ -1,6 +1,6 @@
 name: typeset
 description: This supports the input from backend to be formatted with different formatters
-version: 0.1.0+3
+version: 0.1.0+4
 repository: https://github.com/rohanjsh/typeset/
 
 environment:
