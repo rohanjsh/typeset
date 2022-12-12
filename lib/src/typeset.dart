@@ -70,7 +70,6 @@ class TypeSet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final newText = text;
     // Define a regular expression that matches the
     //bold, italic, and underline markers
     final regex = RegExp(r'([*_~])(.*?)\1');
@@ -80,14 +79,14 @@ class TypeSet extends StatelessWidget {
 
     // Find all matches in the text
     final matches = regex.allMatches(
-      newText,
+      text,
     );
 
     // Iterate over the matches
     var lastMatchEnd = 0;
     for (final match in matches) {
       // Get the text that comes before the matched text
-      final prefix = newText.substring(lastMatchEnd, match.start);
+      final prefix = text.substring(lastMatchEnd, match.start);
       // Add a span for the text that comes before the matched text
       if (prefix.isNotEmpty) {
         spans.add(
@@ -120,10 +119,10 @@ class TypeSet extends StatelessWidget {
       lastMatchEnd = match.end;
     }
     // Add a span for any remaining text
-    if (lastMatchEnd < newText.length) {
+    if (lastMatchEnd < text.length) {
       spans.add(
         TextSpan(
-          text: newText.substring(lastMatchEnd),
+          text: text.substring(lastMatchEnd),
         ),
       );
     }

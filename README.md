@@ -1,8 +1,20 @@
 # TypeSet
 
-[![License: MIT][license_badge]][license_link]
+[![License: MIT][license_badge]][license_link] 
+[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
+[![pub package][pub_badge]][pub_link]
+[![Coverage Status](https://coveralls.io/repos/github/rohanjsh/typeset/badge.svg?branch=main)](https://coveralls.io/github/rohanjsh/typeset?branch=main)
 
-This supports the input from backend to be formatted with different formatters
+This supports the input from backend to be formatted with different formatters.
+Text style that will support bold, italic and underline text coming from the server
+The implementation will be same as we see on WhatsApp.
+
+i.e.
+1. Bold Text will be wrapped in \*asterisk\*
+2. Italic Text will be wrapped in \_underscore\_
+3. Underline Text will be wrapped in \~tilde\~
+4. Bold, Italic and Underline Text will be wrapped in \*asterisk\* \_underscore\_ \~tilde\~
+
 
 ## Installation 💻
 
@@ -23,6 +35,34 @@ flutter packages get
 
 ---
 
+
+Usage
+
+```dart
+import 'package:typeset/typeset.dart';
+
+TypeSet('Hello, *World!*');
+// returns 'World' with bold text
+
+TypeSet('Hello, _World_!');
+// returns 'World' with italic text
+
+TypeSet('Hello, ~World~!');
+// returns 'World' with underline text
+
+TypeSet('*Hello*, _World_ ~World~!');
+// returns 'Hello' with bold text, 'World' with italic text and 'World' with underline text
+
+//TypeSet also has a style property which can be used to style the text
+TypeSet('Hello, *World!*', style: TextStyle(color: Colors.red));
+// returns 'World' with bold text and red color
+```
+
+
+## Features and bugs
+
+Please file feature requests and bugs at the [issue tracker][tracker].
+
 [flutter_install_link]: https://docs.flutter.dev/get-started/install
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
@@ -38,3 +78,8 @@ flutter packages get
 [very_good_ventures_link_light]: https://verygood.ventures#gh-light-mode-only
 [very_good_ventures_link_dark]: https://verygood.ventures#gh-dark-mode-only
 [very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows
+[tracker]: https://github.com/rohanjsh/typeset/issues
+[pub_badge]: https://img.shields.io/pub/v/very_good_performance.svg
+[pub_link]: https://pub.dev/packages/typeset
+
+

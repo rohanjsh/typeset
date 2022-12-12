@@ -1,11 +1,11 @@
 name: typeset
 description: This supports the input from backend to be formatted with different formatters
-version: 0.1.0+4
+version: 0.1.0+7
 repository: https://github.com/rohanjsh/typeset/
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
-  flutter: 3.3.7
+  flutter: ">=3.3.7"
 
 dependencies:
   flutter:
