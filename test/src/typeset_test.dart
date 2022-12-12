@@ -124,6 +124,7 @@ void main() {
           _TypeSetTest(
             title: 'Hello, *World* _World_ ~World~!',
             key: Key('boldItalicUnderlineText'),
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         );
 
