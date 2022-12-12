@@ -3,7 +3,7 @@
 [![License: MIT][license_badge]][license_link] 
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
-[![Coverage Status](coverage_badge.svg)
+[![Coverage Status](./coverage_badge.svg)
 
 This supports the input from backend to be formatted with different formatters.
 Text style that will support bold, italic and underline text coming from the server
