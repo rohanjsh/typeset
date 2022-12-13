@@ -22,7 +22,7 @@ class __TypeSetTestState extends State<_TypeSetTest> {
       home: Scaffold(
         body: Center(
           child: TypeSet(
-            text: widget.title,
+            inputText: widget.title,
             style: widget.style,
           ),
         ),
@@ -32,108 +32,111 @@ class __TypeSetTestState extends State<_TypeSetTest> {
 }
 
 void main() {
-  group('Tests for TypeSet Widget', () {
-    testWidgets(
-      'TypeSet widget displays normal text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(title: 'Hello World'),
-        );
+  group(
+    'Tests for TypeSet Widget',
+    () {
+      testWidgets(
+        'TypeSet widget displays normal text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(title: 'Hello World'),
+          );
 
-        expect(
-          find.text(
-            'Hello World',
-            findRichText: true,
-          ),
-          findsOneWidget,
-        );
-      },
-    );
+          expect(
+            find.text(
+              'Hello World',
+              findRichText: true,
+            ),
+            findsOneWidget,
+          );
+        },
+      );
 
-    testWidgets(
-      'TypeSet widget displays bold text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(
-            title: 'Hello, *World!*',
-            key: Key('boldText'),
-          ),
-        );
-        final boldText = find.byKey(
-          Key('boldText'),
-        );
-        expect(
-          boldText,
-          findsOneWidget,
-        );
-      },
-    );
+      testWidgets(
+        'TypeSet widget displays bold text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(
+              title: 'Hello, *World!*',
+              key: Key('boldText'),
+            ),
+          );
+          final boldText = find.byKey(
+            Key('boldText'),
+          );
+          expect(
+            boldText,
+            findsOneWidget,
+          );
+        },
+      );
 
-    testWidgets(
-      'TypeSet widget displays italic text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(
-            title: 'Hello, _World_!',
-            key: Key('italicText'),
-          ),
-        );
-        final italicText = find.byKey(
-          Key('italicText'),
-        );
-        expect(italicText, findsOneWidget);
-      },
-    );
+      testWidgets(
+        'TypeSet widget displays italic text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(
+              title: 'Hello, _World_!',
+              key: Key('italicText'),
+            ),
+          );
+          final italicText = find.byKey(
+            Key('italicText'),
+          );
+          expect(italicText, findsOneWidget);
+        },
+      );
 
-    testWidgets(
-      'TypeSet widget displays underline text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(
-            title: 'Hello, ~World~!',
-            key: Key('underlineText'),
-          ),
-        );
-        final underlineText = find.byKey(
-          Key('underlineText'),
-        );
-        expect(underlineText, findsOneWidget);
-      },
-    );
+      testWidgets(
+        'TypeSet widget displays underline text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(
+              title: 'Hello, ~World~!',
+              key: Key('underlineText'),
+            ),
+          );
+          final underlineText = find.byKey(
+            Key('underlineText'),
+          );
+          expect(underlineText, findsOneWidget);
+        },
+      );
 
-    testWidgets(
-      'TypeSet widget displays underline text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(
-            title: 'Hello, -World-!',
-            key: Key('underlineText'),
-          ),
-        );
-        final underlineText = find.byKey(
-          Key('underlineText'),
-        );
-        expect(underlineText, findsOneWidget);
-      },
-    );
+      testWidgets(
+        'TypeSet widget displays underline text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(
+              title: 'Hello, -World-!',
+              key: Key('underlineText'),
+            ),
+          );
+          final underlineText = find.byKey(
+            Key('underlineText'),
+          );
+          expect(underlineText, findsOneWidget);
+        },
+      );
 
-    testWidgets(
-      'TypeSet widget displays bold, italic, and underline text correctly',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(
-          _TypeSetTest(
-            title: 'Hello, *World* _World_ ~World~!',
-            key: Key('boldItalicUnderlineText'),
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        );
+      testWidgets(
+        'TypeSet widget displays bold, italic, and underline text correctly',
+        (WidgetTester tester) async {
+          await tester.pumpWidget(
+            _TypeSetTest(
+              title: 'Hello, *World* _World_ ~World~!',
+              key: Key('boldItalicUnderlineText'),
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+          );
 
-        final boldItalicUnderlineText = find.byKey(
-          Key('boldItalicUnderlineText'),
-        );
+          final boldItalicUnderlineText = find.byKey(
+            Key('boldItalicUnderlineText'),
+          );
 
-        expect(boldItalicUnderlineText, findsOneWidget);
-      },
-    );
-  });
+          expect(boldItalicUnderlineText, findsOneWidget);
+        },
+      );
+    },
+  );
 }
