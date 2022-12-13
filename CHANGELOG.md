@@ -1,3 +1,3 @@
-# 0.1.0+10
+# 0.1.0+11
 
 - feat: WhatsApp like formatting for you all!🎉
