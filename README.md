@@ -6,14 +6,14 @@
 ![Coverage Badge](coverage_badge.svg)
 
 This supports the input from backend to be formatted with different formatters.
-Text style that will support bold, italic and underline text coming from the server
+Text style that will support bold, italic and underline text coming from the server.
 The implementation will be same as we see on WhatsApp.
 
 i.e.
 1. Bold Text will be wrapped in \*asterisk\*
 2. Italic Text will be wrapped in \_underscore\_
 3. Underline Text will be wrapped in \~tilde\~
-4. Bold, Italic and Underline Text will be wrapped in \*asterisk\* \_underscore\_ \~tilde\~
+4. Bold, Italic and Underline Text will be wrapped in \*asterisk\* \_underscore\_ \~tilt\~
 
 
 ### Preview

@@ -145,7 +145,7 @@ class TypeSetDisplay extends StatelessWidget {
         //TypeSet accepts text and style as parameters
         //style is optional
         TypeSet(
-          text: formattedText,
+          inputText: formattedText,
           style: const TextStyle(
             fontSize: 16,
             color: Colors.black,
