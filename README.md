@@ -16,6 +16,11 @@ i.e.
 4. Bold, Italic and Underline Text will be wrapped in \*asterisk\* \_underscore\_ \~tilde\~
 
 
+### Preview
+<img width="488" alt="Screenshot 2022-12-13 at 11 56 28" src="https://user-images.githubusercontent.com/35066779/207242541-c8bfd00e-0b81-47ce-9bf3-b280e3d63162.png">
+
+
+
 ## Installation 💻
 
 **❗ In order to start using typeset you must have the [Flutter SDK][flutter_install_link] installed on your machine.**
