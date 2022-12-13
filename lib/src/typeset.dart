@@ -56,17 +56,21 @@ import 'package:flutter/widgets.dart';
 //new list of text spans, which has the same length as the input text.
 
 class TypeSet extends StatelessWidget {
-  ///[text] is required field
+  ///[inputText] is required field
   ///[style] is not required and nullable
 
-  const TypeSet({super.key, required this.text, this.style});
-
-  ///[text] is the text that will be formatted
-
-  final String text;
+  const TypeSet({
+    super.key,
+    required this.inputText,
+    this.style,
+  });
 
   ///[style] is the style of the text
   final TextStyle? style;
+
+  ///[inputText] is the text that will be formatted
+
+  final String inputText;
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +83,14 @@ class TypeSet extends StatelessWidget {
 
     // Find all matches in the text
     final matches = regex.allMatches(
-      text,
+      inputText,
     );
 
     // Iterate over the matches
     var lastMatchEnd = 0;
     for (final match in matches) {
       // Get the text that comes before the matched text
-      final prefix = text.substring(lastMatchEnd, match.start);
+      final prefix = inputText.substring(lastMatchEnd, match.start);
       // Add a span for the text that comes before the matched text
       if (prefix.isNotEmpty) {
         spans.add(
@@ -111,7 +115,10 @@ class TypeSet extends StatelessWidget {
 
       // Add a span for the matched text
       spans.add(
-        TextSpan(text: match.group(2), style: formattedStyle),
+        TextSpan(
+          text: match.group(2),
+          style: formattedStyle,
+        ),
       );
       // Update the text to remove the matched text and the formatting markers
       //from it so that we can continue searching
@@ -119,10 +126,12 @@ class TypeSet extends StatelessWidget {
       lastMatchEnd = match.end;
     }
     // Add a span for any remaining text
-    if (lastMatchEnd < text.length) {
+    if (lastMatchEnd < inputText.length) {
       spans.add(
         TextSpan(
-          text: text.substring(lastMatchEnd),
+          text: inputText.substring(
+            lastMatchEnd,
+          ),
         ),
       );
     }
