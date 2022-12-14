@@ -3,7 +3,7 @@
 [![License: MIT][license_badge]][license_link] 
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
-[![Coverage Badge][coverage_badge.svg]][https://github.com/rohanjsh/typeset/]
+![coverage][coverage_badge]
 
 This supports the input from backend to be formatted with different formatters.
 Text style that will support bold, italic and underline text coming from the server.
@@ -86,5 +86,6 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [tracker]: https://github.com/rohanjsh/typeset/issues
 [pub_badge]: https://img.shields.io/pub/v/typeset.svg
 [pub_link]: https://pub.dev/packages/typeset
+[coverage_badge]: https://img.shields.io/badge/coverage-100%25-green.svg
 
 
