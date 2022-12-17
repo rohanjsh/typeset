@@ -4,7 +4,6 @@
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
 ![coverage][coverage_badge]
-![build][build_badge]
 
 
 This supports the input from backend to be formatted with different formatters.
