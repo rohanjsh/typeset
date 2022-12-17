@@ -4,6 +4,7 @@
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
 ![coverage][coverage_badge]
+![pub points][pub_points_badge]
 
 
 This supports the input from backend to be formatted with different formatters.
@@ -89,5 +90,6 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [pub_link]: https://pub.dev/packages/typeset
 [coverage_badge]: https://img.shields.io/badge/coverage-100%25-green.svg
 [build_badge]: https://img.shields.io/github/workflow/status/rohanjsh/typeset/ci.svg
+[pub_points_badge]: https://img.shields.io/pub/points/typeset
 
 
