@@ -1,6 +1,6 @@
 name: typeset
-description: WhatsApp like text formatting for you!
-version: 0.1.0+15
+description: WhatsApp like text formatting for you! -> Bold, Italic, Underline
+version: 0.1.0+16
 repository: https://github.com/rohanjsh/typeset/
 
 environment:
