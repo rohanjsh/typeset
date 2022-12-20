@@ -1,11 +1,9 @@
 /// {@template typeset}
-/// This supports the input from backend to be formatted with different formats.
-/// As seen in WhatsApp, Bold, Italic, Underline
+/// Whatsapp like text formatting for you!
 /// {@endtemplate}
 import 'package:flutter/widgets.dart';
 //Text style that will support bold, italic and underline
-//text coming from the server
-//The implementation will be same as we see on WhatsApp
+//The usage is same as we see on WhatsApp
 
 //i.e.
 //1. Bold Text will be wrapped in *asterisk*

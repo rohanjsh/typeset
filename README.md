@@ -6,10 +6,9 @@
 ![coverage][coverage_badge]
 ![pub points][pub_points_badge]
 
-
-This supports the input from backend to be formatted with different formatters.
-Text style that will support bold, italic and underline text coming from the server.
-The implementation will be same as we see on WhatsApp.
+Whatsapp like text formatting for you!!
+This supports the input to be formatted with different formatters.
+Text style that will support bold, italic and underline text.
 
 i.e.
 1. Bold Text will be wrapped in \*asterisk\*
