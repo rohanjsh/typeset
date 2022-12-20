@@ -1,6 +1,5 @@
 # TypeSet
 
-[![License: MIT][license_badge]][license_link] 
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
 ![coverage][coverage_badge]
@@ -71,8 +70,6 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 [flutter_install_link]: https://docs.flutter.dev/get-started/install
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license_link]: https://opensource.org/licenses/MIT
 [logo_black]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png#gh-light-mode-only
 [logo_white]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_white.png#gh-dark-mode-only
 [mason_link]: https://github.com/felangel/mason
