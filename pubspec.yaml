@@ -1,6 +1,6 @@
 name: typeset
-description: This supports the input from backend to be formatted with different formatters
-version: 0.1.0+13
+description: WhatsApp like text formatting for you!
+version: 0.1.0+15
 repository: https://github.com/rohanjsh/typeset/
 
 environment:

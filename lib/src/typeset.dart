@@ -1,5 +1,5 @@
 /// {@template typeset}
-/// Whatsapp like text formatting for you!
+/// WhatsApp like text formatting for you!
 /// {@endtemplate}
 import 'package:flutter/widgets.dart';
 //Text style that will support bold, italic and underline
