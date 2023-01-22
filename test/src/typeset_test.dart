@@ -5,25 +5,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:typeset/typeset.dart';
 
 //example widget for testing
-class _TypeSetTest extends StatefulWidget {
-  const _TypeSetTest({super.key, required this.title, this.style});
+class _TypeSetTest extends StatelessWidget {
+  const _TypeSetTest({
+    super.key,
+    this.title,
+    this.style,
+    this.titleForExt,
+  });
 
-  final String title;
+  final String? title;
   final TextStyle? style;
+  final String? titleForExt;
 
-  @override
-  State<_TypeSetTest> createState() => __TypeSetTestState();
-}
-
-class __TypeSetTestState extends State<_TypeSetTest> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: TypeSet(
-            inputText: widget.title,
-            style: widget.style,
+          child: Column(
+            children: [
+              if (title != null)
+                TypeSet(
+                  inputText: title!,
+                  style: style,
+                ),
+              if (titleForExt != null)
+                titleForExt!.typeset(
+                  style: style,
+                ),
+            ],
           ),
         ),
       ),
@@ -139,4 +149,30 @@ void main() {
       );
     },
   );
+
+  group('Tests for TypeSetExtension', () {
+    testWidgets(
+      'TypeSet widget displays through extension',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          _TypeSetTest(
+            titleForExt: 'Hello World',
+            key: Key(
+              'extensionTest',
+            ),
+          ),
+        );
+
+        final extensionTest = find.byKey(
+          Key(
+            'extensionTest',
+          ),
+        );
+        expect(
+          extensionTest,
+          findsOneWidget,
+        );
+      },
+    );
+  });
 }
