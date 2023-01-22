@@ -3,3 +3,4 @@
 library typeset;
 
 export 'src/typeset.dart';
+export 'src/typeset_ext.dart';
