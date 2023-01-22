@@ -29,7 +29,7 @@ Add `typeset` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  typeset:
+  typeset: #latest
 ```
 
 Install it:
@@ -61,6 +61,14 @@ TypeSet(inputText: '*Hello*, _World_ ~World~!');
 //TypeSet also has a style property which can be used to style the text
 TypeSet(inputText: 'Hello, *World!*', style: TextStyle(color: Colors.red));
 // returns 'World' with bold text and red color
+
+//OR
+
+//use the simple extension
+'Hello, *World!*'.typeset();
+//this also comes with style
+'Hello, *World!*'.typeset(style: TextStyle(color: Colors.red,),);
+
 ```
 
 
