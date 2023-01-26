@@ -1,6 +1,9 @@
 
 # Changelog
 
+# 0.1.0+20
+- feat: added property `textAlign`🎉
+
 # 0.1.0+19
 
 - feat: added extension method for typeset 🎉

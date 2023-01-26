@@ -56,11 +56,13 @@ import 'package:flutter/widgets.dart';
 class TypeSet extends StatelessWidget {
   ///[inputText] is required field
   ///[style] is not required and nullable
+  ///[textAlign] is not required and default value is [TextAlign.start]
 
   const TypeSet({
     super.key,
     required this.inputText,
     this.style,
+    this.textAlign = TextAlign.start,
   });
 
   ///[style] is the style of the text
@@ -69,6 +71,10 @@ class TypeSet extends StatelessWidget {
   ///[inputText] is the text that will be formatted
 
   final String inputText;
+
+  ///[textAlign] is the alignment of the text
+
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +141,7 @@ class TypeSet extends StatelessWidget {
     }
     // Use the `RichText` widget to display the text with the correct styles
     return RichText(
+      textAlign: textAlign,
       text: TextSpan(
         style: style ?? DefaultTextStyle.of(context).style,
         children: spans,

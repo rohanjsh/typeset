@@ -6,10 +6,12 @@ extension TypeSetExtension on String {
   ///[typeset] method to format the text with different styles
   TypeSet typeset({
     TextStyle? style,
+    TextAlign textAlign = TextAlign.start,
   }) {
     return TypeSet(
       inputText: this,
       style: style,
+      textAlign: textAlign,
     );
   }
 }
