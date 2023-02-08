@@ -1,6 +1,9 @@
 
 # Changelog
 
+# 0.1.0+21
+- docs: license to Apache 2.0
+
 # 0.1.0+20
 - feat: added property `textAlign`🎉
 
