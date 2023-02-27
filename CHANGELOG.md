@@ -1,6 +1,8 @@
 
 # Changelog
 
+# 0.1.0+22
+- chore: update screenshot
 # 0.1.0+21
 - docs: license to Apache 2.0
 
