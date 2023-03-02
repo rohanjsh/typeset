@@ -80,7 +80,7 @@ class TypeSet extends StatelessWidget {
   Widget build(BuildContext context) {
     // Define a regular expression that matches the
     //bold, italic, and underline markers
-    final regex = RegExp(r'([*_~])(.*?)\1');
+    final regex = RegExp(r'([*_~%]{1,2})(.*?)\1');
 
     // Split the text into separate spans based on the formatting markers
     final spans = <TextSpan>[];
@@ -104,6 +104,7 @@ class TypeSet extends StatelessWidget {
       // Determine the style for the matched text
       TextStyle? formattedStyle;
       switch (match.group(1)) {
+        case '%%':
         case '*':
           formattedStyle = const TextStyle(fontWeight: FontWeight.bold);
           break;

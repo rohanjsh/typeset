@@ -106,8 +106,8 @@ Hello, ~World!~
                     height: 20,
                   ),
                   TypeSetDisplay(
-                    text: "'*Hello*, _World!_, ~World!~' will be:",
-                    formattedText: '*Hello*, _World!_, ~World!~',
+                    text: "Make asterisk bold -> %%9*********7%%",
+                    formattedText: 'Make asterisk bold -> %%9*********7%%',
                   ),
                   SizedBox(
                     height: 20,
