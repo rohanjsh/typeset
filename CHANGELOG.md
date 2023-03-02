@@ -1,6 +1,8 @@
 
 # Changelog
 
+# 0.1.0+23
+- feat: make asterisk bold
 # 0.1.0+22
 - chore: update screenshot
 # 0.1.0+21
