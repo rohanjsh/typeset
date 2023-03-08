@@ -29,8 +29,7 @@ class TypeSetDemo extends StatelessWidget {
         title: const Text('TypeSet Demo'),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             const SizedBox(
               height: 22,
