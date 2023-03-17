@@ -197,7 +197,5 @@ void main() {
       expect(linkSpan.style?.decoration, TextDecoration.underline);
       expect(linkSpan.recognizer, isA<TapGestureRecognizer>());
     });
-
-    //launch url on tap of link
   });
 }
