@@ -72,7 +72,15 @@ Hello, /World!/
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [TypeSet(inputText: '[Hello|hello]')],
+                children: const [
+                  TypeSet(
+                    inputText:
+                        '*hello* [hello|https://google.com]  _hello_ ~hello~ //hello// \n `(int,int){return}`',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                ],
               ),
             )
           ],
@@ -105,9 +113,6 @@ class TypeSetDisplay extends StatelessWidget {
         //style and textAlign is optional
         TypeSet(
           inputText: formattedText,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
         ),
       ],
     );

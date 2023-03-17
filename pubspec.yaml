@@ -13,13 +13,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^4.0.3
   url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   very_good_analysis: ">=3.1.0 <5.0.0"
-
- 
 
 

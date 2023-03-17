@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///[TypesetParser] is a class that parses a string of typeset code into
@@ -17,6 +18,9 @@ class TypesetParser {
 
   ///[kUnderlineChar] is the character that will be used to wrap underline text
   static const kUnderlineChar = '//';
+
+  ///[kMonoSpaceChar] is the character that will be used to wrap monospace text
+  static const kMonoSpaceChar = '`';
 
   ///[kLinkStartChar] is the character that will be used to wrap link text start
   static const kLinkStartChar = '[';
@@ -71,13 +75,17 @@ class TypesetParser {
   }
 
   static TextSpan _getLinkSpan(String word) {
+    if (word.length < 3 || !word.startsWith('[') || !word.endsWith(']')) {
+      // The word is not a valid link, return a plain text span.
+      return TextSpan(text: word);
+    }
     final linkParts =
         word.substring(1, word.length - 1).split(kLinkUrlSeparator);
     final linkText = linkParts[0];
     final linkUrl = linkParts[1];
 
     return TextSpan(
-      text: '$linkText$kSpace',
+      text: linkText,
       style: const TextStyle(
         color: Colors.blue,
         decoration: TextDecoration.underline,
@@ -108,6 +116,17 @@ class TypesetParser {
     final hasUnderline = word.startsWith(kUnderlineChar) &&
         word.endsWith(kUnderlineChar) &&
         word.length > 3;
+    final hasMonoSpace = word.startsWith(kMonoSpaceChar) &&
+        word.endsWith(kMonoSpaceChar) &&
+        word.length > 1;
+
+    if (hasMonoSpace) {
+      return GoogleFonts.sourceCodePro(
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.normal,
+        ),
+      );
+    }
 
     return TextStyle(
       fontWeight: hasBold ? FontWeight.bold : null,
