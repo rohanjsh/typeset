@@ -3,24 +3,18 @@
 /// {@endtemplate}
 import 'package:flutter/widgets.dart';
 import 'package:typeset/src/typeset_parser.dart';
-//Text style that will support bold, italic, strikethrough and underline
-//The usage is same as we see on WhatsApp
 
-/// i.e.
-/// 1. Bold Text will be wrapped in *asterisk*
-/// 2. Italic Text will be wrapped in _underscore_
-/// 3. Underline Text will be wrapped in  //double forward slash//
-/// 4. Strikethrough Text will be wrapped in ~tilde~
+/// Whatsapp like formatting with some addons!!
+/// (input looks like this)
 
-/// Example:
-// Hello, *World!*
-/// Hello, _World!_
-/// Hello, ~World!~
-/// Hello, /World!/
+/// → Hello, *World!*          <Bold>
+/// → Hello, _World!_          <Italic>
+/// → Hello, ~World!~         <Strikethrough>
+/// → Hello, //World!//         <Underline>
+/// → Hello, `World!`          <Monospace>
+/// → [google.com|https://google.com]   <Link>
 class TypeSet extends StatelessWidget {
   ///[inputText] is required field
-  ///[style] is not required and nullable
-  ///[textAlign] is not required and default value is [TextAlign.start]
 
   const TypeSet({
     super.key,

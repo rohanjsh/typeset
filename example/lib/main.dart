@@ -34,37 +34,6 @@ class TypeSetDemo extends StatelessWidget {
             const SizedBox(
               height: 22,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 22.0,
-              ),
-              child: Text(
-                '''
-A simple widget to display text with whatsapp like formatting
-Text style that will support bold, italic, strikethrough and underline text coming from the server
-The implementation will be same as we see on WhatsApp.
-
-i.e.
-1. Bold Text will be wrapped in *asterisk*
-2. Italic Text will be wrapped in _underscore_
-3. Underline Text will be wrapped in /forward slash/
-4. Strikethrough Text will be wrapped in ~tilde~
-
-Example:
-Hello, *World!*
-Hello, _World!_
-Hello, ~World!~
-Hello, /World!/
-''',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const Divider(
-              thickness: 1.4,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 22.0,
@@ -73,11 +42,74 @@ Hello, /World!/
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  TypeSet(
-                    inputText:
-                        '*hello* [hello|https://google.com]  _hello_ ~hello~ //hello// \n `(int,int){return}`',
+                  Text(
+                    '''
+Whatsapp like formatting with some addons!!
+(input looks like this)
+
+→ Hello, *World!*          <Bold>
+→ Hello, _World!_          <Italic>
+→ Hello, ~World!~         <Strikethrough>
+→ Hello, //World!//         <Underline>
+→ Hello, `World!`          <Monospace>
+→ [google.com|https://google.com]   <Link>
+''',
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'bold:\n→ *Bold* *Text*',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'italic:\n→ _Italic_ _Text_',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'underline:\n→ //Underline// //Text//',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'strikethrough:\n→ ~Strikethrough~ ~Text~',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'monospace:\n→ `monospace` `text`',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'link:\n→ [google.com|https://google.com]',
+                    style: TextStyle(
+                      fontSize: 24,
                     ),
                   ),
                 ],
