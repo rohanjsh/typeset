@@ -1,7 +1,7 @@
 
 # Changelog
 
-
+# 1.0.0+2
 # 1.0.0+1
 🎉🎉🎉 It's time to celebrate! Our first stable release is finally here! 🎉🎉🎉
 
@@ -10,19 +10,13 @@
 - Whatsapp like formatting with some addons!!
 (input looks something like this)
 
-🌟 Usage 🌟
-BOLD
-→ Hello, \*World!*
-ITALIC
-→ Hello,  \_World!_ 
-STRIKETHROUGH
-→ Hello, \~World!~
-UNDERLINE
-→ Hello, //World!// 
-MONOSPACE
-→ Hello, \`World!`
-LINK
-→ [google.com|https://google.com] &nbsp;
+**Usage**
+- BOLD → Hello, \*World!*
+- ITALIC → Hello,  \_World!_ 
+- STRIKETHROUGH → Hello, \~World!~
+- UNDERLINE → Hello, //World!// 
+- MONOSPACE → Hello, \`World!`
+- LINK → [google.com|https://google.com]
 
 Thanks for choosing our text formatting widget for all your formatting needs. We hope these updates make your experience even more enjoyable! 🤗
 
