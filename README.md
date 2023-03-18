@@ -2,32 +2,23 @@
 
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
-![coverage][coverage_badge]
 ![pub points][pub_points_badge]
 
 - Make text formatting backend driven (if needed) with one widget!!
 - Whatsapp like formatting with some addons!!
 (input looks something like this)
 
-🌟 Usage 🌟
-BOLD
-→ Hello, \*World!*
-ITALIC
-→ Hello,  \_World!_ 
-STRIKETHROUGH
-→ Hello, \~World!~
-UNDERLINE
-→ Hello, //World!// 
-MONOSPACE
-→ Hello, \`World!`
-LINK
-→ [google.com|https://google.com] &nbsp;
+**Usage**
+- BOLD → Hello, \*World!*
+- ITALIC → Hello,  \_World!_ 
+- STRIKETHROUGH → Hello, \~World!~
+- UNDERLINE → Hello, //World!// 
+- MONOSPACE → Hello, \`World!`
+- LINK → [google.com|https://google.com]
 
 
 ### Preview
 <img width="488" alt="Screenshot 2022-12-13 at 11 56 28" src="/preview.png">
-
-
 
 ## Installation 💻
 
