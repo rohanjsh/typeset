@@ -5,19 +5,27 @@
 ![coverage][coverage_badge]
 ![pub points][pub_points_badge]
 
-Whatsapp like text formatting for you!!
-This supports the input to be formatted with different formatters.
-Text style that will support bold, italic and underline text.
+- Make text formatting backend driven (if needed) with one widget!!
+- Whatsapp like formatting with some addons!!
+(input looks something like this)
 
-i.e.
-1. Bold Text will be wrapped in \*asterisk\*
-2. Italic Text will be wrapped in \_underscore\_
-3. Underline Text will be wrapped in \~tilde\~
-4. Bold, Italic and Underline Text will be wrapped in \*asterisk\* \_underscore\_ \~tilt\~
+🌟 Usage 🌟
+BOLD
+→ Hello, \*World!*
+ITALIC
+→ Hello,  \_World!_ 
+STRIKETHROUGH
+→ Hello, \~World!~
+UNDERLINE
+→ Hello, //World!// 
+MONOSPACE
+→ Hello, \`World!`
+LINK
+→ [google.com|https://google.com] &nbsp;
 
 
 ### Preview
-<img width="488" alt="Screenshot 2022-12-13 at 11 56 28" src="https://user-images.githubusercontent.com/35066779/207242541-c8bfd00e-0b81-47ce-9bf3-b280e3d63162.png">
+<img width="488" alt="Screenshot 2022-12-13 at 11 56 28" src="/preview.png">
 
 
 
@@ -41,7 +49,7 @@ flutter packages get
 ---
 
 
-Usage
+🌟 Usage 🌟
 
 ```dart
 import 'package:typeset/typeset.dart';
@@ -49,25 +57,22 @@ import 'package:typeset/typeset.dart';
 TypeSet(inputText: 'Hello, *World!*');
 // returns 'World' with bold text
 
-TypeSet(inputText: 'Hello, _World_!');
+TypeSet(inputText: 'Hello, _World!_');
 // returns 'World' with italic text
 
-TypeSet(inputText: 'Hello, ~World~!');
+TypeSet(inputText: 'Hello, ~World!~');
+// returns 'World' with strikethrough text
+
+TypeSet(inputText: 'Hello //World!//');
 // returns 'World' with underline text
 
-TypeSet(inputText: '*Hello*, _World_ ~World~!');
-// returns 'Hello' with bold text, 'World' with italic text and 'World' with underline text
+TypeSet(inputText: 'Hello, `World!`');
+// returns 'World' with monospace text
 
-//TypeSet also has a style property which can be used to style the text
-TypeSet(inputText: 'Hello, *World!*', style: TextStyle(color: Colors.red));
-// returns 'World' with bold text and red color
+TypeSet(inputText: '[google.com|https://google.com]');
+// returns 'google.com' with link to google.com
 
-//OR
-
-//use the simple extension
-'Hello, *World!*'.typeset();
-//this also comes with style
-'Hello, *World!*'.typeset(style: TextStyle(color: Colors.red,),);
+///TypeSet also has every property which the Text.rich() has, so you can configure accordingly
 
 ```
 
@@ -92,7 +97,7 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [tracker]: https://github.com/rohanjsh/typeset/issues
 [pub_badge]: https://img.shields.io/pub/v/typeset.svg
 [pub_link]: https://pub.dev/packages/typeset
-[coverage_badge]: https://img.shields.io/badge/coverage-100%25-green.svg
+[coverage_badge]: /coverage_badge.svg
 [build_badge]: https://img.shields.io/github/workflow/status/rohanjsh/typeset/ci.svg
 [pub_points_badge]: https://img.shields.io/pub/points/typeset
 
