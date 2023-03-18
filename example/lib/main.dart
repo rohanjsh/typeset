@@ -14,26 +14,24 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       color: Color(0xFF2196F3),
       title: 'TypeSet Demo',
-      home: TypeSetDemo(),
+      home: TypeSetExample(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class TypeSetDemo extends StatelessWidget {
-  const TypeSetDemo({super.key});
+class TypeSetExample extends StatelessWidget {
+  const TypeSetExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TypeSet Demo'),
+        title: const Text('TypeSet example'),
       ),
       body: Center(
         child: ListView(
           children: [
-            const SizedBox(
-              height: 22,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 22.0,
@@ -44,6 +42,8 @@ class TypeSetDemo extends StatelessWidget {
                 children: const [
                   Text(
                     '''
+Make text formatting backend driven (if needed) with one widget!!
+
 Whatsapp like formatting with some addons!!
 (input looks like this)
 
@@ -118,35 +118,6 @@ Whatsapp like formatting with some addons!!
           ],
         ),
       ),
-    );
-  }
-}
-
-class TypeSetDisplay extends StatelessWidget {
-  const TypeSetDisplay({
-    Key? key,
-    required this.text,
-    required this.formattedText,
-  }) : super(key: key);
-
-  final String text;
-  final String formattedText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          text,
-        ),
-
-        ///TypeSet accepts inputText, style and textAlign as parameters
-        //style and textAlign is optional
-        TypeSet(
-          inputText: formattedText,
-        ),
-      ],
     );
   }
 }

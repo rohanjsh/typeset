@@ -4,9 +4,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:typeset/src/typeset_parser.dart';
 
+/// Make text formatting backend driven (if needed) with one widget!!
+///
 /// Whatsapp like formatting with some addons!!
 /// (input looks like this)
-
+///
 /// → Hello, *World!*          <Bold>
 /// → Hello, _World!_          <Italic>
 /// → Hello, ~World!~         <Strikethrough>
