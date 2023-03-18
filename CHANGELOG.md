@@ -1,7 +1,8 @@
 
 # Changelog
 
-# 1.0.0+2
+# 1.0.0+4
+- chore: readme update
 # 1.0.0+1
 🎉🎉🎉 It's time to celebrate! Our first stable release is finally here! 🎉🎉🎉
 
