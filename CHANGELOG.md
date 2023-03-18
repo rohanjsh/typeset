@@ -1,6 +1,31 @@
 
 # Changelog
 
+
+# 1.0.0+1
+🎉🎉🎉 It's time to celebrate! Our first stable release is finally here! 🎉🎉🎉
+
+
+- Make text formatting backend driven (if needed) with one widget!!
+- Whatsapp like formatting with some addons!!
+(input looks something like this)
+
+🌟 Usage 🌟
+BOLD
+→ Hello, \*World!*
+ITALIC
+→ Hello,  \_World!_ 
+STRIKETHROUGH
+→ Hello, \~World!~
+UNDERLINE
+→ Hello, //World!// 
+MONOSPACE
+→ Hello, \`World!`
+LINK
+→ [google.com|https://google.com] &nbsp;
+
+Thanks for choosing our text formatting widget for all your formatting needs. We hope these updates make your experience even more enjoyable! 🤗
+
 # 0.1.0+23
 - feat: make asterisk bold
 # 0.1.0+22

@@ -2,67 +2,38 @@
 /// WhatsApp like text formatting for you!
 /// {@endtemplate}
 import 'package:flutter/widgets.dart';
-//Text style that will support bold, italic and underline
-//The usage is same as we see on WhatsApp
+import 'package:typeset/src/typeset_parser.dart';
 
-//i.e.
-//1. Bold Text will be wrapped in *asterisk*
-//2. Italic Text will be wrapped in _underscore_
-//3. Underline Text will be wrapped in ~tilde~
-//4. Bold, Italic and Underline Text will be
-//wrapped in *asterisk* _underscore_ ~tilde~
-
-///Current Regex
-/// The first part of the regular expression, ([*_~]), is a capture group that
-/// matches any of the three characters: *, _, or ~. This means that the
-/// regular expression will match any of these three characters at the
-/// beginning of the string.
+/// Make text formatting backend driven (if needed) with one widget!!
 ///
+/// Whatsapp like formatting with some addons!!
+/// (input looks like this)
 ///
-///
-/// The second part of the regular expression, (.*?), is another capture group
-/// that matches any character (except a newline) zero or more times.
-/// This capture group is followed by a ?, which specifies
-/// that the preceding group is non-greedy, meaning that
-/// it will match as few characters as possible.
-///
-///
-///
-/// The third part of the regular expression, \1, is a back reference to the first capture group.
-/// This means that the regular expression will only match if the character that
-/// was matched by the first capture group appears again at the
-/// end of the string.
-///
-///
-///
-/// In other words, this regular expression is used to match a string that
-/// starts and ends with one of the three characters *, _, or ~, and may have
-/// any other characters in between. For example, the string "*bold text*"
-/// would match this regular expression, but the string "*bold text" would not.
-///
-///
-///
-///The time complexity of the code is O(n) where n is the length of the
-///input text. This is because the code uses a regular expression to find all
-///matches in the text, which takes O(n) time, and then iterates over the
-///matches to create the list of text spans, which also takes O(n) time.
-///
-///
-///
-///
-//The space complexity of the code is also O(n) because the code creates a
-//new list of text spans, which has the same length as the input text.
-
+/// → Hello, *World!*          <Bold>
+/// → Hello, _World!_          <Italic>
+/// → Hello, ~World!~         <Strikethrough>
+/// → Hello, //World!//         <Underline>
+/// → Hello, `World!`          <Monospace>
+/// → [google.com|https://google.com]   <Link>
 class TypeSet extends StatelessWidget {
   ///[inputText] is required field
-  ///[style] is not required and nullable
-  ///[textAlign] is not required and default value is [TextAlign.start]
 
   const TypeSet({
     super.key,
     required this.inputText,
     this.style,
     this.textAlign = TextAlign.start,
+    this.textDirection,
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.textScaleFactor,
+    this.maxLines,
+    this.semanticsLabel,
+    this.textWidthBasis,
+    this.textHeightBehavior,
+    this.selectionColor,
+    this.strutStyle,
   });
 
   ///[style] is the style of the text
@@ -76,77 +47,72 @@ class TypeSet extends StatelessWidget {
 
   final TextAlign textAlign;
 
+  ///[textDirection] is the direction of the text
+
+  final TextDirection? textDirection;
+
+  ///[locale] is the locale of the text
+
+  final Locale? locale;
+
+  ///[softWrap] is the soft wrap of the text
+
+  final bool? softWrap;
+
+  ///[overflow] is the overflow of the text
+
+  final TextOverflow? overflow;
+
+  ///[textScaleFactor] is the text scale factor of the text
+
+  final double? textScaleFactor;
+
+  ///[maxLines] is the max lines of the text
+
+  final int? maxLines;
+
+  ///[semanticsLabel] is the semantics label of the text
+
+  final String? semanticsLabel;
+
+  ///[textWidthBasis] is the text width basis of the text
+
+  final TextWidthBasis? textWidthBasis;
+
+  ///[textHeightBehavior] is the text height behavior of the text
+
+  final TextHeightBehavior? textHeightBehavior;
+
+  ///[selectionColor] is the selection color of the text
+
+  final Color? selectionColor;
+
+  ///[strutStyle] is the strut style of the text
+
+  final StrutStyle? strutStyle;
+
   @override
   Widget build(BuildContext context) {
-    // Define a regular expression that matches the
-    //bold, italic, and underline markers
-    final regex = RegExp(r'([*_~%]{1,2})(.*?)\1');
-
-    // Split the text into separate spans based on the formatting markers
-    final spans = <TextSpan>[];
-
-    // Find all matches in the text
-    final matches = regex.allMatches(
-      inputText,
-    );
-
-    // Iterate over the matches
-    var lastMatchEnd = 0;
-    for (final match in matches) {
-      // Get the text that comes before the matched text
-      final prefix = inputText.substring(lastMatchEnd, match.start);
-      // Add a span for the text that comes before the matched text
-      if (prefix.isNotEmpty) {
-        spans.add(
-          TextSpan(text: prefix),
-        );
-      }
-      // Determine the style for the matched text
-      TextStyle? formattedStyle;
-      switch (match.group(1)) {
-        case '%%':
-        case '*':
-          formattedStyle = const TextStyle(fontWeight: FontWeight.bold);
-          break;
-        case '_':
-          formattedStyle = const TextStyle(fontStyle: FontStyle.italic);
-          break;
-        case '~':
-          formattedStyle = const TextStyle(
-            decoration: TextDecoration.underline,
-          );
-          break;
-      }
-
-      // Add a span for the matched text
-      spans.add(
-        TextSpan(
-          text: match.group(2),
-          style: formattedStyle,
-        ),
-      );
-      // Update the text to remove the matched text and the formatting markers
-      //from it so that we can continue searching
-      //for more matches in the remaining text
-      lastMatchEnd = match.end;
-    }
-    // Add a span for any remaining text
-    if (lastMatchEnd < inputText.length) {
-      spans.add(
-        TextSpan(
-          text: inputText.substring(
-            lastMatchEnd,
-          ),
-        ),
-      );
-    }
     // Use the `RichText` widget to display the text with the correct styles
-    return RichText(
-      textAlign: textAlign,
-      text: TextSpan(
-        style: style ?? DefaultTextStyle.of(context).style,
-        children: spans,
+    return Text.rich(
+      TextSpan(
+        children: TypesetParser.parseText(
+          inputText,
+        ),
       ),
+      textAlign: textAlign,
+      style: style,
+      textDirection: textDirection,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaleFactor: textScaleFactor,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+      selectionColor: selectionColor,
+      strutStyle: strutStyle,
     );
   }
 }

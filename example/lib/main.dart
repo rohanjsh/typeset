@@ -14,56 +14,24 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       color: Color(0xFF2196F3),
       title: 'TypeSet Demo',
-      home: TypeSetDemo(),
+      home: TypeSetExample(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class TypeSetDemo extends StatelessWidget {
-  const TypeSetDemo({super.key});
+class TypeSetExample extends StatelessWidget {
+  const TypeSetExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TypeSet Demo'),
+        title: const Text('TypeSet example'),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
-            const SizedBox(
-              height: 22,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 22.0,
-              ),
-              child: Text(
-                '''
-A simple widget to display text with whatsapp like formatting
-Text style that will support bold, italic and underline text coming from the server
-The implementation will be same as we see on WhatsApp.
-
-i.e.
-1. Bold Text will be wrapped in *asterisk*
-2. Italic Text will be wrapped in _underscore_
-3. Underline Text will be wrapped in ~tilde~
-
-Example:
-Hello, *World!*
-Hello, _World!_
-Hello, ~World!~
-''',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const Divider(
-              thickness: 1.4,
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 22.0,
@@ -72,86 +40,84 @@ Hello, ~World!~
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text('DEMO:'),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TypeSetDisplay(
-                    text: "'Hello, World!' will be:",
-                    formattedText: 'Hello, World!',
-                  ),
-                  //describe the above text as normal
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TypeSetDisplay(
-                    text: "'Hello, *World!*' will be:",
-                    formattedText: 'Hello, *World!*',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TypeSetDisplay(
-                    text: "'Hello, _World!_' will be:",
-                    formattedText: 'Hello, _World!_',
+                  Text(
+                    '''
+Make text formatting backend driven (if needed) with one widget!!
+
+Whatsapp like formatting with some addons!!
+(input looks like this)
+
+→ Hello, *World!*          <Bold>
+→ Hello, _World!_          <Italic>
+→ Hello, ~World!~         <Strikethrough>
+→ Hello, //World!//         <Underline>
+→ Hello, `World!`          <Monospace>
+→ [google.com|https://google.com]   <Link>
+''',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  TypeSetDisplay(
-                    text: "'Hello, ~World!~' will be:",
-                    formattedText: 'Hello, ~World!~',
+                  TypeSet(
+                    inputText: 'bold:\n→ *Bold* *Text*',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  TypeSetDisplay(
-                    text: "Make asterisk bold -> %%9*********7%%",
-                    formattedText: 'Make asterisk bold -> %%9*********7%%',
+                  TypeSet(
+                    inputText: 'italic:\n→ _Italic_ _Text_',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text(':::Improvements coming soon:::'),
+                  TypeSet(
+                    inputText: 'underline:\n→ //Underline// //Text//',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'strikethrough:\n→ ~Strikethrough~ ~Text~',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'monospace:\n→ `monospace` `text`',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TypeSet(
+                    inputText: 'link:\n→ [google.com|https://google.com]',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
                 ],
               ),
             )
           ],
         ),
       ),
-    );
-  }
-}
-
-class TypeSetDisplay extends StatelessWidget {
-  const TypeSetDisplay({
-    Key? key,
-    required this.text,
-    required this.formattedText,
-  }) : super(key: key);
-
-  final String text;
-  final String formattedText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          text,
-        ),
-
-        //TypeSet accepts text and style as parameters
-        //style is optional
-        TypeSet(
-          inputText: formattedText,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }
