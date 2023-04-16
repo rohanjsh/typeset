@@ -1,6 +1,7 @@
 /// {@template typeset}
 /// WhatsApp like text formatting for you!
 /// {@endtemplate}
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:typeset/src/typeset_parser.dart';
 
@@ -34,6 +35,9 @@ class TypeSet extends StatelessWidget {
     this.textHeightBehavior,
     this.selectionColor,
     this.strutStyle,
+    this.recognizer,
+    this.linkStyle,
+    this.monospaceStyle,
   });
 
   ///[style] is the style of the text
@@ -91,13 +95,25 @@ class TypeSet extends StatelessWidget {
 
   final StrutStyle? strutStyle;
 
+  ///[recognizer] is the recognizer of the text
+  final GestureRecognizer? recognizer;
+
+  ///[linkStyle] is the style of the link
+  final TextStyle? linkStyle;
+
+  ///[monospaceStyle] is the style of the monospace text
+  final TextStyle? monospaceStyle;
+
   @override
   Widget build(BuildContext context) {
     // Use the `RichText` widget to display the text with the correct styles
     return Text.rich(
       TextSpan(
         children: TypesetParser.parseText(
-          inputText,
+          inputText: inputText,
+          recognizer: recognizer,
+          linkStyle: linkStyle,
+          monospaceStyle: monospaceStyle,
         ),
       ),
       textAlign: textAlign,

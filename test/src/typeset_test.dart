@@ -96,7 +96,7 @@ void main() {
         )
       ];
       expect(
-        TypesetParser.parseText(inputText),
+        TypesetParser.parseText(inputText: inputText),
         equals(expectedSpans),
       );
     });
@@ -124,7 +124,7 @@ void main() {
         )
       ];
       expect(
-        TypesetParser.parseText(inputText),
+        TypesetParser.parseText(inputText: inputText),
         equals(expectedSpans),
       );
     });
@@ -152,7 +152,7 @@ void main() {
         )
       ];
       expect(
-        TypesetParser.parseText(inputText),
+        TypesetParser.parseText(inputText: inputText),
         equals(expectedSpans),
       );
     });
@@ -180,7 +180,7 @@ void main() {
         )
       ];
       expect(
-        TypesetParser.parseText(inputText),
+        TypesetParser.parseText(inputText: inputText),
         equals(expectedSpans),
       );
     });
@@ -188,7 +188,7 @@ void main() {
     test('parses link correctly', () {
       const inputText = '[Example|http://example.com]';
 
-      final result = TypesetParser.parseText(inputText);
+      final result = TypesetParser.parseText(inputText: inputText);
 
       expect(result.length, 1);
       final linkSpan = result[0];

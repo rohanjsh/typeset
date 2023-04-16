@@ -6,58 +6,54 @@ import 'package:url_launcher/url_launcher.dart';
 ///[TypesetParser] is a class that parses a string of typeset code into
 ///a list of TextSpans using [parseText].
 class TypesetParser {
-  ///[kBoldChar] is the character that will be used to wrap bold text
-  static const kBoldChar = '*';
+  static const _kBoldChar = '*';
 
-  ///[kItalicChar] is the character that will be used to wrap italic text
-  static const kItalicChar = '_';
+  static const _kItalicChar = '_';
 
-  ///[kStrikeThroughChar] is the character that will be used
-  ///to wrap strikethrough text
-  static const kStrikeThroughChar = '~';
+  static const _kStrikeThroughChar = '~';
 
-  ///[kUnderlineChar] is the character that will be used to wrap underline text
-  static const kUnderlineChar = '//';
+  static const _kUnderlineChar = '//';
 
-  ///[kMonoSpaceChar] is the character that will be used to wrap monospace text
-  static const kMonoSpaceChar = '`';
+  static const _kMonoSpaceChar = '`';
 
-  ///[kLinkStartChar] is the character that will be used to wrap link text start
-  static const kLinkStartChar = '[';
+  static const _kLinkStartChar = '[';
 
-  ///[kLinkEndChar] is the character that will be used to wrap link text end
-  static const kLinkEndChar = ']';
+  static const _kLinkEndChar = ']';
 
-  ///[kLinkUrlSeparator] is the character that will be used to
-  ///separate link text and url
-  static const kLinkUrlSeparator = '|';
+  static const _kLinkUrlSeparator = '|';
 
-  ///[kSpace] is the character that will be used to separate words
-  static const kSpace = ' ';
+  static const _kSpace = ' ';
 
-  ///[kEmpty] is the character that will be used to represent empty string
-  static const kEmpty = '';
+  static const _kEmpty = '';
 
   ///[parseText] this method will parse the [inputText] and
   ///return a list of [TextSpan] with the correct styles applied to it
-  static List<TextSpan> parseText(String inputText) {
-    return _getWordSpans(inputText);
-  }
-
-  static List<TextSpan> _getWordSpans(String part) {
-    final words = part.split(kSpace);
+  static List<TextSpan> parseText({
+    required String inputText,
+    TextStyle? linkStyle,
+    GestureRecognizer? recognizer,
+    TextStyle? monospaceStyle,
+  }) {
+    final words = inputText.split(_kSpace);
     return words.asMap().entries.map<TextSpan>(
       (entry) {
         final index = entry.key;
         final word = entry.value;
 
         if (_isLink(word)) {
-          return _getLinkSpan(word);
+          return _getLinkSpan(
+            word: word,
+            linkStyle: linkStyle,
+            recognizer: recognizer,
+          );
         }
 
-        final style = _getStyle(word);
+        final style = _getStyle(
+          word,
+          monospaceStyle: monospaceStyle,
+        );
         final text = _getText(word, style);
-        final space = index == words.length - 1 ? kEmpty : kSpace;
+        final space = index == words.length - 1 ? _kEmpty : _kSpace;
 
         return TextSpan(
           text: '$text$space',
@@ -67,65 +63,74 @@ class TypesetParser {
     ).toList();
   }
 
+  //*for link
   static bool _isLink(String word) {
-    return word.startsWith(kLinkStartChar) &&
-        word.endsWith(kLinkEndChar) &&
-        word.contains(kLinkUrlSeparator) &&
+    return word.startsWith(_kLinkStartChar) &&
+        word.endsWith(_kLinkEndChar) &&
+        word.contains(_kLinkUrlSeparator) &&
         word.length > 3;
   }
 
-  static TextSpan _getLinkSpan(String word) {
+  static TextSpan _getLinkSpan({
+    required String word,
+    TextStyle? linkStyle,
+    GestureRecognizer? recognizer,
+  }) {
     if (word.length < 3 || !word.startsWith('[') || !word.endsWith(']')) {
       // The word is not a valid link, return a plain text span.
       return TextSpan(text: word);
     }
     final linkParts =
-        word.substring(1, word.length - 1).split(kLinkUrlSeparator);
+        word.substring(1, word.length - 1).split(_kLinkUrlSeparator);
     final linkText = linkParts[0];
     final linkUrl = linkParts[1];
 
     return TextSpan(
       text: linkText,
-      style: const TextStyle(
-        color: Colors.blue,
-        decoration: TextDecoration.underline,
-      ),
-      recognizer: TapGestureRecognizer()
-        ..onTap = () async {
-          if (await canLaunchUrl(
-            Uri.parse(linkUrl),
-          )) {
-            await launchUrl(
-              Uri.parse(linkUrl),
-            );
-          }
-        },
+      style: linkStyle ??
+          const TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+      recognizer: recognizer ??
+          (TapGestureRecognizer()
+            ..onTap = () async {
+              if (await canLaunchUrl(
+                Uri.parse(linkUrl),
+              )) {
+                await launchUrl(
+                  Uri.parse(linkUrl),
+                );
+              }
+            }),
     );
   }
 
-  static TextStyle _getStyle(String word) {
-    final hasBold = word.startsWith(kBoldChar) &&
-        word.endsWith(kBoldChar) &&
+  //* for other styles
+  static TextStyle _getStyle(String word, {TextStyle? monospaceStyle}) {
+    final hasBold = word.startsWith(_kBoldChar) &&
+        word.endsWith(_kBoldChar) &&
         word.length > 1;
-    final hasItalic = word.startsWith(kItalicChar) &&
-        word.endsWith(kItalicChar) &&
+    final hasItalic = word.startsWith(_kItalicChar) &&
+        word.endsWith(_kItalicChar) &&
         word.length > 1;
-    final hasStrikeThrough = word.startsWith(kStrikeThroughChar) &&
-        word.endsWith(kStrikeThroughChar) &&
+    final hasStrikeThrough = word.startsWith(_kStrikeThroughChar) &&
+        word.endsWith(_kStrikeThroughChar) &&
         word.length > 1;
-    final hasUnderline = word.startsWith(kUnderlineChar) &&
-        word.endsWith(kUnderlineChar) &&
+    final hasUnderline = word.startsWith(_kUnderlineChar) &&
+        word.endsWith(_kUnderlineChar) &&
         word.length > 3;
-    final hasMonoSpace = word.startsWith(kMonoSpaceChar) &&
-        word.endsWith(kMonoSpaceChar) &&
+    final hasMonoSpace = word.startsWith(_kMonoSpaceChar) &&
+        word.endsWith(_kMonoSpaceChar) &&
         word.length > 1;
 
     if (hasMonoSpace) {
-      return GoogleFonts.sourceCodePro(
-        textStyle: const TextStyle(
-          fontWeight: FontWeight.normal,
-        ),
-      );
+      return monospaceStyle ??
+          GoogleFonts.sourceCodePro(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.normal,
+            ),
+          );
     }
 
     return TextStyle(

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:typeset/typeset.dart';
 
@@ -39,8 +40,8 @@ class TypeSetExample extends StatelessWidget {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     '''
 Make text formatting backend driven (if needed) with one widget!!
 
@@ -58,59 +59,69 @@ Whatsapp like formatting with some addons!!
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     inputText: 'bold:\n→ *Bold* *Text*',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     inputText: 'italic:\n→ _Italic_ _Text_',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     inputText: 'underline:\n→ //Underline// //Text//',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     inputText: 'strikethrough:\n→ ~Strikethrough~ ~Text~',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     inputText: 'monospace:\n→ `monospace` `text`',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
+
+                  //customized link textstyle and recognizer (tap recognizer)
                   TypeSet(
                     inputText: 'link:\n→ [google.com|https://google.com]',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                     ),
+                    linkStyle: const TextStyle(
+                      color: Colors.red,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => debugPrint(
+                            'link tapped',
+                          ),
                   ),
                 ],
               ),
