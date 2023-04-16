@@ -1,6 +1,8 @@
 
 # Changelog
 
+# 1.0.1+1
+- feat: 3 new properties added `linkStyle`, `monospaceStyle`, `recognizer` 💙
 # 1.0.0+4
 - chore: readme update
 # 1.0.0+1
