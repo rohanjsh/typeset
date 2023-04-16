@@ -6,37 +6,25 @@ import 'package:url_launcher/url_launcher.dart';
 ///[TypesetParser] is a class that parses a string of typeset code into
 ///a list of TextSpans using [parseText].
 class TypesetParser {
-  ///[kBoldChar] is the character that will be used to wrap bold text
-  static const kBoldChar = '*';
+  static const _kBoldChar = '*';
 
-  ///[kItalicChar] is the character that will be used to wrap italic text
-  static const kItalicChar = '_';
+  static const _kItalicChar = '_';
 
-  ///[kStrikeThroughChar] is the character that will be used
-  ///to wrap strikethrough text
-  static const kStrikeThroughChar = '~';
+  static const _kStrikeThroughChar = '~';
 
-  ///[kUnderlineChar] is the character that will be used to wrap underline text
-  static const kUnderlineChar = '//';
+  static const _kUnderlineChar = '//';
 
-  ///[kMonoSpaceChar] is the character that will be used to wrap monospace text
-  static const kMonoSpaceChar = '`';
+  static const _kMonoSpaceChar = '`';
 
-  ///[kLinkStartChar] is the character that will be used to wrap link text start
-  static const kLinkStartChar = '[';
+  static const _kLinkStartChar = '[';
 
-  ///[kLinkEndChar] is the character that will be used to wrap link text end
-  static const kLinkEndChar = ']';
+  static const _kLinkEndChar = ']';
 
-  ///[kLinkUrlSeparator] is the character that will be used to
-  ///separate link text and url
-  static const kLinkUrlSeparator = '|';
+  static const _kLinkUrlSeparator = '|';
 
-  ///[kSpace] is the character that will be used to separate words
-  static const kSpace = ' ';
+  static const _kSpace = ' ';
 
-  ///[kEmpty] is the character that will be used to represent empty string
-  static const kEmpty = '';
+  static const _kEmpty = '';
 
   ///[parseText] this method will parse the [inputText] and
   ///return a list of [TextSpan] with the correct styles applied to it
@@ -45,7 +33,7 @@ class TypesetParser {
   }
 
   static List<TextSpan> _getWordSpans(String part) {
-    final words = part.split(kSpace);
+    final words = part.split(_kSpace);
     return words.asMap().entries.map<TextSpan>(
       (entry) {
         final index = entry.key;
@@ -57,7 +45,7 @@ class TypesetParser {
 
         final style = _getStyle(word);
         final text = _getText(word, style);
-        final space = index == words.length - 1 ? kEmpty : kSpace;
+        final space = index == words.length - 1 ? _kEmpty : _kSpace;
 
         return TextSpan(
           text: '$text$space',
@@ -68,9 +56,9 @@ class TypesetParser {
   }
 
   static bool _isLink(String word) {
-    return word.startsWith(kLinkStartChar) &&
-        word.endsWith(kLinkEndChar) &&
-        word.contains(kLinkUrlSeparator) &&
+    return word.startsWith(_kLinkStartChar) &&
+        word.endsWith(_kLinkEndChar) &&
+        word.contains(_kLinkUrlSeparator) &&
         word.length > 3;
   }
 
@@ -80,7 +68,7 @@ class TypesetParser {
       return TextSpan(text: word);
     }
     final linkParts =
-        word.substring(1, word.length - 1).split(kLinkUrlSeparator);
+        word.substring(1, word.length - 1).split(_kLinkUrlSeparator);
     final linkText = linkParts[0];
     final linkUrl = linkParts[1];
 
@@ -104,20 +92,20 @@ class TypesetParser {
   }
 
   static TextStyle _getStyle(String word) {
-    final hasBold = word.startsWith(kBoldChar) &&
-        word.endsWith(kBoldChar) &&
+    final hasBold = word.startsWith(_kBoldChar) &&
+        word.endsWith(_kBoldChar) &&
         word.length > 1;
-    final hasItalic = word.startsWith(kItalicChar) &&
-        word.endsWith(kItalicChar) &&
+    final hasItalic = word.startsWith(_kItalicChar) &&
+        word.endsWith(_kItalicChar) &&
         word.length > 1;
-    final hasStrikeThrough = word.startsWith(kStrikeThroughChar) &&
-        word.endsWith(kStrikeThroughChar) &&
+    final hasStrikeThrough = word.startsWith(_kStrikeThroughChar) &&
+        word.endsWith(_kStrikeThroughChar) &&
         word.length > 1;
-    final hasUnderline = word.startsWith(kUnderlineChar) &&
-        word.endsWith(kUnderlineChar) &&
+    final hasUnderline = word.startsWith(_kUnderlineChar) &&
+        word.endsWith(_kUnderlineChar) &&
         word.length > 3;
-    final hasMonoSpace = word.startsWith(kMonoSpaceChar) &&
-        word.endsWith(kMonoSpaceChar) &&
+    final hasMonoSpace = word.startsWith(_kMonoSpaceChar) &&
+        word.endsWith(_kMonoSpaceChar) &&
         word.length > 1;
 
     if (hasMonoSpace) {
