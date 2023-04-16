@@ -28,22 +28,30 @@ class TypesetParser {
 
   ///[parseText] this method will parse the [inputText] and
   ///return a list of [TextSpan] with the correct styles applied to it
-  static List<TextSpan> parseText(String inputText) {
-    return _getWordSpans(inputText);
-  }
-
-  static List<TextSpan> _getWordSpans(String part) {
-    final words = part.split(_kSpace);
+  static List<TextSpan> parseText({
+    required String inputText,
+    TextStyle? linkStyle,
+    GestureRecognizer? recognizer,
+    TextStyle? monospaceStyle,
+  }) {
+    final words = inputText.split(_kSpace);
     return words.asMap().entries.map<TextSpan>(
       (entry) {
         final index = entry.key;
         final word = entry.value;
 
         if (_isLink(word)) {
-          return _getLinkSpan(word);
+          return _getLinkSpan(
+            word: word,
+            linkStyle: linkStyle,
+            recognizer: recognizer,
+          );
         }
 
-        final style = _getStyle(word);
+        final style = _getStyle(
+          word,
+          monospaceStyle: monospaceStyle,
+        );
         final text = _getText(word, style);
         final space = index == words.length - 1 ? _kEmpty : _kSpace;
 
@@ -55,6 +63,7 @@ class TypesetParser {
     ).toList();
   }
 
+  //*for link
   static bool _isLink(String word) {
     return word.startsWith(_kLinkStartChar) &&
         word.endsWith(_kLinkEndChar) &&
@@ -62,7 +71,11 @@ class TypesetParser {
         word.length > 3;
   }
 
-  static TextSpan _getLinkSpan(String word) {
+  static TextSpan _getLinkSpan({
+    required String word,
+    TextStyle? linkStyle,
+    GestureRecognizer? recognizer,
+  }) {
     if (word.length < 3 || !word.startsWith('[') || !word.endsWith(']')) {
       // The word is not a valid link, return a plain text span.
       return TextSpan(text: word);
@@ -74,24 +87,27 @@ class TypesetParser {
 
     return TextSpan(
       text: linkText,
-      style: const TextStyle(
-        color: Colors.blue,
-        decoration: TextDecoration.underline,
-      ),
-      recognizer: TapGestureRecognizer()
-        ..onTap = () async {
-          if (await canLaunchUrl(
-            Uri.parse(linkUrl),
-          )) {
-            await launchUrl(
-              Uri.parse(linkUrl),
-            );
-          }
-        },
+      style: linkStyle ??
+          const TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+      recognizer: recognizer ??
+          (TapGestureRecognizer()
+            ..onTap = () async {
+              if (await canLaunchUrl(
+                Uri.parse(linkUrl),
+              )) {
+                await launchUrl(
+                  Uri.parse(linkUrl),
+                );
+              }
+            }),
     );
   }
 
-  static TextStyle _getStyle(String word) {
+  //* for other styles
+  static TextStyle _getStyle(String word, {TextStyle? monospaceStyle}) {
     final hasBold = word.startsWith(_kBoldChar) &&
         word.endsWith(_kBoldChar) &&
         word.length > 1;
@@ -109,11 +125,12 @@ class TypesetParser {
         word.length > 1;
 
     if (hasMonoSpace) {
-      return GoogleFonts.sourceCodePro(
-        textStyle: const TextStyle(
-          fontWeight: FontWeight.normal,
-        ),
-      );
+      return monospaceStyle ??
+          GoogleFonts.sourceCodePro(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.normal,
+            ),
+          );
     }
 
     return TextStyle(
