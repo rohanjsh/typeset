@@ -3,7 +3,7 @@ description: WhatsApp like text formatting for you! -> Bold, Italic, Underline
 version: 1.0.1+1
 repository: https://github.com/rohanjsh/typeset/
 screenshots:
-  - description: 'Examples of the typeset formatters'
+  - description: "Examples of the typeset formatters"
     path: demo.png
 
 environment:
@@ -13,12 +13,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^4.0.3
-  url_launcher: ^6.1.10
+  google_fonts: ^5.1.0
+  url_launcher: ^6.1.12
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  very_good_analysis: ">=3.1.0 <5.0.0"
-
-
+  very_good_analysis: ">=3.1.0 <6.0.0"
