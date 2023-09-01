@@ -93,7 +93,7 @@ void main() {
         TextSpan(
           text: 'bold',
           style: TextStyle(),
-        )
+        ),
       ];
       expect(
         TypesetParser.parseText(inputText: inputText),
@@ -121,7 +121,7 @@ void main() {
         TextSpan(
           text: 'italic',
           style: TextStyle(),
-        )
+        ),
       ];
       expect(
         TypesetParser.parseText(inputText: inputText),
@@ -149,7 +149,7 @@ void main() {
         TextSpan(
           text: 'underlined',
           style: TextStyle(),
-        )
+        ),
       ];
       expect(
         TypesetParser.parseText(inputText: inputText),
@@ -177,7 +177,7 @@ void main() {
         TextSpan(
           text: 'strikethrough',
           style: TextStyle(),
-        )
+        ),
       ];
       expect(
         TypesetParser.parseText(inputText: inputText),
