@@ -28,7 +28,7 @@ class TypeSet extends StatelessWidget {
     this.locale,
     this.softWrap,
     this.overflow,
-    this.textScaleFactor,
+    this.textScaler,
     this.maxLines,
     this.semanticsLabel,
     this.textWidthBasis,
@@ -67,9 +67,9 @@ class TypeSet extends StatelessWidget {
 
   final TextOverflow? overflow;
 
-  ///[textScaleFactor] is the text scale factor of the text
+  ///[textScaler] is the text scale factor of the text
 
-  final double? textScaleFactor;
+  final TextScaler? textScaler;
 
   ///[maxLines] is the max lines of the text
 
@@ -122,7 +122,7 @@ class TypeSet extends StatelessWidget {
       locale: locale,
       softWrap: softWrap,
       overflow: overflow,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       maxLines: maxLines,
       semanticsLabel: semanticsLabel,
       textWidthBasis: textWidthBasis,
