@@ -1,13 +1,18 @@
 
 # Changelog
 
+# 1.0.3
+- chore: update dependencies
+
 # 1.0.2
 - chore: update dependencies, ci flows
 
 # 1.0.1+1
 - feat: 3 new properties added `linkStyle`, `monospaceStyle`, `recognizer` 💙
+
 # 1.0.0+4
 - chore: readme update
+
 # 1.0.0+1
 🎉🎉🎉 It's time to celebrate! Our first stable release is finally here! 🎉🎉🎉
 
