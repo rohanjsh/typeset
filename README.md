@@ -13,9 +13,9 @@
 - BOLD → Hello, \*World!\*
 - ITALIC → Hello, \_World!\_
 - STRIKETHROUGH → Hello, \~World!~
-- UNDERLINE → Hello, //World!//
+- UNDERLINE → Hello, #World!#
 - MONOSPACE → Hello, \`World!`
-- LINK → [google.com|https://google.com]
+- LINK → §google.com|https://google.com§
 
 ## See it in action!!
 
