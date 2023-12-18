@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:typeset/src/core/type_controller.dart';
+import 'package:typeset/src/models/type_enum.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///[TypesetParser] is a class that parses a string of typeset code into
@@ -28,6 +30,7 @@ class TypesetParser {
 
   ///[parseText] this method will parse the [inputText] and
   ///return a list of [TextSpan] with the correct styles applied to it
+  @Deprecated('this used old parser')
   static List<TextSpan> parseText({
     required String inputText,
     TextStyle? linkStyle,
@@ -156,5 +159,73 @@ class TypesetParser {
     } else {
       return word;
     }
+  }
+
+  static List<TextSpan> newParseText({
+    required String inputText,
+    TextStyle? linkStyle,
+    GestureRecognizer? recognizer,
+    TextStyle? monospaceStyle,
+  }) {
+    final controller = TypesetController(inputText);
+    final spans = <TextSpan>[];
+
+    controller.manipulateString().forEach(
+      (text) {
+        if (text.type == TYPE.link) {
+          final linkData = text.value.split('|');
+          spans.add(
+            TextSpan(
+              text: linkData.isNotEmpty ? linkData[0] : '',
+              style: linkStyle ??
+                  const TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+              recognizer: recognizer ??
+                  (TapGestureRecognizer()
+                    ..onTap = () async {
+                      if (await canLaunchUrl(
+                        Uri.parse(
+                          linkData.length == 2 ? linkData[1] : '',
+                        ),
+                      )) {
+                        await launchUrl(
+                          Uri.parse(
+                            linkData.length == 2 ? linkData[1] : '',
+                          ),
+                        );
+                      }
+                    }),
+            ),
+          );
+        } else {
+          final style = text.type == TYPE.mono
+              ? monospaceStyle ??
+                  GoogleFonts.sourceCodePro(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                    ),
+                  )
+              : TextStyle(
+                  fontWeight: text.type == TYPE.bold ? FontWeight.bold : null,
+                  fontStyle: text.type == TYPE.italic ? FontStyle.italic : null,
+                  decoration: text.type == TYPE.strikeThrough
+                      ? TextDecoration.lineThrough
+                      : text.type == TYPE.underline
+                          ? TextDecoration.underline
+                          : null,
+                );
+
+          spans.add(
+            TextSpan(
+              text: text.value,
+              style: style,
+            ),
+          );
+        }
+      },
+    );
+    return spans;
   }
 }
