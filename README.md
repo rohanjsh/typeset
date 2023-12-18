@@ -6,22 +6,24 @@
 
 - Make text formatting backend driven (if needed) with one widget!!
 - Whatsapp like formatting with some addons!!
-(input looks something like this)
+  (input looks something like this)
 
 **Usage**
-- BOLD → Hello, \*World!*
-- ITALIC → Hello,  \_World!_ 
+
+- BOLD → Hello, \*World!\*
+- ITALIC → Hello, \_World!\_
 - STRIKETHROUGH → Hello, \~World!~
-- UNDERLINE → Hello, //World!// 
+- UNDERLINE → Hello, //World!//
 - MONOSPACE → Hello, \`World!`
 - LINK → [google.com|https://google.com]
 
 ## See it in action!!
+
 **https://zapp.run/pub/typeset**
 
 ### Preview
-<img width="346" alt="Screenshot 2023-03-18 at 10 25 42" src="https://user-images.githubusercontent.com/35066779/226097689-46c42693-3ee7-4ecc-9f4c-ee2d8763d5f6.png">
 
+<img width="346" alt="Screenshot 2023-03-18 at 10 25 42" src="https://user-images.githubusercontent.com/35066779/226097689-46c42693-3ee7-4ecc-9f4c-ee2d8763d5f6.png">
 
 ## Installation 💻
 
@@ -42,6 +44,20 @@ flutter packages get
 
 ---
 
+## Breaking Change for underline & link literals:
+
+```dart
+import 'package:typeset/typeset.dart';
+
+TypeSet(inputText: 'Hello #World!#');
+// returns 'World' with underline text
+
+TypeSet(inputText: '§google.com|https://google.com§');
+// returns 'google.com' with link to google.com
+
+```
+
+---
 
 🌟 Usage 🌟
 
@@ -70,7 +86,6 @@ TypeSet(inputText: '[google.com|https://google.com]');
 
 ```
 
-
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
@@ -94,5 +109,3 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [coverage_badge]: /coverage_badge.svg
 [build_badge]: https://img.shields.io/github/workflow/status/rohanjsh/typeset/ci.svg
 [pub_points_badge]: https://img.shields.io/pub/points/typeset
-
-
