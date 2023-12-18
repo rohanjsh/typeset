@@ -50,11 +50,18 @@ flutter packages get
 import 'package:typeset/typeset.dart';
 
 TypeSet(inputText: 'Hello #World!#');
-// returns 'World' with underline text
+// returns 'World!' with underline text
 
 TypeSet(inputText: '§google.com|https://google.com§');
 // returns 'google.com' with link to google.com
+```
 
+You can also add all the literals in any string by adding forward slash '/' before literal.
+example:
+
+```dart
+TypeSet(inputText: 'Hello, *World/**');
+// returns 'World*' with bold text
 ```
 
 ---
@@ -65,19 +72,19 @@ TypeSet(inputText: '§google.com|https://google.com§');
 import 'package:typeset/typeset.dart';
 
 TypeSet(inputText: 'Hello, *World!*');
-// returns 'World' with bold text
+// returns 'World!' with bold text
 
 TypeSet(inputText: 'Hello, _World!_');
-// returns 'World' with italic text
+// returns 'World!' with italic text
 
 TypeSet(inputText: 'Hello, ~World!~');
-// returns 'World' with strikethrough text
+// returns 'World!' with strikethrough text
 
 TypeSet(inputText: 'Hello //World!//');
-// returns 'World' with underline text
+// returns 'World!' with underline text
 
 TypeSet(inputText: 'Hello, `World!`');
-// returns 'World' with monospace text
+// returns 'World!' with monospace text
 
 TypeSet(inputText: '[google.com|https://google.com]');
 // returns 'google.com' with link to google.com
