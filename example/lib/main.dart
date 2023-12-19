@@ -48,12 +48,12 @@ Make text formatting backend driven (if needed) with one widget!!
 Whatsapp like formatting with some addons!!
 (input looks like this)
 
-→ Hello, *World!*          <Bold>
-→ Hello, _World!_          <Italic>
+→ Hello, *World!*           <Bold>
+→ Hello, _World!_           <Italic>
 → Hello, ~World!~         <Strikethrough>
-→ Hello, //World!//         <Underline>
-→ Hello, `World!`          <Monospace>
-→ [google.com|https://google.com]   <Link>
+→ Hello, #World!#         <Underline>
+→ Hello, `World!`           <Monospace>
+→ §google.com|https://google.com§ <Link>
 ''',
                     style: TextStyle(
                       fontSize: 18,
@@ -63,7 +63,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'bold:\n→ *Bold* *Text*',
+                    inputText: 'bold:\n→ *Bold Text*',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -72,7 +72,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'italic:\n→ _Italic_ _Text_',
+                    inputText: 'italic:\n→ _Italic Text_',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -81,7 +81,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'underline:\n→ //Underline// //Text//',
+                    inputText: 'underline:\n→ #Underline Text#',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -90,7 +90,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'strikethrough:\n→ ~Strikethrough~ ~Text~',
+                    inputText: 'strikethrough:\n→ ~Strikethrough Text~',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -99,7 +99,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'monospace:\n→ `monospace` `text`',
+                    inputText: 'monospace:\n→ `monospace text`',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -110,12 +110,12 @@ Whatsapp like formatting with some addons!!
 
                   //customized link textstyle and recognizer (tap recognizer)
                   TypeSet(
-                    inputText: 'link:\n→ [google.com|https://google.com]',
+                    inputText: 'link:\n→ §google.com|https://google.com§',
                     style: const TextStyle(
                       fontSize: 24,
                     ),
                     linkStyle: const TextStyle(
-                      color: Colors.red,
+                      color: Colors.blue,
                       decoration: TextDecoration.underline,
                     ),
                     recognizer: TapGestureRecognizer()
