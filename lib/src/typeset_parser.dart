@@ -172,15 +172,34 @@ class TypesetParser {
 
     controller.manipulateString().forEach(
       (text) {
+        double? fontSize;
+        var justText = text.value;
+        try {
+          final regex = RegExp(r'(.+?)<(\d+)>');
+          final match = regex.firstMatch(text.value);
+          if (match != null) {
+            justText = match.group(1)!;
+            fontSize = double.parse(match.group(2)!);
+          }
+        } catch (e) {
+          fontSize = null;
+        }
         if (text.type == TYPE.link) {
           final linkData = text.value.split('|');
           spans.add(
             TextSpan(
-              text: linkData.isNotEmpty ? linkData[0] : '',
-              style: linkStyle ??
-                  const TextStyle(
+              text: fontSize != null
+                  ? justText
+                  : linkData.isNotEmpty
+                      ? linkData[0]
+                      : '',
+              style: linkStyle?.copyWith(
+                    fontSize: fontSize,
+                  ) ??
+                  TextStyle(
                     color: Colors.blue,
                     decoration: TextDecoration.underline,
+                    fontSize: fontSize,
                   ),
               recognizer: recognizer ??
                   (TapGestureRecognizer()
@@ -203,8 +222,9 @@ class TypesetParser {
           final style = text.type == TYPE.mono
               ? monospaceStyle ??
                   GoogleFonts.sourceCodePro(
-                    textStyle: const TextStyle(
+                    textStyle: TextStyle(
                       fontWeight: FontWeight.normal,
+                      fontSize: fontSize,
                     ),
                   )
               : TextStyle(
@@ -215,11 +235,12 @@ class TypesetParser {
                       : text.type == TYPE.underline
                           ? TextDecoration.underline
                           : null,
+                  fontSize: fontSize,
                 );
 
           spans.add(
             TextSpan(
-              text: text.value,
+              text: justText,
               style: style,
             ),
           );
