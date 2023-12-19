@@ -63,7 +63,7 @@ Whatsapp like formatting with some addons!!
                     height: 20,
                   ),
                   const TypeSet(
-                    inputText: 'bold:\n→ *Bold Text*',
+                    inputText: 'bold:\n→ *Bold Text<30>*',
                     style: TextStyle(
                       fontSize: 24,
                     ),
