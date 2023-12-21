@@ -114,10 +114,6 @@ Whatsapp like formatting with some addons!!
                     style: const TextStyle(
                       fontSize: 24,
                     ),
-                    linkStyle: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => debugPrint(
                             'link tapped',
