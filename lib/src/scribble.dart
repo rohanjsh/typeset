@@ -228,102 +228,99 @@
 //   }
 // }
 
-
-
 ///+----------------------+
 ///|        PARSER        |
 ///+----------------------+
 ///
 ///  // static List<TextSpan> parser({
-  //   required String inputText,
-  //   TextStyle? linkStyle,
-  //   GestureRecognizer? recognizer,
-  //   TextStyle? monospaceStyle,
-  // }) {
-  //   final controller = TypesetController(inputText);
-  //   final spans = <TextSpan>[];
+//   required String inputText,
+//   TextStyle? linkStyle,
+//   GestureRecognizer? recognizer,
+//   TextStyle? monospaceStyle,
+// }) {
+//   final controller = TypesetController(inputText);
+//   final spans = <TextSpan>[];
 
-  //   controller.manipulateString().forEach(
-  //     (text) {
-  //       double? fontSize;
-  //       var justText = text.value;
-  //       try {
-  //         final regex = RegExp(r'(.+?)<(\d+)>');
-  //         final match = regex.firstMatch(text.value);
-  //         if (match != null) {
-  //           justText = match.group(1)!;
-  //           fontSize = double.parse(match.group(2)!);
-  //         }
-  //       } catch (e) {
-  //         fontSize = null;
-  //       }
-  //       if (text.type == StyleTypeEnum.link) {
-  //         final linkData = text.value.split('|');
-  //         spans.add(
-  //           TextSpan(
-  //             text: fontSize != null
-  //                 ? justText
-  //                 : linkData.isNotEmpty
-  //                     ? linkData[0]
-  //                     : '',
-  //             style: linkStyle?.copyWith(
-  //                   fontSize: fontSize,
-  //                 ) ??
-  //                 TextStyle(
-  //                   color: Colors.blue,
-  //                   decoration: TextDecoration.underline,
-  //                   fontSize: fontSize,
-  //                 ),
-  //             recognizer: recognizer ??
-  //                 (TapGestureRecognizer()
-  //                   ..onTap = () async {
-  //                     if (await canLaunchUrl(
-  //                       Uri.parse(
-  //                         linkData.length == 2 ? linkData[1] : '',
-  //                       ),
-  //                     )) {
-  //                       await launchUrl(
-  //                         Uri.parse(
-  //                           linkData.length == 2 ? linkData[1] : '',
-  //                         ),
-  //                       );
-  //                     }
-  //                   }),
-  //           ),
-  //         );
-  //       } else {
-  //         final style = text.type == StyleTypeEnum.monospace
-  //             ? monospaceStyle ??
-  //                 GoogleFonts.sourceCodePro(
-  //                   textStyle: TextStyle(
-  //                     fontWeight: FontWeight.normal,
-  //                     fontSize: fontSize,
-  //                   ),
-  //                 )
-  //             : TextStyle(
-  //                 fontWeight:
-  //                     text.type == StyleTypeEnum.bold ? FontWeight.bold : 
-  // null,
-  //                 fontStyle: text.type == StyleTypeEnum.italic
-  //                     ? FontStyle.italic
-  //                     : null,
-  //                 decoration: text.type == StyleTypeEnum.strikethrough
-  //                     ? TextDecoration.lineThrough
-  //                     : text.type == StyleTypeEnum.underline
-  //                         ? TextDecoration.underline
-  //                         : null,
-  //                 fontSize: fontSize,
-  //               );
+//   controller.manipulateString().forEach(
+//     (text) {
+//       double? fontSize;
+//       var justText = text.value;
+//       try {
+//         final regex = RegExp(r'(.+?)<(\d+)>');
+//         final match = regex.firstMatch(text.value);
+//         if (match != null) {
+//           justText = match.group(1)!;
+//           fontSize = double.parse(match.group(2)!);
+//         }
+//       } catch (e) {
+//         fontSize = null;
+//       }
+//       if (text.type == StyleTypeEnum.link) {
+//         final linkData = text.value.split('|');
+//         spans.add(
+//           TextSpan(
+//             text: fontSize != null
+//                 ? justText
+//                 : linkData.isNotEmpty
+//                     ? linkData[0]
+//                     : '',
+//             style: linkStyle?.copyWith(
+//                   fontSize: fontSize,
+//                 ) ??
+//                 TextStyle(
+//                   color: Colors.blue,
+//                   decoration: TextDecoration.underline,
+//                   fontSize: fontSize,
+//                 ),
+//             recognizer: recognizer ??
+//                 (TapGestureRecognizer()
+//                   ..onTap = () async {
+//                     if (await canLaunchUrl(
+//                       Uri.parse(
+//                         linkData.length == 2 ? linkData[1] : '',
+//                       ),
+//                     )) {
+//                       await launchUrl(
+//                         Uri.parse(
+//                           linkData.length == 2 ? linkData[1] : '',
+//                         ),
+//                       );
+//                     }
+//                   }),
+//           ),
+//         );
+//       } else {
+//         final style = text.type == StyleTypeEnum.monospace
+//             ? monospaceStyle ??
+//                 GoogleFonts.sourceCodePro(
+//                   textStyle: TextStyle(
+//                     fontWeight: FontWeight.normal,
+//                     fontSize: fontSize,
+//                   ),
+//                 )
+//             : TextStyle(
+//                 fontWeight:
+//                     text.type == StyleTypeEnum.bold ? FontWeight.bold :
+// null,
+//                 fontStyle: text.type == StyleTypeEnum.italic
+//                     ? FontStyle.italic
+//                     : null,
+//                 decoration: text.type == StyleTypeEnum.strikethrough
+//                     ? TextDecoration.lineThrough
+//                     : text.type == StyleTypeEnum.underline
+//                         ? TextDecoration.underline
+//                         : null,
+//                 fontSize: fontSize,
+//               );
 
-  //         spans.add(
-  //           TextSpan(
-  //             text: justText,
-  //             style: style,
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  //   return spans;
-  // }
-  
+//         spans.add(
+//           TextSpan(
+//             text: justText,
+//             style: style,
+//           ),
+//         );
+//       }
+//     },
+//   );
+//   return spans;
+// }
