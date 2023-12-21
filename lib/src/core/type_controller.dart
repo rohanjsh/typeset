@@ -94,7 +94,12 @@ class TypesetController {
           currentStyle == StyleTypeEnum.plain) {
         // Add any existing plain text to the list.
         if (currentContent.isNotEmpty) {
-          list.add(TypeValueModel(currentStyle, currentContent.toString()));
+          list.add(
+            TypeValueModel(
+              type: currentStyle,
+              value: currentContent.toString(),
+            ),
+          );
           currentContent.clear();
         }
         // Update the style for the subsequent text.
@@ -102,7 +107,12 @@ class TypesetController {
       } else if (literalsMap.containsKey(input[i]) &&
           literalsMap[input[i]] == currentStyle) {
         // End the current styled text and reset style to plain.
-        list.add(TypeValueModel(currentStyle, currentContent.toString()));
+        list.add(
+          TypeValueModel(
+            type: currentStyle,
+            value: currentContent.toString(),
+          ),
+        );
         currentContent.clear();
         currentStyle = StyleTypeEnum.plain;
       } else {
@@ -113,7 +123,12 @@ class TypesetController {
 
     // Add any leftover text as plain text.
     if (currentContent.isNotEmpty) {
-      list.add(TypeValueModel(currentStyle, currentContent.toString()));
+      list.add(
+        TypeValueModel(
+          type: currentStyle,
+          value: currentContent.toString(),
+        ),
+      );
     }
 
     return list;
