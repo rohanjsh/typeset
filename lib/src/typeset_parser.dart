@@ -2,11 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:typeset/src/core/type_controller.dart';
-import 'package:typeset/src/models/type_enum.dart';
+import 'package:typeset/src/models/style_type_enum.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-///[TypesetParser] is a class that parses a string of typeset code into
-///a list of TextSpans using [parseText].
+///[TypesetParser]
 class TypesetParser {
   static const _kBoldChar = '*';
 
@@ -30,7 +29,7 @@ class TypesetParser {
 
   ///[parseText] this method will parse the [inputText] and
   ///return a list of [TextSpan] with the correct styles applied to it
-  @Deprecated('this used old parser')
+  @Deprecated('parseText will be removed in upcoming versions, use parser')
   static List<TextSpan> parseText({
     required String inputText,
     TextStyle? linkStyle,
@@ -161,38 +160,89 @@ class TypesetParser {
     }
   }
 
-  static List<TextSpan> newParseText({
+  /// Parses the input text and generates a list of [TextSpan] objects based on
+  /// different styles and formatting options.
+  ///
+  /// The [parser] method takes in several input parameters and returns a list
+  /// of [TextSpan] objects. It uses a [TypesetController] to manipulate the
+  /// input text and generate the [TextSpan] objects based on different styles
+  /// and formatting options.
+  ///
+  /// Example Usage:
+  /// ```dart
+  /// final inputText = "This is *bold* and _italic_ text with a [link|https://example.com].";
+  /// final spans = TypesetParser.parser(
+  ///   inputText: inputText,
+  ///   linkStyle: TextStyle(color: Colors.red),
+  ///   recognizer: TapGestureRecognizer()..onTap = () => print("Link tapped!"),
+  ///   monospaceStyle: TextStyle(fontFamily: 'Courier'),
+  /// );
+  /// ```
+  /// The above code snippet demonstrates how to use the [parser] method to
+  /// parse an input text and generate a list of [TextSpan] objects.
+  /// It sets a custom link style, a tap gesture recognizer, and a
+  /// monospace style. The resulting [TextSpan]s list can be used to display
+  /// the formatted text in a Flutter application.
+  ///
+  /// Inputs:
+  /// - [inputText] (required): A string represents the input text to be parsed.
+  /// - [linkStyle] (optional): A [TextStyle] object represents the style
+  ///   to be applied to link text.
+  /// - [recognizer] (optional): A [GestureRecognizer] object representing
+  ///   the tap gesture recognizer for links.
+  /// - [monospaceStyle] (optional): A [TextStyle] object representing
+  ///   the style to be applied to monospace text.
+  ///
+  /// Flow:
+  /// 1. The method initializes an empty list to store the generated
+  ///    [TextSpan] objects.
+  /// 2. It creates a [TypesetController] instance using the
+  ///    provided [inputText].
+  /// 3. It iterates over each object returned by the `manipulateString`
+  ///    method of the [TypesetController].
+  /// 4. For each object, it checks the `type` property to determine the
+  ///    style of the text.
+  /// 5. If the text is a link, it splits the `value` property using the
+  ///    '|' separator to extract the link text and URL.
+  /// 6. It creates a [TextSpan] with the appropriate style and
+  ///    adds it to the list.
+  /// 7. If the text is monospace, it creates a [TextSpan] with the
+  ///    monospace style and adds it to the list.
+  /// 8. If the text has other styles (bold, italic, strikethrough, underline),
+  ///    it creates a [TextSpan] with the corresponding style and
+  ///    adds it to the list.
+  /// 9. Finally, it returns the list containing all the generated
+  ///    [TextSpan] objects.
+  ///
+  /// Outputs:
+  /// - A list of [TextSpan] objects representing the parsed and formatted text
+  ///   based on the input parameters.
+  static List<TextSpan> parser({
     required String inputText,
     TextStyle? linkStyle,
     GestureRecognizer? recognizer,
     TextStyle? monospaceStyle,
   }) {
-    final controller = TypesetController(inputText);
+    final controller = TypesetController(
+      input: inputText,
+    );
     final spans = <TextSpan>[];
 
-    controller.manipulateString().forEach(
-      (text) {
-        double? fontSize;
-        var justText = text.value;
-        try {
-          final regex = RegExp(r'(.+?)<(\d+)>');
-          final match = regex.firstMatch(text.value);
-          if (match != null) {
-            justText = match.group(1)!;
-            fontSize = double.parse(match.group(2)!);
-          }
-        } catch (e) {
-          fontSize = null;
-        }
-        if (text.type == TYPE.link) {
+    for (final text in controller.manipulateString()) {
+      final regex = RegExp(r'(.+?)<(\d+)>');
+      final match = regex.firstMatch(text.value);
+      final justText = match?.group(1) ?? text.value;
+      final fontSize =
+          match == null ? null : double.tryParse(match.group(2) ?? '');
+
+      switch (text.type) {
+        case StyleTypeEnum.link:
           final linkData = text.value.split('|');
+          final linkText = linkData.isNotEmpty ? linkData[0] : '';
+          final url = linkData.length == 2 ? linkData[1] : '';
           spans.add(
             TextSpan(
-              text: fontSize != null
-                  ? justText
-                  : linkData.isNotEmpty
-                      ? linkData[0]
-                      : '',
+              text: fontSize != null ? justText : linkText,
               style: linkStyle?.copyWith(
                     fontSize: fontSize,
                   ) ??
@@ -200,53 +250,51 @@ class TypesetParser {
                     color: Colors.blue,
                     decoration: TextDecoration.underline,
                     fontSize: fontSize,
+                    decorationColor: Colors.blue,
                   ),
               recognizer: recognizer ??
-                  (TapGestureRecognizer()
-                    ..onTap = () async {
-                      if (await canLaunchUrl(
-                        Uri.parse(
-                          linkData.length == 2 ? linkData[1] : '',
-                        ),
-                      )) {
-                        await launchUrl(
-                          Uri.parse(
-                            linkData.length == 2 ? linkData[1] : '',
-                          ),
-                        );
-                      }
-                    }),
+                  (TapGestureRecognizer()..onTap = () => _launchUrl(url)),
             ),
           );
-        } else {
-          final style = text.type == TYPE.mono
-              ? monospaceStyle ??
-                  GoogleFonts.sourceCodePro(
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: fontSize,
-                    ),
-                  )
-              : TextStyle(
-                  fontWeight: text.type == TYPE.bold ? FontWeight.bold : null,
-                  fontStyle: text.type == TYPE.italic ? FontStyle.italic : null,
-                  decoration: text.type == TYPE.strikeThrough
-                      ? TextDecoration.lineThrough
-                      : text.type == TYPE.underline
-                          ? TextDecoration.underline
-                          : null,
-                  fontSize: fontSize,
-                );
-
+          break;
+        case StyleTypeEnum.monospace:
           spans.add(
             TextSpan(
               text: justText,
-              style: style,
+              style: monospaceStyle ??
+                  GoogleFonts.sourceCodePro(
+                    textStyle: TextStyle(fontSize: fontSize),
+                  ),
             ),
           );
-        }
-      },
-    );
+          break;
+        // ignore: no_default_cases
+        default:
+          spans.add(
+            TextSpan(
+              text: justText,
+              style: TextStyle(
+                fontWeight:
+                    text.type == StyleTypeEnum.bold ? FontWeight.bold : null,
+                fontStyle:
+                    text.type == StyleTypeEnum.italic ? FontStyle.italic : null,
+                decoration: text.type == StyleTypeEnum.strikethrough
+                    ? TextDecoration.lineThrough
+                    : text.type == StyleTypeEnum.underline
+                        ? TextDecoration.underline
+                        : null,
+                fontSize: fontSize,
+              ),
+            ),
+          );
+      }
+    }
     return spans;
+  }
+
+  static Future<void> _launchUrl(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    }
   }
 }

@@ -109,7 +109,7 @@ class TypeSet extends StatelessWidget {
     // Use the `RichText` widget to display the text with the correct styles
     return Text.rich(
       TextSpan(
-        children: TypesetParser.newParseText(
+        children: TypesetParser.parser(
           inputText: inputText,
           recognizer: recognizer,
           linkStyle: linkStyle,
