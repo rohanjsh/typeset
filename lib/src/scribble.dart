@@ -34,7 +34,8 @@
 //         typeOfString = StyleTypeEnum.italic;
 //         continue;
 //       }
-//       if (input[i] == underlineLiteral && typeOfString == StyleTypeEnum.plain) {
+//       if (input[i] == underlineLiteral && typeOfString == StyleTypeEnum.plain
+//) {
 //         typeOfString = StyleTypeEnum.underline;
 //         continue;
 //       }
@@ -301,7 +302,8 @@
   //                 )
   //             : TextStyle(
   //                 fontWeight:
-  //                     text.type == StyleTypeEnum.bold ? FontWeight.bold : null,
+  //                     text.type == StyleTypeEnum.bold ? FontWeight.bold : 
+  // null,
   //                 fontStyle: text.type == StyleTypeEnum.italic
   //                     ? FontStyle.italic
   //                     : null,
@@ -324,4 +326,4 @@
   //   );
   //   return spans;
   // }
-
+  
