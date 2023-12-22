@@ -85,7 +85,7 @@ class TypesetController {
 
     for (var i = 0; i < input.length; i++) {
       if (i < input.length - 1 &&
-          input[i] == TypesetReserved.literal &&
+          input[i] == TypesetReserved.escapeLiteral &&
           literalsMap.containsKey(input[i + 1])) {
         // Skip literal character and add the next char as normal text.
         currentContent.write(input[++i]);

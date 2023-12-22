@@ -19,7 +19,7 @@ final class TypesetReserved {
   TypesetReserved._();
 
   /// The escape character used in typesetting.
-  static const literal = '¦';
+  static const escapeLiteral = '¦';
 
   /// The literal for bold formatting.
   static const boldChar = '*';
