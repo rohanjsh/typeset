@@ -11,6 +11,7 @@
 
 ### Breaking Changes
 - **Underline Style Update:** The syntax for underlining text has changed. The previous `//` markers are now replaced with `#`. This shift streamlines the styling process and aligns with common markdown practices.
+- **Link Style Update:** The syntax for link text has changed. The previous `[]` markers are now replaced with `§`. A link text would look like this `§rohanjsh|https://rohanjsh.dev§`
 - **Reserved Character Escaping:** Incorporating the new literal `¦` necessitates the explicit marking of reserved characters to be treated as literals. This modifies how users will work with text that includes characters previously used for formatting.
 
 # 1.0.3
