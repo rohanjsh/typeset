@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:typeset/src/core/type_controller.dart';
+import 'package:typeset/src/core/typeset_controller.dart';
 import 'package:typeset/src/models/style_type_enum.dart';
+import 'package:typeset/typeset.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///[TypesetParser]
@@ -229,13 +230,13 @@ class TypesetParser {
     final spans = <TextSpan>[];
 
     for (final text in controller.manipulateString()) {
-      final regex = RegExp(r'(.+?)<(\d+)>');
+      final regex = RegExp(TypesetReserved.fontSizeRegex);
       final match = regex.firstMatch(text.value);
       final justText = match?.group(1) ?? text.value;
       final fontSize =
           match == null ? null : double.tryParse(match.group(2) ?? '');
 
-      switch (text.type) {
+      switch (text.styleType) {
         case StyleTypeEnum.link:
           final linkData = text.value.split('|');
           final linkText = linkData.isNotEmpty ? linkData[0] : '';
@@ -274,13 +275,15 @@ class TypesetParser {
             TextSpan(
               text: justText,
               style: TextStyle(
-                fontWeight:
-                    text.type == StyleTypeEnum.bold ? FontWeight.bold : null,
-                fontStyle:
-                    text.type == StyleTypeEnum.italic ? FontStyle.italic : null,
-                decoration: text.type == StyleTypeEnum.strikethrough
+                fontWeight: text.styleType == StyleTypeEnum.bold
+                    ? FontWeight.bold
+                    : null,
+                fontStyle: text.styleType == StyleTypeEnum.italic
+                    ? FontStyle.italic
+                    : null,
+                decoration: text.styleType == StyleTypeEnum.strikethrough
                     ? TextDecoration.lineThrough
-                    : text.type == StyleTypeEnum.underline
+                    : text.styleType == StyleTypeEnum.underline
                         ? TextDecoration.underline
                         : null,
                 fontSize: fontSize,

@@ -16,15 +16,15 @@ import 'package:typeset/src/models/style_type_enum.dart';
 /// print(model.type); // Output: StyleTypeEnum.bold
 /// print(model.value); // Output: Hello
 /// ```
-class TypeValueModel {
-  /// Creates a new instance of [TypeValueModel].
-  TypeValueModel({
-    required this.type,
+class StyleTypeValueModel {
+  /// Creates a new instance of [StyleTypeValueModel].
+  StyleTypeValueModel({
+    required this.styleType,
     required this.value,
   });
 
   /// The style for the text
-  StyleTypeEnum type;
+  StyleTypeEnum styleType;
 
   /// The value for the text
   String value;

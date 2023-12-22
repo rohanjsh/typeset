@@ -1,5 +1,6 @@
+import 'package:typeset/src/core/typeset_reserved.dart';
 import 'package:typeset/src/models/style_type_enum.dart';
-import 'package:typeset/src/models/type_value_model.dart';
+import 'package:typeset/src/models/style_type_value_model.dart';
 
 /// The 'TypesetController' class is responsible for manipulating
 /// a given input string and converting it into a list of TypeValueModel
@@ -54,28 +55,29 @@ class TypesetController {
   final String input;
 
   /// A list of `TypeValueModel` objects representing the manipulated string.
-  List<TypeValueModel> list = [];
+  List<StyleTypeValueModel> list = [];
 
   /// Manipulates a given string by identifying specific characters and
   /// assigning corresponding style types to them.
   ///
-  /// Returns a list of [TypeValueModel] objects, where each object represents
-  /// a segment of the manipulated string with its corresponding style type.
+  /// Returns a list of [StyleTypeValueModel] objects, where each object
+  /// represents a segment of the manipulated string with its
+  /// corresponding style type.
   ///
   /// Example Usage:
   /// ```dart
   /// var result = manipulateString();
   /// ```
-  List<TypeValueModel> manipulateString() {
+  List<StyleTypeValueModel> manipulateString() {
     // Define literals in a map for easy access
     //to their corresponding style types.
     const literalsMap = <String, StyleTypeEnum>{
-      '*': StyleTypeEnum.bold,
-      '_': StyleTypeEnum.italic,
-      '#': StyleTypeEnum.underline,
-      '`': StyleTypeEnum.monospace,
-      '~': StyleTypeEnum.strikethrough,
-      '§': StyleTypeEnum.link,
+      TypesetReserved.boldChar: StyleTypeEnum.bold,
+      TypesetReserved.italicChar: StyleTypeEnum.italic,
+      TypesetReserved.underlineChar: StyleTypeEnum.underline,
+      TypesetReserved.monospaceChar: StyleTypeEnum.monospace,
+      TypesetReserved.strikethroughChar: StyleTypeEnum.strikethrough,
+      TypesetReserved.linkChar: StyleTypeEnum.link,
     };
 
     var currentStyle = StyleTypeEnum.plain;
@@ -83,7 +85,7 @@ class TypesetController {
 
     for (var i = 0; i < input.length; i++) {
       if (i < input.length - 1 &&
-          input[i] == '/' &&
+          input[i] == TypesetReserved.literal &&
           literalsMap.containsKey(input[i + 1])) {
         // Skip escaping character and add the next literal char as normal text.
         currentContent.write(input[++i]);
@@ -95,8 +97,8 @@ class TypesetController {
         // Add any existing plain text to the list.
         if (currentContent.isNotEmpty) {
           list.add(
-            TypeValueModel(
-              type: currentStyle,
+            StyleTypeValueModel(
+              styleType: currentStyle,
               value: currentContent.toString(),
             ),
           );
@@ -108,8 +110,8 @@ class TypesetController {
           literalsMap[input[i]] == currentStyle) {
         // End the current styled text and reset style to plain.
         list.add(
-          TypeValueModel(
-            type: currentStyle,
+          StyleTypeValueModel(
+            styleType: currentStyle,
             value: currentContent.toString(),
           ),
         );
@@ -124,8 +126,8 @@ class TypesetController {
     // Add any leftover text as plain text.
     if (currentContent.isNotEmpty) {
       list.add(
-        TypeValueModel(
-          type: currentStyle,
+        StyleTypeValueModel(
+          styleType: currentStyle,
           value: currentContent.toString(),
         ),
       );

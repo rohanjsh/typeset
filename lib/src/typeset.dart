@@ -3,19 +3,28 @@
 /// {@endtemplate}
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/typeset_parser.dart';
+import 'package:typeset/src/core/typeset_parser.dart';
 
-/// Make text formatting backend driven (if needed) with one widget!!
+/// Format the text with different styles, similar to whatsapp
 ///
-/// Whatsapp like formatting with some addons!!
-/// (input looks like this)
+/// Following is the usage:
+/// Bold
+/// → Hello, *World!*
 ///
-/// → Hello, *World!*          <Bold>
-/// → Hello, _World!_          <Italic>
-/// → Hello, ~World!~         <Strikethrough>
-/// → Hello, //World!//         <Underline>
-/// → Hello, `World!`          <Monospace>
-/// → [google.com|https://google.com]   <Link>
+/// Italic
+/// → Hello, _World!_
+///
+/// Strikethrough
+/// → Hello, ~World!~
+///
+/// Underline
+/// → Hello, #World!#
+///
+/// Monospace
+/// → Hello, `World!`
+///
+/// Link
+/// → §google.com|https://google.com§
 class TypeSet extends StatelessWidget {
   ///[inputText] is required field
 

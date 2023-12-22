@@ -2,7 +2,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/typeset_parser.dart';
+import 'package:typeset/src/core/typeset_parser.dart';
 
 import 'typeset_widget.dart';
 

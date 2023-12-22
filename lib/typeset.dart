@@ -2,5 +2,6 @@
 /// with different formatters
 library typeset;
 
+export 'src/core/typeset_reserved.dart';
 export 'src/typeset.dart';
 export 'src/typeset_ext.dart';
