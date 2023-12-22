@@ -87,7 +87,7 @@ class TypesetController {
       if (i < input.length - 1 &&
           input[i] == TypesetReserved.literal &&
           literalsMap.containsKey(input[i + 1])) {
-        // Skip escaping character and add the next literal char as normal text.
+        // Skip literal character and add the next char as normal text.
         currentContent.write(input[++i]);
         continue;
       }
