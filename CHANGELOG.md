@@ -1,6 +1,22 @@
 
 # Changelog
 
+# 2.0.0-beta.1
+### New Features
+- **Dynamic Font Sizing:** Font size can now be applied dynamically, enhancing visual hierarchy and readability.
+- **Literal Character Rendering:** Introducing the literal symbol `¦` to unambiguously represent reserved characters in text formatting, ensuring clarity in rendered output.
+
+### Bug Fixes
+- **Spacing in Strings:** Corrected an issue where strings containing spaces were not formatted correctly, improving the robustness and reliability of the text display.
+
+### Breaking Changes
+- **Underline Style Update:** The syntax for underlining text has changed. The previous `//` markers are now replaced with `#`. This shift streamlines the styling process and aligns with common markdown practices.
+- **Reserved Character Escaping:** Incorporating the new literal `¦` necessitates the explicit marking of reserved characters to be treated as literals. This modifies how users will work with text that includes characters previously used for formatting.
+
+### Celebrate Our Progress
+#### Stable Release Environmental Enhancements
+- With every iteration, we not only aim to improve functionality but also ensure that each contribution to the code base adheres to the highest standards. We revise documentation, streamline our continuous integration flows, and update dependencies to deliver top-notch performance and security.
+
 # 1.0.3
 - chore: update dependencies
 
@@ -47,3 +63,7 @@ Thanks for choosing our text formatting widget for all your formatting needs. We
 # 0.1.0+18
 
 - feat: WhatsApp like formatting for you all!🎉
+
+
+Thank you for being part of our journey. Your feedback is the beacon that guides our innovation. 
+*Please note that all changes included in beta releases are for testing purposes and may change before the final release.* 
