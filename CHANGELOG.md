@@ -13,10 +13,6 @@
 - **Underline Style Update:** The syntax for underlining text has changed. The previous `//` markers are now replaced with `#`. This shift streamlines the styling process and aligns with common markdown practices.
 - **Reserved Character Escaping:** Incorporating the new literal `¦` necessitates the explicit marking of reserved characters to be treated as literals. This modifies how users will work with text that includes characters previously used for formatting.
 
-### Celebrate Our Progress
-#### Stable Release Environmental Enhancements
-- With every iteration, we not only aim to improve functionality but also ensure that each contribution to the code base adheres to the highest standards. We revise documentation, streamline our continuous integration flows, and update dependencies to deliver top-notch performance and security.
-
 # 1.0.3
 - chore: update dependencies
 
