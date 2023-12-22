@@ -63,6 +63,11 @@ TypeSet(inputText: 'Hey, *Hello world<30>*'); // Renders 'Hello world' with font
 
 TypeSet inherits all properties of the `Text.rich()` widget, allowing for a familiar and versatile configuration experience.
 
+### Use **`¦` (broken bar)** and append with any reserved character to render them.
+Example:
+```dart
+Typeset(inputText: '*Hello ¦* World*');
+```
 ## Features 🎨
 
 - **Backend-driven formatting**: Keep your text styling logic server-side for easy updates without the need to redeploy your app.
