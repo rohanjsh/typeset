@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: deprecated_member_use_from_same_package
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/typeset_parser.dart';
+import 'package:typeset/src/core/typeset_parser.dart';
 
 import 'typeset_widget.dart';
-
-//example widget for testing
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +16,7 @@ void main() {
         'TypeSet widget displays bold, italic, and strikethrough text',
         (WidgetTester tester) async {
           await tester.pumpWidget(
-            TypeSetTest(
+            const TypeSetTest(
               title:
                   'Hello, *World* _World_ ~World~ //hello// [hello](https://google.com)',
               key: Key(
@@ -32,7 +30,7 @@ void main() {
           );
 
           final boldItalicUnderlineText = find.byKey(
-            Key(
+            const Key(
               'typeset_widget_test',
             ),
           );
@@ -51,7 +49,7 @@ void main() {
       'TypeSet widget displays through extension',
       (WidgetTester tester) async {
         await tester.pumpWidget(
-          TypeSetTest(
+          const TypeSetTest(
             titleForExt: 'Hello World',
             key: Key(
               'extensionTest',
@@ -60,7 +58,7 @@ void main() {
         );
 
         final extensionTest = find.byKey(
-          Key(
+          const Key(
             'extensionTest',
           ),
         );
@@ -72,25 +70,25 @@ void main() {
     );
   });
 
-  group('TypesetParser', () {
+  group('TypesetParser parseText', () {
     test('parses bold text', () {
       const inputText = 'This *word* is bold';
       final expectedSpans = [
-        TextSpan(
+        const TextSpan(
           text: 'This ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'word ',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'is ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'bold',
           style: TextStyle(),
         ),
@@ -104,21 +102,21 @@ void main() {
     test('parses italic text', () {
       const inputText = 'This _word_ is italic';
       final expectedSpans = [
-        TextSpan(
+        const TextSpan(
           text: 'This ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'word ',
           style: TextStyle(
             fontStyle: FontStyle.italic,
           ),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'is ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'italic',
           style: TextStyle(),
         ),
@@ -132,21 +130,21 @@ void main() {
     test('parses underline text', () {
       const inputText = 'This //word// is underlined';
       final expectedSpans = [
-        TextSpan(
+        const TextSpan(
           text: 'This ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'word ',
           style: TextStyle(
             decoration: TextDecoration.underline,
           ),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'is ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'underlined',
           style: TextStyle(),
         ),
@@ -160,21 +158,21 @@ void main() {
     test('parses strikethrough text', () {
       const inputText = 'This ~word~ is strikethrough';
       final expectedSpans = [
-        TextSpan(
+        const TextSpan(
           text: 'This ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'word ',
           style: TextStyle(
             decoration: TextDecoration.lineThrough,
           ),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'is ',
           style: TextStyle(),
         ),
-        TextSpan(
+        const TextSpan(
           text: 'strikethrough',
           style: TextStyle(),
         ),
@@ -189,6 +187,117 @@ void main() {
       const inputText = '[Example|http://example.com]';
 
       final result = TypesetParser.parseText(inputText: inputText);
+
+      expect(result.length, 1);
+      final linkSpan = result[0];
+      expect(linkSpan.text, 'Example');
+      expect(linkSpan.style?.color, Colors.blue);
+      expect(linkSpan.style?.decoration, TextDecoration.underline);
+      expect(linkSpan.recognizer, isA<TapGestureRecognizer>());
+    });
+  });
+
+  group('TypesetParser parser', () {
+    test('parses bold text', () {
+      const inputText = 'This *word* is bold';
+      final expectedSpans = [
+        const TextSpan(
+          text: 'This ',
+          style: TextStyle(),
+        ),
+        const TextSpan(
+          text: 'word',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const TextSpan(
+          text: ' is bold',
+          style: TextStyle(),
+        ),
+      ];
+      expect(
+        TypesetParser.parser(inputText: inputText),
+        equals(expectedSpans),
+      );
+    });
+
+    test('parses italic text', () {
+      const inputText = 'This _word_ is italic';
+      final expectedSpans = [
+        const TextSpan(
+          text: 'This ',
+          style: TextStyle(),
+        ),
+        const TextSpan(
+          text: 'word',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const TextSpan(
+          text: ' is italic',
+          style: TextStyle(),
+        ),
+      ];
+      expect(
+        TypesetParser.parser(inputText: inputText),
+        equals(expectedSpans),
+      );
+    });
+
+    test('parses underline text', () {
+      const inputText = 'This #word# is underlined';
+      final expectedSpans = [
+        const TextSpan(
+          text: 'This ',
+          style: TextStyle(),
+        ),
+        const TextSpan(
+          text: 'word',
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+          ),
+        ),
+        const TextSpan(
+          text: ' is underlined',
+          style: TextStyle(),
+        ),
+      ];
+      expect(
+        TypesetParser.parser(inputText: inputText),
+        equals(expectedSpans),
+      );
+    });
+
+    test('parses strikethrough text', () {
+      const inputText = 'This ~word~ is strikethrough';
+      final expectedSpans = [
+        const TextSpan(
+          text: 'This ',
+          style: TextStyle(),
+        ),
+        const TextSpan(
+          text: 'word',
+          style: TextStyle(
+            decoration: TextDecoration.lineThrough,
+          ),
+        ),
+        const TextSpan(
+          text: ' is strikethrough',
+          style: TextStyle(),
+        ),
+      ];
+      expect(
+        TypesetParser.parser(inputText: inputText),
+        equals(expectedSpans),
+      );
+    });
+
+    test('parses link correctly', () {
+      const inputText = '§Example|http://example.com§';
+
+      final result = TypesetParser.parser(inputText: inputText);
 
       expect(result.length, 1);
       final linkSpan = result[0];

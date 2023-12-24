@@ -1,79 +1,90 @@
-# TypeSet
+---
 
+# TypeSet: Elegant Text Styling for Flutter
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
 ![pub points][pub_points_badge]
 
-- Make text formatting backend driven (if needed) with one widget!!
-- Whatsapp like formatting with some addons!!
-(input looks something like this)
+Enhance your Flutter app's text presentation with TypeSet, the all-in-one solution for text styling and formatting that's as dynamic as your app needs to be. Inspired by familiar markdown formatting, TypeSet allows you to seamlessly integrate rich text features, including variable font sizes and web links, without disrupting the underlying logic of your code. With backend-driven formatting capability, WhatsApp-like ease, and additional formatting options, TypeSet offers the fluidity to make any text come alive!
 
-**Usage**
-- BOLD → Hello, \*World!*
-- ITALIC → Hello,  \_World!_ 
-- STRIKETHROUGH → Hello, \~World!~
-- UNDERLINE → Hello, //World!// 
-- MONOSPACE → Hello, \`World!`
-- LINK → [google.com|https://google.com]
+## Preview of Possibilities
 
-## See it in action!!
-**https://zapp.run/pub/typeset**
+<img width="346" alt="Screenshot 2023-03-18 at 10 25 42" src="https://github.com/rohanjsh/typeset/assets/35066779/34c49da7-4a47-41a2-8af1-0f9d5a093689">
 
-### Preview
-<img width="346" alt="Screenshot 2023-03-18 at 10 25 42" src="https://user-images.githubusercontent.com/35066779/226097689-46c42693-3ee7-4ecc-9f4c-ee2d8763d5f6.png">
+Craft the perfect user experience with customizable text that embraces bold, italic, strikethrough, underline, monospace, hyperlinks, and dynamic font sizes – all at your fingertips.
 
+## Getting Started 🚀
 
-## Installation 💻
+To unleash the power of TypeSet in your Flutter application, ensure you have the Flutter SDK installed and up to date.
 
-**❗ In order to start using typeset you must have the [Flutter SDK][flutter_install_link] installed on your machine.**
+### Installation
 
-Add `typeset` to your `pubspec.yaml`:
+In your `pubspec.yaml`, under dependencies, add the following line:
 
 ```yaml
 dependencies:
-  typeset: #latest
+  typeset: ^latest_version
 ```
 
-Install it:
+Run the following command to install the package:
 
-```sh
+```shell
 flutter packages get
 ```
 
----
+### Usage 🌟
 
-
-🌟 Usage 🌟
+Utilize the TypeSet widget as easily as you would use the native `Text.rich()` in Flutter:
 
 ```dart
 import 'package:typeset/typeset.dart';
 
-TypeSet(inputText: 'Hello, *World!*');
-// returns 'World' with bold text
+// Bold Text Example
+TypeSet(inputText: 'Hello, *World!*'); // Renders 'World!' in bold
 
-TypeSet(inputText: 'Hello, _World!_');
-// returns 'World' with italic text
+// Italic Text Example
+TypeSet(inputText: 'Hello, _World!_'); // Renders 'World!' in italic
 
-TypeSet(inputText: 'Hello, ~World!~');
-// returns 'World' with strikethrough text
+// Strikethrough Text Example
+TypeSet(inputText: 'Hello, ~World!~'); // Renders 'World!' with a strikethrough
 
-TypeSet(inputText: 'Hello //World!//');
-// returns 'World' with underline text
+// Underline Text Example
+TypeSet(inputText: 'Hello #World!#'); // Renders 'World!' underlined
 
-TypeSet(inputText: 'Hello, `World!`');
-// returns 'World' with monospace text
+// Monospace Text Example
+TypeSet(inputText: 'Hello, `World!`'); // Renders 'World!' in monospace
 
-TypeSet(inputText: '[google.com|https://google.com]');
-// returns 'google.com' with link to google.com
+// Hyperlink Text Example
+TypeSet(inputText: '§google.com|https://google.com§'); // Renders 'google.com' as a clickable link
 
-///TypeSet also has every property which the Text.rich() has, so you can configure accordingly
-
+// Dynamic Font Size Example
+TypeSet(inputText: 'Hey, *Hello world<30>*'); // Renders 'Hello world' with font size 30
 ```
 
+TypeSet inherits all properties of the `Text.rich()` widget, allowing for a familiar and versatile configuration experience.
 
-## Features and bugs
+### Use **`¦` (broken bar)** and append with any reserved character to render them.
+Example:
+```dart
+Typeset(inputText: '*Hello ¦* World*');
+```
+## Features 🎨
 
-Please file feature requests and bugs at the [issue tracker][tracker].
+- **Backend-driven formatting**: Keep your text styling logic server-side for easy updates without the need to redeploy your app.
+- **Rich markdown-like formatting**: Easily implement bold, italic, strikethrough, underline, monospace, and hyperlinked text.
+- **Dynamic font resizing**: Adjust text sizes on the fly for emphasis or accessibility.
+- **Extensible**: Designed with openness for adding more styling options in future updates.
+
+## We Value Your Feedback 📬
+
+Have ideas for more features? Found a bug? Feel free to [open an issue][tracker] on our issue tracker. Your contributions make TypeSet better for everyone.
+
+## Keep Your App's Text Styling Dynamic and Engaging with TypeSet!
+
+---
+
+Remember to include accurate links where necessary, like a link to the image of the demo snapshot, and the issue tracker. Also, replace the placeholder `^latest_version` with the actual latest version number of your package.
+
 
 [flutter_install_link]: https://docs.flutter.dev/get-started/install
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
@@ -94,5 +105,3 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [coverage_badge]: /coverage_badge.svg
 [build_badge]: https://img.shields.io/github/workflow/status/rohanjsh/typeset/ci.svg
 [pub_points_badge]: https://img.shields.io/pub/points/typeset
-
-

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:typeset/typeset.dart';
 
@@ -28,101 +27,145 @@ class TypeSetExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TypeSet example'),
+        title: const Text('TypeSet Demo'),
       ),
       body: Center(
         child: ListView(
-          children: [
+          children: const [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22.0,
-                vertical: 22,
+              padding: EdgeInsets.symmetric(
+                horizontal: 22,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Divider(),
+                  Text(
+                    'Usage',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  Divider(),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
                     '''
-Make text formatting backend driven (if needed) with one widget!!
+Bold
+→ Hello, *World!* 
 
-Whatsapp like formatting with some addons!!
-(input looks like this)
+Italic
+→ Hello, _World!_
 
-→ Hello, *World!*          <Bold>
-→ Hello, _World!_          <Italic>
-→ Hello, ~World!~         <Strikethrough>
-→ Hello, //World!//         <Underline>
-→ Hello, `World!`          <Monospace>
-→ [google.com|https://google.com]   <Link>
+Strikethrough
+→ Hello, ~World!~ 
+
+Underline
+→ Hello, #World!#
+
+Monospace
+→ Hello, `World!` 
+
+Link
+→ §google.com|https://google.com§
 ''',
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+
+                  Divider(),
+                  Text(
+                    'Samples',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
-                  const TypeSet(
-                    inputText: 'bold:\n→ *Bold* *Text*',
+                  Divider(),
+
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TypeSet(
+                    inputText:
+                        '→ *TypeSet* _can_ #style# ~everything~ `you need` §with|https://rohanjsh.dev/§ _dynamic<18>_ _font<28>_ _size<25>_',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Divider(),
+                  Text(
+                    'Supported Stylings',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  Divider(),
+
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TypeSet(
+                    inputText: 'Bold:\n→ *Bold Text*',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const TypeSet(
-                    inputText: 'italic:\n→ _Italic_ _Text_',
+                  TypeSet(
+                    inputText: 'Italic:\n→ _Italic Text_ ',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const TypeSet(
-                    inputText: 'underline:\n→ //Underline// //Text//',
+                  TypeSet(
+                    inputText: 'Underline:\n→ #Underline Text#',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const TypeSet(
-                    inputText: 'strikethrough:\n→ ~Strikethrough~ ~Text~',
+                  TypeSet(
+                    inputText: 'Strikethrough:\n→ ~Strikethrough Text~',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const TypeSet(
-                    inputText: 'monospace:\n→ `monospace` `text`',
+                  TypeSet(
+                    inputText: 'Monospace:\n→ `monospace text`',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
 
                   //customized link textstyle and recognizer (tap recognizer)
                   TypeSet(
-                    inputText: 'link:\n→ [google.com|https://google.com]',
-                    style: const TextStyle(
+                    inputText: 'Link:\n→ §google.com|https://google.com§',
+                    style: TextStyle(
                       fontSize: 24,
                     ),
-                    linkStyle: const TextStyle(
-                      color: Colors.red,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => debugPrint(
-                            'link tapped',
-                          ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Divider(),
                 ],
               ),
             )
