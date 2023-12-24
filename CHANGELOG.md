@@ -1,7 +1,7 @@
 
 # Changelog
 
-# 2.0.0-beta.1
+# 2.0.0
 ### New Features
 - **Dynamic Font Sizing:** Font size can now be applied dynamically, enhancing visual hierarchy and readability.
 - **Literal Character Rendering:** Introducing the literal symbol `¦` to unambiguously represent reserved characters in text formatting, ensuring clarity in rendered output.
