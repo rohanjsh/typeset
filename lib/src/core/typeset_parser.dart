@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:typeset/src/core/typeset_controller.dart';
 import 'package:typeset/src/models/style_type_enum.dart';
 import 'package:typeset/typeset.dart';
@@ -223,6 +222,7 @@ class TypesetParser {
     TextStyle? linkStyle,
     GestureRecognizer? recognizer,
     TextStyle? monospaceStyle,
+    TextStyle? boldStyle,
   }) {
     final controller = TypesetController(
       input: inputText,
@@ -238,7 +238,7 @@ class TypesetParser {
 
       switch (text.styleType) {
         case StyleTypeEnum.link:
-          final linkData = text.value.split('|');
+          final linkData = text.value.split(TypesetReserved.linkSplitChar);
           final linkText = linkData.isNotEmpty ? linkData[0] : '';
           final url = linkData.length == 2 ? linkData[1] : '';
           spans.add(
@@ -254,7 +254,10 @@ class TypesetParser {
                     decorationColor: Colors.blue,
                   ),
               recognizer: recognizer ??
-                  (TapGestureRecognizer()..onTap = () => _launchUrl(url)),
+                  (TapGestureRecognizer()
+                    ..onTap = () => _launchUrl(
+                          url,
+                        )),
             ),
           );
           break;
@@ -264,7 +267,24 @@ class TypesetParser {
               text: justText,
               style: monospaceStyle ??
                   GoogleFonts.sourceCodePro(
-                    textStyle: TextStyle(fontSize: fontSize),
+                    textStyle: TextStyle(
+                      fontSize: fontSize,
+                    ),
+                  ),
+            ),
+          );
+          break;
+
+        case StyleTypeEnum.bold:
+          spans.add(
+            TextSpan(
+              text: justText,
+              style: boldStyle?.copyWith(
+                    fontSize: fontSize,
+                  ) ??
+                  TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: fontSize,
                   ),
             ),
           );
@@ -275,9 +295,6 @@ class TypesetParser {
             TextSpan(
               text: justText,
               style: TextStyle(
-                fontWeight: text.styleType == StyleTypeEnum.bold
-                    ? FontWeight.bold
-                    : null,
                 fontStyle: text.styleType == StyleTypeEnum.italic
                     ? FontStyle.italic
                     : null,
@@ -296,8 +313,16 @@ class TypesetParser {
   }
 
   static Future<void> _launchUrl(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    if (await canLaunchUrl(
+      Uri.parse(
+        url,
+      ),
+    )) {
+      await launchUrl(
+        Uri.parse(
+          url,
+        ),
+      );
     }
   }
 }

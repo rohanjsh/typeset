@@ -39,6 +39,9 @@ final class TypesetReserved {
   /// The literal for creating links.
   static const linkChar = '§';
 
+  /// The literal for splitting links.
+  static const linkSplitChar = '|';
+
   /// Regex to identify links
   static const fontSizeRegex = r'(.+?)<(\d+)>';
 }

@@ -47,6 +47,7 @@ class TypeSet extends StatelessWidget {
     this.recognizer,
     this.linkStyle,
     this.monospaceStyle,
+    this.boldStyle,
   });
 
   ///[style] is the style of the text
@@ -113,6 +114,9 @@ class TypeSet extends StatelessWidget {
   ///[monospaceStyle] is the style of the monospace text
   final TextStyle? monospaceStyle;
 
+  ///[boldStyle] is the style of the bold text
+  final TextStyle? boldStyle;
+
   @override
   Widget build(BuildContext context) {
     // Use the `RichText` widget to display the text with the correct styles
@@ -123,6 +127,7 @@ class TypeSet extends StatelessWidget {
           recognizer: recognizer,
           linkStyle: linkStyle,
           monospaceStyle: monospaceStyle,
+          boldStyle: boldStyle,
         ),
       ),
       textAlign: textAlign,
