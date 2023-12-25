@@ -1,6 +1,9 @@
 
 # Changelog
 
+# Next
+- BREAKING CHANGE: `TypeSet(inputText: "Foo")` is now `TypeSet("Foo")`
+
 # 2.0.0
 ### New Features
 - **Dynamic Font Sizing:** Font size can now be applied dynamically, enhancing visual hierarchy and readability.
