@@ -292,12 +292,11 @@
 //       } else {
 //         final style = text.type == StyleTypeEnum.monospace
 //             ? monospaceStyle ??
-//                 GoogleFonts.sourceCodePro(
-//                   textStyle: TextStyle(
-//                     fontWeight: FontWeight.normal,
-//                     fontSize: fontSize,
-//                   ),
-//                 )
+//                 TextStyle(
+//                   fontFamily: 'Courier',
+//                   fontWeight: FontWeight.normal,
+//                   fontSize: fontSize,
+//                 ),
 //             : TextStyle(
 //                 fontWeight:
 //                     text.type == StyleTypeEnum.bold ? FontWeight.bold :
