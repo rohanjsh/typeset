@@ -88,8 +88,7 @@ Link
                     height: 12,
                   ),
                   TypeSet(
-                    inputText:
-                        '→ *TypeSet* _can_ #style# ~everything~ `you need` §with|https://rohanjsh.dev/§ _dynamic<18>_ _font<28>_ _size<25>_',
+                    '→ *TypeSet* _can_ #style# ~everything~ `you need` §with|https://rohanjsh.dev/§ _dynamic<18>_ _font<28>_ _size<25>_',
                     style: TextStyle(
                       fontSize: 18,
                     ),
@@ -110,7 +109,7 @@ Link
                     height: 12,
                   ),
                   TypeSet(
-                    inputText: 'Bold:\n→ *Bold Text*',
+                    'Bold:\n→ *Bold Text*',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -119,7 +118,7 @@ Link
                     height: 20,
                   ),
                   TypeSet(
-                    inputText: 'Italic:\n→ _Italic Text_ ',
+                    'Italic:\n→ _Italic Text_ ',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -128,7 +127,7 @@ Link
                     height: 20,
                   ),
                   TypeSet(
-                    inputText: 'Underline:\n→ #Underline Text#',
+                    'Underline:\n→ #Underline Text#',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -137,7 +136,7 @@ Link
                     height: 20,
                   ),
                   TypeSet(
-                    inputText: 'Strikethrough:\n→ ~Strikethrough Text~',
+                    'Strikethrough:\n→ ~Strikethrough Text~',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -146,7 +145,7 @@ Link
                     height: 20,
                   ),
                   TypeSet(
-                    inputText: 'Monospace:\n→ `monospace text`',
+                    'Monospace:\n→ `monospace text`',
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -157,7 +156,7 @@ Link
 
                   //customized link textstyle and recognizer (tap recognizer)
                   TypeSet(
-                    inputText: 'Link:\n→ §google.com|https://google.com§',
+                    'Link:\n→ §google.com|https://google.com§',
                     style: TextStyle(
                       fontSize: 24,
                     ),

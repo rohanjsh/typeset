@@ -22,7 +22,7 @@ class TypeSetTest extends StatelessWidget {
             children: [
               if (title != null)
                 TypeSet(
-                  inputText: title!,
+                  title!,
                   style: style,
                 ),
               if (titleForExt != null)

@@ -9,7 +9,7 @@ extension TypeSetExtension on String {
     TextAlign textAlign = TextAlign.start,
   }) {
     return TypeSet(
-      inputText: this,
+      this,
       style: style,
       textAlign: textAlign,
     );

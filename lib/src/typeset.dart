@@ -28,9 +28,9 @@ import 'package:typeset/src/core/typeset_parser.dart';
 class TypeSet extends StatelessWidget {
   ///[inputText] is required field
 
-  const TypeSet({
+  const TypeSet(
+    this.inputText, {
     super.key,
-    required this.inputText,
     this.style,
     this.textAlign = TextAlign.start,
     this.textDirection,

@@ -1,8 +1,8 @@
 
 # Changelog
 
-# Next
-
+# Next (To be Released)
+- BREAKING CHANGE: `TypeSet(inputText: "Foo")` is now `TypeSet("Foo")`
 - Remove `google_fonts` dependency
 - Change default monospace font to `Courier`, as provided by the operating system.
 
