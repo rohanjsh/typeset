@@ -25,7 +25,7 @@ extension TypeSetExtension on String {
     TextStyle? monospaceStyle,
   }) {
     return TypeSet(
-      inputText: this,
+      this,
       style: style,
       textAlign: textAlign,
       textDirection: textDirection,

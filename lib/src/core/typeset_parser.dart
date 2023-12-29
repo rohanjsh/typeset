@@ -128,10 +128,8 @@ class TypesetParser {
 
     if (hasMonoSpace) {
       return monospaceStyle ??
-          GoogleFonts.sourceCodePro(
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.normal,
-            ),
+          const TextStyle(
+            fontFamily: 'Courier',
           );
     }
 
@@ -266,10 +264,8 @@ class TypesetParser {
             TextSpan(
               text: justText,
               style: monospaceStyle ??
-                  GoogleFonts.sourceCodePro(
-                    textStyle: TextStyle(
-                      fontSize: fontSize,
-                    ),
+                  const TextStyle(
+                    fontFamily: 'Courier',
                   ),
             ),
           );
