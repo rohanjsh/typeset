@@ -62,14 +62,34 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
 }) {
   final buttonItems = <ContextMenuButtonItem>[];
   final value = editableTextState.textEditingValue;
+  final selectionText = value.selection.textInside(value.text);
 
   // If no specific styles are provided, add all available styles
   if (styleTypes == null || styleTypes.isEmpty) {
     styleTypes = StyleTypeEnum.values.toList();
   }
 
+  //if text is already styled, return
+  for (final char in TypesetReserved.all) {
+    if (selectionText.startsWith(char) && selectionText.endsWith(char)) {
+      return buttonItems;
+    }
+  }
+
+  // Helper to escape reserved chars with broken bar
+  String escapeReservedChars(String originalText) {
+    final escapedText = originalText.split('').map((char) {
+      if (TypesetReserved.all.contains(char)) {
+        // Prepend the escape literal before the reserved char
+        return '${TypesetReserved.escapeLiteral}$char';
+      }
+      return char;
+    }).join();
+    return escapedText;
+  }
+
   void applyTextStyle(String char) {
-    final text = value.selection.textInside(value.text);
+    final text = escapeReservedChars(value.selection.textInside(value.text));
     final newText = value.text.replaceRange(
       value.selection.start,
       value.selection.end,
@@ -79,24 +99,27 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
       value.copyWith(
         text: newText,
         selection: TextSelection.collapsed(
-          offset: value.selection.start + 2 + text.length,
+          offset: value.selection.start + char.length * 2 + text.length,
         ),
       ),
     );
   }
 
   void applyLinkStyle() {
-    final text = value.selection.textInside(value.text);
+    final text = escapeReservedChars(value.selection.textInside(value.text));
     final newText = value.text.replaceRange(
       value.selection.start,
       value.selection.end,
-      '§$text|https://$text§',
+      '${TypesetReserved.linkChar}$text${TypesetReserved.linkSplitChar}https://$text${TypesetReserved.linkChar}',
     );
     editableTextState.updateEditingValue(
       value.copyWith(
         text: newText,
         selection: TextSelection.collapsed(
-          offset: value.selection.start + text.length + 2,
+          offset: value.selection.start +
+              text.length +
+              TypesetReserved.linkChar.length * 2 +
+              TypesetReserved.linkSplitChar.length,
         ),
       ),
     );
