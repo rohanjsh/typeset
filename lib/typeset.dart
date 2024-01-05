@@ -5,3 +5,4 @@ library typeset;
 export 'src/core/typeset_reserved.dart';
 export 'src/typeset.dart';
 export 'src/typeset_ext.dart';
+export 'src/typeset_context_menus.dart';
