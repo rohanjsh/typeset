@@ -33,7 +33,7 @@ import 'package:typeset/typeset.dart';
 ///   contextMenuBuilder: (context, editableTextState) {
 ///     return AdaptiveTextSelectionToolbar.buttonItems(
 ///       anchors: editableTextState.contextMenuAnchors,
-///       buttonItems: getTypesetContextMenus(editableTextState: editableTextState),
+///   buttonItems: getTypesetContextMenus(editableTextState: editableTextState),
 ///     );
 ///   },
 /// );
@@ -41,7 +41,8 @@ import 'package:typeset/typeset.dart';
 ///
 /// ## Context Menu Item Actions:
 ///
-/// When a context menu item is selected, it applies a specific style to the text.
+/// When a context menu item is selected,
+/// it applies a specific style to the text.
 /// For instance, selecting 'Bold' wraps the selected text with `boldChar`.
 /// Similarly, 'Italic', 'Strikethrough', 'Monospace', 'Underline', and 'Link'
 /// apply their respective styles as per the definitions in [TypesetReserved].
@@ -63,6 +64,10 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   final buttonItems = <ContextMenuButtonItem>[];
   final value = editableTextState.textEditingValue;
   final selectionText = value.selection.textInside(value.text);
+
+  if (selectionText.isEmpty) {
+    return buttonItems;
+  }
 
   // If no specific styles are provided, add all available styles
   if (styleTypes == null || styleTypes.isEmpty) {
@@ -129,7 +134,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.bold)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Bold',
+        label: StyleTypeEnum.bold.styleTypeEnumValue,
         onPressed: () => applyTextStyle(TypesetReserved.boldChar),
       ),
     );
@@ -138,7 +143,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.italic)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Italic',
+        label: StyleTypeEnum.italic.styleTypeEnumValue,
         onPressed: () => applyTextStyle(TypesetReserved.italicChar),
       ),
     );
@@ -147,7 +152,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.strikethrough)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Strikethrough',
+        label: StyleTypeEnum.strikethrough.styleTypeEnumValue,
         onPressed: () => applyTextStyle(TypesetReserved.strikethroughChar),
       ),
     );
@@ -156,7 +161,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.monospace)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Monospace',
+        label: StyleTypeEnum.monospace.styleTypeEnumValue,
         onPressed: () => applyTextStyle(TypesetReserved.monospaceChar),
       ),
     );
@@ -165,7 +170,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.underline)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Underline',
+        label: StyleTypeEnum.underline.styleTypeEnumValue,
         onPressed: () => applyTextStyle(TypesetReserved.underlineChar),
       ),
     );
@@ -174,7 +179,7 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
   if (styleTypes.contains(StyleTypeEnum.link)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: 'Link',
+        label: StyleTypeEnum.link.styleTypeEnumValue,
         onPressed: applyLinkStyle,
       ),
     );
