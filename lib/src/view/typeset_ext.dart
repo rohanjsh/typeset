@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
-import 'package:typeset/src/typeset.dart';
+import 'package:typeset/src/view/typeset.dart';
 
 ///TypeSet extension on String to use [typeset] method
 extension TypeSetExtension on String {
