@@ -1,10 +1,18 @@
 
 # Changelog
 
-# Next (To be Released)
-- BREAKING CHANGE: `TypeSet(inputText: "Foo")` is now `TypeSet("Foo")`
-- Remove `google_fonts` dependency
+# 2.1.0
+### New
+- Introducing context menus, use `getTypesetContextMenus()` to get the context menus for the text.
 - Change default monospace font to `Courier`, as provided by the operating system.
+
+### Breaking
+- `TypeSet(inputText: "Foo")` is now `TypeSet("Foo")` to match semantics of `Text("Foo")`
+
+### Other
+- Remove `google_fonts` dependency
+- 95% test coverage
+- Deprecated parser removed
 
 # 2.0.0
 ### New Features
