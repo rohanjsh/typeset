@@ -40,25 +40,25 @@ Utilize the TypeSet widget as easily as you would use the native `Text.rich()` i
 import 'package:typeset/typeset.dart';
 
 // Bold Text Example
-TypeSet(inputText: 'Hello, *World!*'); // Renders 'World!' in bold
+TypeSet('Hello, *World!*'); // Renders 'World!' in bold
 
 // Italic Text Example
-TypeSet(inputText: 'Hello, _World!_'); // Renders 'World!' in italic
+TypeSet('Hello, _World!_'); // Renders 'World!' in italic
 
 // Strikethrough Text Example
-TypeSet(inputText: 'Hello, ~World!~'); // Renders 'World!' with a strikethrough
+TypeSet('Hello, ~World!~'); // Renders 'World!' with a strikethrough
 
 // Underline Text Example
-TypeSet(inputText: 'Hello #World!#'); // Renders 'World!' underlined
+TypeSet('Hello #World!#'); // Renders 'World!' underlined
 
 // Monospace Text Example
-TypeSet(inputText: 'Hello, `World!`'); // Renders 'World!' in monospace
+TypeSet('Hello, `World!`'); // Renders 'World!' in monospace
 
 // Hyperlink Text Example
-TypeSet(inputText: '§google.com|https://google.com§'); // Renders 'google.com' as a clickable link
+TypeSet('§google.com|https://google.com§'); // Renders 'google.com' as a clickable link
 
 // Dynamic Font Size Example
-TypeSet(inputText: 'Hey, *Hello world<30>*'); // Renders 'Hello world' with font size 30
+TypeSet('Hey, *Hello world<30>*'); // Renders 'Hello world' with font size 30
 ```
 
 TypeSet inherits all properties of the `Text.rich()` widget, allowing for a familiar and versatile configuration experience.
@@ -66,7 +66,7 @@ TypeSet inherits all properties of the `Text.rich()` widget, allowing for a fami
 ### Use **`¦` (broken bar)** and append with any reserved character to render them.
 Example:
 ```dart
-Typeset(inputText: '*Hello ¦* World*');
+Typeset('*Hello ¦* World*');
 ```
 ## Features 🎨
 
