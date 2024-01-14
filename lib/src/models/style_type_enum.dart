@@ -14,23 +14,28 @@
 /// the different types of text formatting.
 enum StyleTypeEnum {
   /// Bold Style
-  bold,
+  bold('Bold'),
 
   /// Italic Style
-  italic,
+  italic('Italic'),
 
   /// Underline Style
-  underline,
+  underline('Underline'),
 
   /// Plain Style
-  plain,
+  plain('Plain'),
 
   /// Monospace Style
-  monospace,
+  monospace('Monospace'),
 
   /// Strikethrough Style
-  strikethrough,
+  strikethrough('Strikethrough'),
 
   /// Link Style
-  link,
+  link('Link');
+
+  const StyleTypeEnum(this.styleTypeEnumValue);
+
+  /// The String value of the enum.
+  final String styleTypeEnumValue;
 }

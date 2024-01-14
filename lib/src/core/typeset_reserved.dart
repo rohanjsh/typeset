@@ -44,4 +44,16 @@ final class TypesetReserved {
 
   /// Regex to identify links
   static const fontSizeRegex = r'(.+?)<(\d+)>';
+
+  /// all set of reserved characters
+  static const all = {
+    escapeLiteral,
+    boldChar,
+    italicChar,
+    strikethroughChar,
+    monospaceChar,
+    underlineChar,
+    linkChar,
+    linkSplitChar,
+  };
 }
