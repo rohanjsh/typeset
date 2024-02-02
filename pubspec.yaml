@@ -13,11 +13,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mocktail: ^1.0.2
-  url_launcher: ^6.2.3
+  url_launcher: ^6.2.4
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.3
   very_good_analysis: ">=3.1.0 <6.0.0"
