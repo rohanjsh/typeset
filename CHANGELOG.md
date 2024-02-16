@@ -1,6 +1,10 @@
 
 # Changelog
 
+# 2.1.1
+### Bug Fixes
+- Moved `mocktail` to `dev_dependencies` to avoid conflicts with other packages and build configs.
+
 # 2.1.0
 ### New
 - Introducing context menus, use `getTypesetContextMenus()` to get the context menus for the text.
