@@ -1,6 +1,10 @@
 
 # Changelog
 
+# 2.1.2
+### Chore
+- Dependency updates
+
 # 2.1.1
 ### Bug Fixes
 - Moved `mocktail` to `dev_dependencies` to avoid conflicts with other packages and build configs.
