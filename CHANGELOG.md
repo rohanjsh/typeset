@@ -1,6 +1,14 @@
 
 # Changelog
 
+# 2.2.0
+### New
+- Recognize individual links and apply desired actions on tap.
+
+### Breaking
+- `recognizer` is now `linkGestureRecognizer` callback
+- Removed `url_launcher` dependency
+
 # 2.1.2
 ### Chore
 - Dependency updates
