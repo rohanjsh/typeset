@@ -60,7 +60,7 @@ void testCustomStyling() {
   final spans = TypesetParser.parser(
     inputText: inputText,
     linkStyle: linkStyle,
-    recognizer: recognizer,
+    linkRecognizerBuilder: (linkText, url) => recognizer,
     boldStyle: boldStyle,
   );
 
