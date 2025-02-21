@@ -170,7 +170,13 @@ void main() {
     test('parses link correctly', () {
       const inputText = '§Example|http://example.com§';
 
-      final result = TypesetParser.parser(inputText: inputText);
+      final result = TypesetParser.parser(
+        inputText: inputText,
+        linkRecognizerBuilder: (linkText, url) => TapGestureRecognizer()
+          ..onTap = () {
+            debugPrint('Link tapped');
+          },
+      );
 
       expect(result.length, 1);
       final linkSpan = result[0];
