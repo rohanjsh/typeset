@@ -11,7 +11,7 @@ void main() {
       test('Parser with monospace', testMonoSpaceInParser);
       test('Parser with custom styling', testCustomStyling);
       test('Parser with font size', testFontSize);
-      test('Parser with url launcher', testUrlLauncher);
+      test('Parser with recognizer', testUrlLauncher);
     },
   );
 }
@@ -60,7 +60,7 @@ void testCustomStyling() {
   final spans = TypesetParser.parser(
     inputText: inputText,
     linkStyle: linkStyle,
-    recognizer: recognizer,
+    linkRecognizerBuilder: (linkText, url) => recognizer,
     boldStyle: boldStyle,
   );
 
@@ -99,6 +99,8 @@ void testUrlLauncher() {
   const inputText = 'This is a §link|https://google.com§';
   final spans = TypesetParser.parser(
     inputText: inputText,
+    linkRecognizerBuilder: (text, url) => TapGestureRecognizer()
+      ..onTap = () => debugPrint('URL: $url and Text: $text'),
   );
 
   expect(spans[1].recognizer.runtimeType, TapGestureRecognizer);
