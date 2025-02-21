@@ -55,7 +55,13 @@ TypeSet('Hello #World!#'); // Renders 'World!' underlined
 TypeSet('Hello, `World!`'); // Renders 'World!' in monospace
 
 // Hyperlink Text Example
-TypeSet('§google.com|https://google.com§'); // Renders 'google.com' as a clickable link
+TypeSet('§google.com|https://google.com§', 
+    linkRecognizerBuilder: (linkText, url) =>
+                        TapGestureRecognizer()
+                          ..onTap = () {
+                            // your desired action
+                          },
+    ); // Renders 'google.com' as a link
 
 // Dynamic Font Size Example
 TypeSet('Hey, *Hello world<30>*'); // Renders 'Hello world' with font size 30
