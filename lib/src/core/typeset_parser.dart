@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:typeset/src/core/typeset_controller.dart';
 import 'package:typeset/src/models/style_type_enum.dart';
 import 'package:typeset/typeset.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 ///[TypesetParser]
 class TypesetParser {
@@ -35,8 +34,8 @@ class TypesetParser {
   /// - [inputText] (required): A string represents the input text to be parsed.
   /// - [linkStyle] (optional): A [TextStyle] object represents the style
   ///   to be applied to link text.
-  /// - [recognizer] (optional): A [GestureRecognizer] object representing
-  ///   the tap gesture recognizer for links.
+  /// - [linkRecognizerBuilder] (optional): A [GestureRecognizer] object
+  ///   representing the tap gesture recognizer for links.
   /// - [monospaceStyle] (optional): A [TextStyle] object representing
   ///   the style to be applied to monospace text.
   ///
@@ -67,7 +66,7 @@ class TypesetParser {
   static List<TextSpan> parser({
     required String inputText,
     TextStyle? linkStyle,
-    GestureRecognizer? recognizer,
+    GestureRecognizer Function(String text, String url)? linkRecognizerBuilder,
     TextStyle? monospaceStyle,
     TextStyle? boldStyle,
   }) {
@@ -100,11 +99,7 @@ class TypesetParser {
                     fontSize: fontSize,
                     decorationColor: Colors.blue,
                   ),
-              recognizer: recognizer ??
-                  (TapGestureRecognizer()
-                    ..onTap = () => _launchUrl(
-                          url,
-                        )),
+              recognizer: linkRecognizerBuilder?.call(linkText, url),
             ),
           );
           break;
@@ -155,19 +150,5 @@ class TypesetParser {
       }
     }
     return spans;
-  }
-
-  static Future<void> _launchUrl(String url) async {
-    if (await canLaunchUrl(
-      Uri.parse(
-        url,
-      ),
-    )) {
-      await launchUrl(
-        Uri.parse(
-          url,
-        ),
-      );
-    }
   }
 }

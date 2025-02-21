@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:typeset/typeset.dart';
 
@@ -31,26 +32,26 @@ class TypeSetExample extends StatelessWidget {
       ),
       body: Center(
         child: ListView(
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 22,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Divider(),
-                  Text(
+                  const Divider(),
+                  const Text(
                     'Usage',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                  Divider(),
-                  SizedBox(
+                  const Divider(),
+                  const SizedBox(
                     height: 12,
                   ),
-                  Text(
+                  const Text(
                     '''
 Bold
 → Hello, *World!* 
@@ -75,96 +76,108 @@ Link
                     ),
                   ),
 
-                  Divider(),
-                  Text(
+                  const Divider(),
+                  const Text(
                     'Samples',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   TypeSet(
                     '→ *TypeSet* _can_ #style# ~everything~ `you need` §with|https://rohanjsh.dev/§ _dynamic<18>_ _font<28>_ _size<25>_',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
+                    linkRecognizerBuilder: (linkText, url) {
+                      return TapGestureRecognizer()
+                        ..onTap = () {
+                          debugPrint('URL: $url and Text: $linkText');
+                        };
+                    },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
-                  Divider(),
-                  Text(
+                  const Divider(),
+                  const Text(
                     'Supported Stylings',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  TypeSet(
-                    'Bold:\n→ *Bold Text*',
+                  const TypeSet(
+                    'Bold:\n→ Hello<20> world',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     'Italic:\n→ _Italic Text_ ',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     'Underline:\n→ #Underline Text#',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     'Strikethrough:\n→ ~Strikethrough Text~',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     'Monospace:\n→ `monospace text`',
                     style: TextStyle(
                       fontSize: 24,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 
                   //customized link textstyle and recognizer (tap recognizer)
                   TypeSet(
                     'Link:\n→ §google.com|https://google.com§',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                     ),
+                    linkRecognizerBuilder: (linkText, url) {
+                      return TapGestureRecognizer()
+                        ..onTap = () {
+                          debugPrint('URL: $url and Text: $linkText');
+                        };
+                    },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Divider(),
+                  const Divider(),
                 ],
               ),
             )

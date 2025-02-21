@@ -1,6 +1,6 @@
 name: typeset
 description: Whatsapp like text styling for you! -- Bold, Italic, Underline and more -- Drive your text style through Backend!
-version: 2.1.2
+version: 2.2.0
 repository: https://github.com/rohanjsh/typeset/
 screenshots:
   - description: "Examples of the typeset formatters"
@@ -13,7 +13,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: ^6.3.0
 
 
 dev_dependencies:

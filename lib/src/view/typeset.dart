@@ -1,10 +1,10 @@
-/// {@template typeset}
-/// WhatsApp like text formatting for you!
-/// {@endtemplate}
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:typeset/src/core/typeset_parser.dart';
 
+/// {@template typeset}
+/// WhatsApp like text formatting for you!
+/// {@endtemplate}
 /// Format the text with different styles, similar to whatsapp
 ///
 /// Following is the usage:
@@ -44,7 +44,7 @@ class TypeSet extends StatelessWidget {
     this.textHeightBehavior,
     this.selectionColor,
     this.strutStyle,
-    this.recognizer,
+    this.linkRecognizerBuilder,
     this.linkStyle,
     this.monospaceStyle,
     this.boldStyle,
@@ -105,8 +105,9 @@ class TypeSet extends StatelessWidget {
 
   final StrutStyle? strutStyle;
 
-  ///[recognizer] is the recognizer of the text
-  final GestureRecognizer? recognizer;
+  ///[linkRecognizerBuilder] is the recognizer of the text
+  final GestureRecognizer Function(String linkText, String url)?
+      linkRecognizerBuilder;
 
   ///[linkStyle] is the style of the link
   final TextStyle? linkStyle;
@@ -124,7 +125,7 @@ class TypeSet extends StatelessWidget {
       TextSpan(
         children: TypesetParser.parser(
           inputText: inputText,
-          recognizer: recognizer,
+          linkRecognizerBuilder: linkRecognizerBuilder,
           linkStyle: linkStyle,
           monospaceStyle: monospaceStyle,
           boldStyle: boldStyle,

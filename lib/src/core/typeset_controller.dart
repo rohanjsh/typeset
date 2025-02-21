@@ -42,9 +42,9 @@ import 'package:typeset/src/models/style_type_value_model.dart';
 /// 9. Return the `list` of `TypeValueModel` objects.
 ///
 /// Outputs:
-/// - `list` (List<TypeValueModel>): A list of `TypeValueModel` objects
-///    representing the manipulated string. Each object contains a style type
-///    and the corresponding text segment.
+/// - `list` : A list of `StyleTypeValueModel`
+///    objects representing the manipulated string.
+///    Each object contains a style type and the corresponding text segment.
 class TypesetController {
   /// The constructor for the TypesetController class.
   TypesetController({
