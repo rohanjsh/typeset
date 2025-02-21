@@ -1,10 +1,10 @@
-/// {@template typeset}
-/// WhatsApp like text formatting for you!
-/// {@endtemplate}
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:typeset/src/core/typeset_parser.dart';
 
+/// {@template typeset}
+/// WhatsApp like text formatting for you!
+/// {@endtemplate}
 /// Format the text with different styles, similar to whatsapp
 ///
 /// Following is the usage:
