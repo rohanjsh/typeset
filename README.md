@@ -96,18 +96,70 @@ TypeSet('Regular text with *bigger<24>* words');
 TypeSet('Use the ¦* symbol to show *asterisks*');
 ```
 
+## 💬 Interactive Text Editing
+
 ### TypeSetEditingController
 
-New in v2.3.0! Add WhatsApp-like styling to your text input fields:
+New in v2.3.0! Add WhatsApp-like styling to your text input fields with real-time formatting preview:
 
 ```dart
-final controller = TypeSetEditingController();
+import 'package:typeset/typeset.dart';
+import 'package:flutter/material.dart';
 
+// Create a controller with optional styling parameters
+final controller = TypeSetEditingController(
+  // Initial text with formatting
+  text: 'This is *bold* and _italic_',
+  // Style for the formatting markers
+  markerColor: Colors.grey.shade400,
+  // Style for links
+  linkStyle: const TextStyle(color: Colors.blue),
+  // Style for bold text
+  boldStyle: const TextStyle(fontWeight: FontWeight.bold),
+  // Style for monospace text
+  monospaceStyle: const TextStyle(fontFamily: 'Courier'),
+);
+
+// Use it with a TextField
 TextField(
   controller: controller,
-  // Your other TextField properties
+  maxLines: 3,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: 'Type formatted text here...',
+  ),
 );
 ```
+
+### Context Menu Integration
+
+Add formatting options to the text selection context menu with `getTypesetContextMenus()`:
+
+```dart
+import 'package:typeset/typeset.dart';
+import 'package:flutter/material.dart';
+
+TextField(
+  controller: TypeSetEditingController(),
+  contextMenuBuilder: (context, editableTextState) {
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editableTextState.contextMenuAnchors,
+      buttonItems: [
+        // Add TypeSet formatting options to the context menu
+        ...getTypesetContextMenus(
+          editableTextState: editableTextState,
+          // Optional: specify which formatting options to include
+          // styleTypes: [StyleTypeEnum.bold, StyleTypeEnum.italic],
+        ),
+        // Keep the default context menu items
+        ...editableTextState.contextMenuButtonItems,
+      ],
+    );
+  },
+);
+```
+
+This adds formatting buttons (Bold, Italic, Strikethrough, etc.) to the text selection menu, allowing users to easily format selected text.
 ## ✨ Key Features
 
 - **WhatsApp-like Formatting** - Familiar syntax that users already understand
