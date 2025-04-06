@@ -72,7 +72,7 @@ TypeSet('Hello *Flutter* developers!');
 | **Bold** | `*text*` | **text** |
 | _Italic_ | `_text_` | _text_ |
 | ~~Strikethrough~~ | `~text~` | ~~text~~ |
-| Underline | `#text#` | <u>text</u> |
+| Underline | `#text#` | <ins>text</ins> |
 | `Monospace` | `` `text` `` | `text` |
 | [Link](https://flutter.dev) | `§Link text\|https://url§` | [Link text](https://url) |
 | Font Size | `text<size>` | Renders text at specified size |
