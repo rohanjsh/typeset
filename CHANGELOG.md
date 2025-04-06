@@ -1,13 +1,21 @@
 
 # Changelog
 
+# 2.3.0
+### New
+- *TypeSetEditingController* - Give your chatroom life.
+- Added back url_launcher package for default link behavior.
+
+### Others
+- Test suite for TypeSetEditingController
+- Updated example app to showcase all features including TypeSetEditingController and - getTypesetContextMenus.
+
 # 2.2.0
 ### New
 - Recognize individual links and apply desired actions on tap.
 
 ### Breaking
-- `recognizer` is now `linkGestureRecognizer` callback
-- Removed `url_launcher` dependency
+- `recognizer` is now `linkRecognizerBuilder` callback
 
 # 2.1.2
 ### Chore
@@ -65,9 +73,9 @@
 
 **Usage**
 - BOLD → Hello, \*World!*
-- ITALIC → Hello,  \_World!_ 
+- ITALIC → Hello,  \_World!_
 - STRIKETHROUGH → Hello, \~World!~
-- UNDERLINE → Hello, //World!// 
+- UNDERLINE → Hello, //World!//
 - MONOSPACE → Hello, \`World!`
 - LINK → [google.com|https://google.com]
 
@@ -91,5 +99,5 @@ Thanks for choosing our text formatting widget for all your formatting needs. We
 - feat: WhatsApp like formatting for you all!🎉
 
 
-Thank you for being part of our journey. Your feedback is the beacon that guides our innovation. 
-*Please note that all changes included in beta releases are for testing purposes and may change before the final release.* 
+Thank you for being part of our journey. Your feedback is the beacon that guides our innovation.
+*Please note that all changes included in beta releases are for testing purposes and may change before the final release.*

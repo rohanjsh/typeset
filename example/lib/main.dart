@@ -21,8 +21,34 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TypeSetExample extends StatelessWidget {
+class TypeSetExample extends StatefulWidget {
   const TypeSetExample({super.key});
+
+  @override
+  State<TypeSetExample> createState() => _TypeSetExampleState();
+}
+
+class _TypeSetExampleState extends State<TypeSetExample> {
+  late final TypeSetEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TypeSetEditingController(
+      text:
+          'This is *bold*, _italic_, ~strikethrough~, #underlined#, `monospace`, and a §link|https://flutter.dev§',
+      markerColor: Colors.grey.shade400,
+      linkStyle: const TextStyle(color: Colors.blue),
+      boldStyle: const TextStyle(fontWeight: FontWeight.bold),
+      monospaceStyle: const TextStyle(fontFamily: 'Courier'),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +80,19 @@ class TypeSetExample extends StatelessWidget {
                   const Text(
                     '''
 Bold
-→ Hello, *World!* 
+→ Hello, *World!*
 
 Italic
 → Hello, _World!_
 
 Strikethrough
-→ Hello, ~World!~ 
+→ Hello, ~World!~
 
 Underline
 → Hello, #World!#
 
 Monospace
-→ Hello, `World!` 
+→ Hello, `World!`
 
 Link
 → §google.com|https://google.com§
@@ -88,17 +114,11 @@ Link
                   const SizedBox(
                     height: 12,
                   ),
-                  TypeSet(
+                  const TypeSet(
                     '→ *TypeSet* _can_ #style# ~everything~ `you need` §with|https://rohanjsh.dev/§ _dynamic<18>_ _font<28>_ _size<25>_',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                     ),
-                    linkRecognizerBuilder: (linkText, url) {
-                      return TapGestureRecognizer()
-                        ..onTap = () {
-                          debugPrint('URL: $url and Text: $linkText');
-                        };
-                    },
                   ),
                   const SizedBox(
                     height: 24,
@@ -178,6 +198,52 @@ Link
                     height: 20,
                   ),
                   const Divider(),
+                  const Text(
+                    'Chat - TypeSet Input',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _controller,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter text here...',
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        debugPrint(val);
+                      });
+                    },
+                    contextMenuBuilder: (context, editableTextState) {
+                      return AdaptiveTextSelectionToolbar.buttonItems(
+                        anchors: editableTextState.contextMenuAnchors,
+                        buttonItems: [
+                          ...getTypesetContextMenus(
+                            editableTextState: editableTextState,
+                          ),
+                          ...editableTextState.contextMenuButtonItems,
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Preview',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TypeSet(
+                    _controller.text,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 100),
                 ],
               ),
             )
