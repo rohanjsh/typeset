@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:typeset/src/core/typeset_controller.dart';
 import 'package:typeset/src/models/style_type_enum.dart';
 import 'package:typeset/typeset.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 ///[TypesetParser]
 class TypesetParser {
@@ -99,7 +100,8 @@ class TypesetParser {
                     fontSize: fontSize,
                     decorationColor: Colors.blue,
                   ),
-              recognizer: linkRecognizerBuilder?.call(linkText, url),
+              recognizer: linkRecognizerBuilder?.call(linkText, url) ??
+                  (url.isNotEmpty ? _launch(url) : null),
             ),
           );
           break;
@@ -150,5 +152,28 @@ class TypesetParser {
       }
     }
     return spans;
+  }
+
+  /// Creates a [TapGestureRecognizer] that launches the given URL when tapped
+  ///
+  /// If the URL cannot be launched, it will print a debug message
+  static TapGestureRecognizer _launch(String url) {
+    return TapGestureRecognizer()
+      ..onTap = () async {
+        final uri = Uri.tryParse(url);
+        if (uri != null) {
+          try {
+            if (await launcher.canLaunchUrl(uri)) {
+              await launcher.launchUrl(uri);
+            } else {
+              debugPrint('Could not launch URL: $url');
+            }
+          } catch (e) {
+            debugPrint('Error launching URL: $e');
+          }
+        } else {
+          debugPrint('Invalid URL: $url');
+        }
+      };
   }
 }

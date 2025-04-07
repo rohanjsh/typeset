@@ -42,7 +42,7 @@ final class TypesetReserved {
   /// The literal for splitting links.
   static const linkSplitChar = '|';
 
-  /// Regex to identify links
+  /// Regex to identify font size
   static const fontSizeRegex = r'(.+?)<(\d+)>';
 
   /// all set of reserved characters

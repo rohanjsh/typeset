@@ -1,95 +1,199 @@
 ---
 
-# TypeSet: Elegant Text Styling for Flutter
+<div align="center">
+
+# ✨ TypeSet ✨
+### Powerful Text Styling for Flutter
+
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![pub package][pub_badge]][pub_link]
 ![pub points][pub_points_badge]
+[![build status][build_badge]][tracker]
 
-Enhance your Flutter app's text presentation with TypeSet, the all-in-one solution for text styling and formatting that's as dynamic as your app needs to be. Inspired by familiar markdown formatting, TypeSet allows you to seamlessly integrate rich text features, including variable font sizes and web links, without disrupting the underlying logic of your code. With backend-driven formatting capability, WhatsApp-like ease, and additional formatting options, TypeSet offers the fluidity to make any text come alive!
+</div>
 
-## Preview of Possibilities
+## Transform Your Text Experience
 
-<img width="346" alt="Screenshot 2023-03-18 at 10 25 42" src="https://github.com/rohanjsh/typeset/assets/35066779/34c49da7-4a47-41a2-8af1-0f9d5a093689">
+TypeSet brings WhatsApp, Telegram-like text styling to your Flutter apps with a powerful twist. Create rich, dynamic text experiences that can be driven by your backend or controlled directly in your UI.
 
-Craft the perfect user experience with customizable text that embraces bold, italic, strikethrough, underline, monospace, hyperlinks, and dynamic font sizes – all at your fingertips.
+With TypeSet, you can seamlessly integrate **bold**, _italic_, ~~strikethrough~~, underlined text, `monospace`, hyperlinks, and even dynamic font sizing without complex widgets or convoluted styling code.
 
-## Getting Started 🚀
+## 📱 See It In Action
 
-To unleash the power of TypeSet in your Flutter application, ensure you have the Flutter SDK installed and up to date.
+<table align="center">
+  <tr>
+    <th>TypeSet Widget</th>
+    <th>TypeSetEditingController</th>
+  </tr>
+  <tr>
+    <td>
+      <img width="346" alt="TypeSet Widget" src="https://github.com/user-attachments/assets/a0f9695d-5735-426d-9f66-5e7e991791fa">
+    </td>
+    <td>
+      <img width="346" alt="TypeSetEditingController" src="https://github.com/user-attachments/assets/6ecc0930-c38f-4253-807c-c8fcd8fb6482">
+    </td>
+  </tr>
+</table>
+
+Craft the perfect user experience with text styling that feels natural to your users. TypeSet makes it easy to implement rich text features that would otherwise require complex custom solutions.
+
+## 🚀 Getting Started
 
 ### Installation
 
-In your `pubspec.yaml`, under dependencies, add the following line:
+Add TypeSet to your project by including it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  typeset: ^latest_version
+  typeset: ^2.3.0  # Check pub.dev for the latest version
 ```
 
-Run the following command to install the package:
+Then run:
 
 ```shell
-flutter packages get
+flutter pub get
 ```
 
-### Usage 🌟
+## 💎 Usage
 
-Utilize the TypeSet widget as easily as you would use the native `Text.rich()` in Flutter:
+TypeSet is designed to be as simple as using Flutter's built-in `Text` widget:
 
 ```dart
 import 'package:typeset/typeset.dart';
 
-// Bold Text Example
-TypeSet('Hello, *World!*'); // Renders 'World!' in bold
-
-// Italic Text Example
-TypeSet('Hello, _World!_'); // Renders 'World!' in italic
-
-// Strikethrough Text Example
-TypeSet('Hello, ~World!~'); // Renders 'World!' with a strikethrough
-
-// Underline Text Example
-TypeSet('Hello #World!#'); // Renders 'World!' underlined
-
-// Monospace Text Example
-TypeSet('Hello, `World!`'); // Renders 'World!' in monospace
-
-// Hyperlink Text Example
-TypeSet('§google.com|https://google.com§', 
-    linkRecognizerBuilder: (linkText, url) =>
-                        TapGestureRecognizer()
-                          ..onTap = () {
-                            // your desired action
-                          },
-    ); // Renders 'google.com' as a link
-
-// Dynamic Font Size Example
-TypeSet('Hey, *Hello world<30>*'); // Renders 'Hello world' with font size 30
+// Just drop in your formatted text
+TypeSet('Hello *Flutter* developers!');
 ```
 
-TypeSet inherits all properties of the `Text.rich()` widget, allowing for a familiar and versatile configuration experience.
+### Text Formatting Syntax
 
-### Use **`¦` (broken bar)** and append with any reserved character to render them.
-Example:
+| Style | Syntax | Result |
+|-------|--------|--------|
+| **Bold** | `*text*` | **text** |
+| _Italic_ | `_text_` | _text_ |
+| ~~Strikethrough~~ | `~text~` | ~~text~~ |
+| Underline | `#text#` | <ins>text</ins> |
+| `Monospace` | `` `text` `` | `text` |
+| [Link](https://flutter.dev) | `§Link text\|https://url§` | [Link text](https://url) |
+| Font Size | `text<size>` | Renders text at specified size |
+
+### Advanced Examples
+
 ```dart
-Typeset('*Hello ¦* World*');
+// Hyperlink with custom tap action
+TypeSet(
+  '§Visit Flutter\|https://flutter.dev§',
+  linkRecognizerBuilder: (linkText, url) =>
+    TapGestureRecognizer()..onTap = () {
+      // Your custom action here
+    },
+);
+
+// Dynamic font sizing
+TypeSet('Regular text with *bigger<24>* words');
+
+// Escape formatting characters
+TypeSet('Use the ¦* symbol to show *asterisks*');
 ```
-## Features 🎨
 
-- **Backend-driven formatting**: Keep your text styling logic server-side for easy updates without the need to redeploy your app.
-- **Rich markdown-like formatting**: Easily implement bold, italic, strikethrough, underline, monospace, and hyperlinked text.
-- **Dynamic font resizing**: Adjust text sizes on the fly for emphasis or accessibility.
-- **Extensible**: Designed with openness for adding more styling options in future updates.
+## 💬 Interactive Text Editing
 
-## We Value Your Feedback 📬
+### TypeSetEditingController
 
-Have ideas for more features? Found a bug? Feel free to [open an issue][tracker] on our issue tracker. Your contributions make TypeSet better for everyone.
+New in v2.3.0! Add WhatsApp-like styling to your text input fields with real-time formatting preview:
 
-## Keep Your App's Text Styling Dynamic and Engaging with TypeSet!
+```dart
+import 'package:typeset/typeset.dart';
+import 'package:flutter/material.dart';
+
+// Create a controller with optional styling parameters
+final controller = TypeSetEditingController(
+  // Initial text with formatting
+  text: 'This is *bold* and _italic_',
+  // Style for the formatting markers
+  markerColor: Colors.grey.shade400,
+  // Style for links
+  linkStyle: const TextStyle(color: Colors.blue),
+  // Style for bold text
+  boldStyle: const TextStyle(fontWeight: FontWeight.bold),
+  // Style for monospace text
+  monospaceStyle: const TextStyle(fontFamily: 'Courier'),
+);
+
+// Use it with a TextField
+TextField(
+  controller: controller,
+  maxLines: 3,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: 'Type formatted text here...',
+  ),
+);
+```
+
+### Context Menu Integration
+
+Add formatting options to the text selection context menu with `getTypesetContextMenus()`:
+
+```dart
+import 'package:typeset/typeset.dart';
+import 'package:flutter/material.dart';
+
+TextField(
+  controller: TypeSetEditingController(),
+  contextMenuBuilder: (context, editableTextState) {
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editableTextState.contextMenuAnchors,
+      buttonItems: [
+        // Add TypeSet formatting options to the context menu
+        ...getTypesetContextMenus(
+          editableTextState: editableTextState,
+          // Optional: specify which formatting options to include
+          // styleTypes: [StyleTypeEnum.bold, StyleTypeEnum.italic],
+        ),
+        // Keep the default context menu items
+        ...editableTextState.contextMenuButtonItems,
+      ],
+    );
+  },
+);
+```
+
+This adds formatting buttons (Bold, Italic, Strikethrough, etc.) to the text selection menu, allowing users to easily format selected text.
+## ✨ Key Features
+
+- **WhatsApp-like Formatting** - Familiar syntax that users already understand
+- **Backend-driven Styling** - Update text formatting from your server without app updates
+- **TypeSetEditingController** - Add rich text capabilities to input fields
+- **Dynamic Font Sizing** - Adjust text size inline for emphasis or hierarchy
+- **Context Menus** - Built-in support for copy/paste with formatting
+- **Highly Customizable** - Style each formatting type independently
+- **Lightweight** - Minimal dependencies for a smaller app footprint
+- **Well-tested** - 95%+ test coverage for production reliability
+
+## 🤝 Community & Support
+
+- **[GitHub Issues][tracker]** - Report bugs or request features
+- **[GitHub Discussions](https://github.com/rohanjsh/typeset/discussions)** - Get help and share ideas
+- **[Pub.dev Documentation][pub_link]** - Detailed API documentation
+
+### Contributing
+
+Contributions are welcome! Check out our [contribution guidelines](https://github.com/rohanjsh/typeset/blob/main/CONTRIBUTING.md) to get started.
+
+### Support the Project
+
+If TypeSet has been helpful for your projects, consider:
+- ⭐ Starring the repository
+- 🔄 Sharing with other developers
+- 💬 Providing feedback and suggestions
+- 🐛 Reporting bugs and issues
+
+## 📝 License
+
+TypeSet is available under the [Apache License, Version 2.0](https://github.com/rohanjsh/typeset/blob/main/LICENSE).
 
 ---
-
-Remember to include accurate links where necessary, like a link to the image of the demo snapshot, and the issue tracker. Also, replace the placeholder `^latest_version` with the actual latest version number of your package.
 
 
 [flutter_install_link]: https://docs.flutter.dev/get-started/install
@@ -109,5 +213,5 @@ Remember to include accurate links where necessary, like a link to the image of 
 [pub_badge]: https://img.shields.io/pub/v/typeset.svg
 [pub_link]: https://pub.dev/packages/typeset
 [coverage_badge]: /coverage_badge.svg
-[build_badge]: https://img.shields.io/github/workflow/status/rohanjsh/typeset/ci.svg
+[build_badge]: https://img.shields.io/github/actions/workflow/status/rohanjsh/typeset/main.yaml
 [pub_points_badge]: https://img.shields.io/pub/points/typeset
