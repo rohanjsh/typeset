@@ -1,103 +1,180 @@
-
 # Changelog
 
-# 2.3.0
-### New
-- *TypeSetEditingController* - Give your chatroom life.
-- Added back url_launcher package for default link behavior.
+All notable changes to this project are documented in this file.
 
-### Others
-- Test suite for TypeSetEditingController
-- Updated example app to showcase all features including TypeSetEditingController and - getTypesetContextMenus.
+## 3.0.0-beta.1
 
-# 2.2.0
-### New
-- Recognize individual links and apply desired actions on tap.
+> Breaking release focused on parser/renderer architecture, configuration
+> standardization, and safer AutoLink controls.
+>
+> Pre-release notice: this is a beta version intended for validation before stable `3.0.0`.
 
-### Breaking
-- `recognizer` is now `linkRecognizerBuilder` callback
+### Added
 
-# 2.1.2
-### Chore
-- Dependency updates
+- `TypeSetConfig` for centralized widget/controller configuration.
+- `TypeSetStyle` for style-level customization.
+- `TypeSetAutoLinkConfig` with scheme allowlist, domain allowlist, and custom URL validator.
+- `TypeSetConfigProvider` for subtree-scoped configuration.
+- `TypeSetGlobalConfig` for app-level defaults.
+- Parser/renderer AST pipeline (`TypesetParser`, `TypesetRenderer`, typed nodes).
 
-# 2.1.1
-### Bug Fixes
-- Moved `mocktail` to `dev_dependencies` to avoid conflicts with other packages and build configs.
+### Changed
 
-# 2.1.0
-### New
-- Introducing context menus, use `getTypesetContextMenus()` to get the context menus for the text.
-- Change default monospace font to `Courier`, as provided by the operating system.
+- `TypeSet` now reads behavior from `config`, then scoped provider config, then global defaults.
+- `TypeSetEditingController` now accepts `config` instead of individual style parameters.
+- Underline delimiter is standardized as `__text__`.
+- Public exports were reorganized to include the new config model API.
 
-### Breaking
-- `TypeSet(inputText: "Foo")` is now `TypeSet("Foo")` to match semantics of `Text("Foo")`
+### Removed
 
-### Other
-- Remove `google_fonts` dependency
-- 95% test coverage
-- Deprecated parser removed
+- Legacy parser/controller internals from public architecture.
+- Legacy per-widget and per-controller style parameters replaced by config objects.
+- Legacy explicit link marker syntax parsing in widget/controller APIs.
 
-# 2.0.0
-### New Features
-- **Dynamic Font Sizing:** Font size can now be applied dynamically, enhancing visual hierarchy and readability.
-- **Literal Character Rendering:** Introducing the literal symbol `¦` to unambiguously represent reserved characters in text formatting, ensuring clarity in rendered output.
+### Breaking changes
 
-### Bug Fixes
-- **Spacing in Strings:** Corrected an issue where strings containing spaces were not formatted correctly, improving the robustness and reliability of the text display.
+- `TypeSet` constructor parameters removed:
+  - `linkRecognizerBuilder`
+  - `linkStyle`
+  - `monospaceStyle`
+  - `boldStyle`
+- `TypeSetEditingController` constructor parameters removed:
+  - `linkStyle`
+  - `linkRecognizerBuilder`
+  - `monospaceStyle`
+  - `boldStyle`
+  - `markerColor`
+- `StyleTypeEnum.link` was removed from context menu options.
+- Underline syntax changed from `#text#` to `__text__`.
 
-### Breaking Changes
-- **Underline Style Update:** The syntax for underlining text has changed. The previous `//` markers are now replaced with `#`. This shift streamlines the styling process and aligns with common markdown practices.
-- **Link Style Update:** The syntax for link text has changed. The previous `[]` markers are now replaced with `§`. A link text would look like this `§rohanjsh|https://rohanjsh.dev§`
-- **Reserved Character Escaping:** Incorporating the new literal `¦` necessitates the explicit marking of reserved characters to be treated as literals. This modifies how users will work with text that includes characters previously used for formatting.
+See [MIGRATION.md](MIGRATION.md) for step-by-step updates.
 
-# 1.0.3
-- chore: update dependencies
+## 2.3.0
 
-# 1.0.2
-- chore: update dependencies, ci flows
+### Added
 
-# 1.0.1+1
-- feat: 3 new properties added `linkStyle`, `monospaceStyle`, `recognizer` 💙
+- `TypeSetEditingController` for editing with inline formatting preview.
+- Updated example app to include editing and context menu flows.
 
-# 1.0.0+4
-- chore: readme update
+### Changed
 
-# 1.0.0+1
-🎉🎉🎉 It's time to celebrate! Our first stable release is finally here! 🎉🎉🎉
+- Added default URL launcher behavior for links.
 
+## 2.2.0
 
-- Make text formatting backend driven (if needed) with one widget!!
-- Whatsapp like formatting with some addons!!
-(input looks something like this)
+### Added
 
-**Usage**
-- BOLD → Hello, \*World!*
-- ITALIC → Hello,  \_World!_
-- STRIKETHROUGH → Hello, \~World!~
-- UNDERLINE → Hello, //World!//
-- MONOSPACE → Hello, \`World!`
-- LINK → [google.com|https://google.com]
+- Link recognition callback support.
 
-Thanks for choosing our text formatting widget for all your formatting needs. We hope these updates make your experience even more enjoyable! 🤗
+### Breaking changes
 
-# 0.1.0+23
-- feat: make asterisk bold
-# 0.1.0+22
-- chore: update screenshot
-# 0.1.0+21
-- docs: license to Apache 2.0
+- `recognizer` renamed to `linkRecognizerBuilder`.
 
-# 0.1.0+20
-- feat: added property `textAlign`🎉
+## 2.1.2
 
-# 0.1.0+19
+### Changed
 
-- feat: added extension method for typeset 🎉
-# 0.1.0+18
+- Dependency updates.
 
-- feat: WhatsApp like formatting for you all!🎉
+## 2.1.1
 
+### Fixed
 
-Thank you for being part of our journey. Your feedback is the beacon that guides our innovation.
-*Please note that all changes included in beta releases are for testing purposes and may change before the final release.*
+- Moved `mocktail` to `dev_dependencies`.
+
+## 2.1.0
+
+### Added
+
+- `getTypesetContextMenus()` helper for text selection toolbars.
+
+### Changed
+
+- Default monospace font set to `Courier`.
+
+### Breaking changes
+
+- `TypeSet(inputText: "Foo")` changed to `TypeSet("Foo")`.
+
+## 2.0.0
+
+### Added
+
+- Dynamic font sizing support.
+- Explicit literal escaping support.
+
+### Fixed
+
+- Formatting behavior for strings with spaces.
+
+### Breaking changes
+
+- Underline marker changed from `//` to `#`.
+- Link marker changed from `[]` style to `§text|url§`.
+- Reserved-character escaping behavior updated.
+
+## 1.0.3
+
+### Changed
+
+- Dependency updates.
+
+## 1.0.2
+
+### Changed
+
+- Dependency and CI updates.
+
+## 1.0.1+1
+
+### Added
+
+- `linkStyle`, `monospaceStyle`, and `recognizer` options.
+
+## 1.0.0+4
+
+### Changed
+
+- README updates.
+
+## 1.0.0+1
+
+### Added
+
+- First stable release.
+
+## 0.1.0+23
+
+### Added
+
+- Asterisk-based bold support.
+
+## 0.1.0+22
+
+### Changed
+
+- Screenshot update.
+
+## 0.1.0+21
+
+### Changed
+
+- License set to Apache-2.0.
+
+## 0.1.0+20
+
+### Added
+
+- `textAlign` support.
+
+## 0.1.0+19
+
+### Added
+
+- String extension API.
+
+## 0.1.0+18
+
+### Added
+
+- Initial WhatsApp-style formatting support.
