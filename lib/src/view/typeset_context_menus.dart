@@ -1,62 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:typeset/src/models/style_type_enum.dart';
-import 'package:typeset/typeset.dart';
+import 'package:typeset/src/models/typeset_reserved.dart';
 
-/// Generates a list of [ContextMenuButtonItem]s for text editing actions.
+/// Style types available in the context menu.
+enum StyleTypeEnum {
+  /// Bold formatting.
+  bold('Bold'),
+
+  /// Italic formatting.
+  italic('Italic'),
+
+  /// Strikethrough formatting.
+  strikethrough('Strikethrough'),
+
+  /// Monospace/inline code formatting.
+  monospace('Monospace'),
+
+  /// Underline formatting.
+  underline('Underline');
+
+  const StyleTypeEnum(this.label);
+
+  /// The display label for this style type.
+  final String label;
+}
+
+/// Generates a list of [ContextMenuButtonItem]s for text editing.
 ///
-/// This method builds context menu items that apply various text styling
-/// options to the selected text within a [TextField]. The styles are
-/// determined by the [styleTypes] list provided. If no styles are specified,
-/// then all available text styles are included by default.
+/// Builds context menu items that apply text styling to selected text
+/// within a [TextField].
+/// Supports: Bold (`*text*`), Italic (`_text_`), Underline (`__text__`),
+/// Strikethrough (`~text~`), Monospace (`` `text` ``).
 ///
-/// The method leverages the [EditableTextState]'s `textEditingValue` to
-/// customize the text styling and updates the state accordingly.
-///
-/// ## Parameters:
-///
-/// - `editableTextState`: The state of the editable text field. It is
-///   used to apply the style changes to the current text.
-/// - `styleTypes`: An optional list of [StyleTypeEnum] that specifies
-///   which styles should be present in the context menu. If not provided,
+/// Parameters:
+/// - `editableTextState`: The state of the editable text field.
+/// - `styleTypes`: Optional list of styles to include. If not provided,
 ///   all styles are included.
-///
-/// ## Returns:
-/// A list of [ContextMenuButtonItem] where each item represents a
-/// button in the context menu for styling the selected text in
-/// the associated text field.
-///
-/// ## Usage Examples:
-///
-/// ```dart
-/// // Within a [TextField], using the default constructor
-/// TextField(
-///   contextMenuBuilder: (context, editableTextState) {
-///     return AdaptiveTextSelectionToolbar.buttonItems(
-///       anchors: editableTextState.contextMenuAnchors,
-///   buttonItems: getTypesetContextMenus(editableTextState: editableTextState),
-///     );
-///   },
-/// );
-/// ```
-///
-/// ## Context Menu Item Actions:
-///
-/// When a context menu item is selected,
-/// it applies a specific style to the text.
-/// For instance, selecting 'Bold' wraps the selected text with `boldChar`.
-/// Similarly, 'Italic', 'Strikethrough', 'Monospace', 'Underline', and 'Link'
-/// apply their respective styles as per the definitions in [TypesetReserved].
-///
-/// ```dart
-/// // Applying a single style, for example, Bold
-/// var buttonItems = getTypesetContextMenus(
-///   editableTextState: editableTextState,
-///   styleTypes: [StyleTypeEnum.bold],
-/// );
-/// buttonItems.firstWhere((item) => item.label == 'Bold').onPressed();
-/// // This will embolden the selected text.
-/// ```
-
 List<ContextMenuButtonItem> getTypesetContextMenus({
   required EditableTextState editableTextState,
   List<StyleTypeEnum>? styleTypes,
@@ -69,118 +47,90 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
     return buttonItems;
   }
 
-  // If no specific styles are provided, add all available styles
-  if (styleTypes == null || styleTypes.isEmpty) {
-    styleTypes = StyleTypeEnum.values.toList();
-  }
+  final effectiveStyleTypes = (styleTypes == null || styleTypes.isEmpty)
+      ? StyleTypeEnum.values.toList()
+      : styleTypes;
 
-  //if text is already styled, return
-  for (final char in TypesetReserved.all) {
-    if (selectionText.startsWith(char) && selectionText.endsWith(char)) {
+  for (final delim in TypesetReserved.all) {
+    if (selectionText.startsWith(delim) && selectionText.endsWith(delim)) {
       return buttonItems;
     }
   }
 
-  // Helper to escape reserved chars with broken bar
-  String escapeReservedChars(String originalText) {
-    final escapedText = originalText.split('').map((char) {
-      if (TypesetReserved.all.contains(char)) {
-        // Prepend the escape literal before the reserved char
-        return '${TypesetReserved.escapeLiteral}$char';
+  String escapeReserved(String originalText) {
+    final buf = StringBuffer();
+    for (var i = 0; i < originalText.length; i++) {
+      final ch = originalText[i];
+      if (TypesetReserved.allSingle.contains(ch)) {
+        buf.write(r'\');
       }
-      return char;
-    }).join();
-    return escapedText;
+      buf.write(ch);
+    }
+    return buf.toString();
   }
 
-  void applyTextStyle(String char) {
-    final text = escapeReservedChars(value.selection.textInside(value.text));
+  void applyTextStyle(String delimiter) {
+    final text = escapeReserved(
+      value.selection.textInside(value.text),
+    );
     final newText = value.text.replaceRange(
       value.selection.start,
       value.selection.end,
-      '$char$text$char',
+      '$delimiter$text$delimiter',
     );
     editableTextState.updateEditingValue(
       value.copyWith(
         text: newText,
         selection: TextSelection.collapsed(
-          offset: value.selection.start + char.length * 2 + text.length,
+          offset: value.selection.start + delimiter.length * 2 + text.length,
         ),
       ),
     );
   }
 
-  void applyLinkStyle() {
-    final text = escapeReservedChars(value.selection.textInside(value.text));
-    final newText = value.text.replaceRange(
-      value.selection.start,
-      value.selection.end,
-      '${TypesetReserved.linkChar}$text${TypesetReserved.linkSplitChar}https://$text${TypesetReserved.linkChar}',
-    );
-    editableTextState.updateEditingValue(
-      value.copyWith(
-        text: newText,
-        selection: TextSelection.collapsed(
-          offset: value.selection.start +
-              text.length +
-              TypesetReserved.linkChar.length * 2 +
-              TypesetReserved.linkSplitChar.length,
-        ),
-      ),
-    );
-  }
-
-  // Adding buttons based on the provided style types
-  if (styleTypes.contains(StyleTypeEnum.bold)) {
+  if (effectiveStyleTypes.contains(StyleTypeEnum.bold)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: StyleTypeEnum.bold.styleTypeEnumValue,
+        label: StyleTypeEnum.bold.label,
         onPressed: () => applyTextStyle(TypesetReserved.boldChar),
       ),
     );
   }
 
-  if (styleTypes.contains(StyleTypeEnum.italic)) {
+  if (effectiveStyleTypes.contains(StyleTypeEnum.italic)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: StyleTypeEnum.italic.styleTypeEnumValue,
+        label: StyleTypeEnum.italic.label,
         onPressed: () => applyTextStyle(TypesetReserved.italicChar),
       ),
     );
   }
 
-  if (styleTypes.contains(StyleTypeEnum.strikethrough)) {
+  if (effectiveStyleTypes.contains(StyleTypeEnum.strikethrough)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: StyleTypeEnum.strikethrough.styleTypeEnumValue,
-        onPressed: () => applyTextStyle(TypesetReserved.strikethroughChar),
+        label: StyleTypeEnum.strikethrough.label,
+        onPressed: () => applyTextStyle(
+          TypesetReserved.strikethroughChar,
+        ),
       ),
     );
   }
 
-  if (styleTypes.contains(StyleTypeEnum.monospace)) {
+  if (effectiveStyleTypes.contains(StyleTypeEnum.monospace)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: StyleTypeEnum.monospace.styleTypeEnumValue,
+        label: StyleTypeEnum.monospace.label,
         onPressed: () => applyTextStyle(TypesetReserved.monospaceChar),
       ),
     );
   }
 
-  if (styleTypes.contains(StyleTypeEnum.underline)) {
+  if (effectiveStyleTypes.contains(StyleTypeEnum.underline)) {
     buttonItems.add(
       ContextMenuButtonItem(
-        label: StyleTypeEnum.underline.styleTypeEnumValue,
+        label: StyleTypeEnum.underline.label,
         onPressed: () => applyTextStyle(TypesetReserved.underlineChar),
-      ),
-    );
-  }
-
-  if (styleTypes.contains(StyleTypeEnum.link)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.link.styleTypeEnumValue,
-        onPressed: applyLinkStyle,
       ),
     );
   }

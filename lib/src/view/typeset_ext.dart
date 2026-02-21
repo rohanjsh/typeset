@@ -1,10 +1,10 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/painting.dart';
+import 'package:typeset/src/models/typeset_config.dart';
 import 'package:typeset/src/view/typeset.dart';
 
-///TypeSet extension on String to use [typeset] method
+/// TypeSet extension on String to use [typeset] method.
 extension TypeSetExtension on String {
-  ///[typeset] method to format the text with different styles
+  /// Formats the string as a TypeSet widget.
   TypeSet typeset({
     TextStyle? style,
     TextAlign textAlign = TextAlign.start,
@@ -19,10 +19,7 @@ extension TypeSetExtension on String {
     TextHeightBehavior? textHeightBehavior,
     Color? selectionColor,
     StrutStyle? strutStyle,
-    GestureRecognizer Function(String linkText, String url)? recognizerBuilder,
-    TextStyle? linkStyle,
-    TextStyle? boldStyle,
-    TextStyle? monospaceStyle,
+    TypeSetConfig? config,
   }) {
     return TypeSet(
       this,
@@ -39,10 +36,7 @@ extension TypeSetExtension on String {
       textHeightBehavior: textHeightBehavior,
       selectionColor: selectionColor,
       strutStyle: strutStyle,
-      linkRecognizerBuilder: recognizerBuilder,
-      linkStyle: linkStyle,
-      boldStyle: boldStyle,
-      monospaceStyle: monospaceStyle,
+      config: config,
     );
   }
 }

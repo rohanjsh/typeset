@@ -1,33 +1,18 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/core/typeset_parser.dart';
+import 'package:typeset/src/core/parser/typeset_parser.dart';
+import 'package:typeset/src/core/renderer/typeset_renderer.dart';
+import 'package:typeset/src/core/typeset_config_provider.dart';
+import 'package:typeset/src/models/typeset_config.dart';
+import 'package:typeset/src/models/typeset_global_config.dart';
 
 /// {@template typeset}
-/// WhatsApp like text formatting for you!
+/// WhatsApp/Telegram-like text formatting.
 /// {@endtemplate}
-/// Format the text with different styles, similar to whatsapp
 ///
-/// Following is the usage:
-/// Bold
-/// → Hello, *World!*
-///
-/// Italic
-/// → Hello, _World!_
-///
-/// Strikethrough
-/// → Hello, ~World!~
-///
-/// Underline
-/// → Hello, #World!#
-///
-/// Monospace
-/// → Hello, `World!`
-///
-/// Link
-/// → §google.com|https://google.com§
+/// Supports: `*bold*`, `_italic_`, `__underline__`, `~strikethrough~`,
+/// `` `code` ``, AutoLink URLs.
 class TypeSet extends StatelessWidget {
-  ///[inputText] is required field
-
+  /// Creates a TypeSet widget.
   const TypeSet(
     this.inputText, {
     super.key,
@@ -44,92 +29,76 @@ class TypeSet extends StatelessWidget {
     this.textHeightBehavior,
     this.selectionColor,
     this.strutStyle,
-    this.linkRecognizerBuilder,
-    this.linkStyle,
-    this.monospaceStyle,
-    this.boldStyle,
+    this.config,
   });
 
-  ///[style] is the style of the text
+  /// Base text style applied to all text.
   final TextStyle? style;
 
-  ///[inputText] is the text that will be formatted
-
+  /// The text to format.
   final String inputText;
 
-  ///[textAlign] is the alignment of the text
-
+  /// How the text should be aligned horizontally.
   final TextAlign textAlign;
 
-  ///[textDirection] is the direction of the text
-
+  /// The directionality of the text.
   final TextDirection? textDirection;
 
-  ///[locale] is the locale of the text
-
+  /// Used to select a font when the same Unicode character can be
+  /// rendered differently.
   final Locale? locale;
 
-  ///[softWrap] is the soft wrap of the text
-
+  /// Whether the text should break at soft line breaks.
   final bool? softWrap;
 
-  ///[overflow] is the overflow of the text
-
+  /// How visual overflow should be handled.
   final TextOverflow? overflow;
 
-  ///[textScaler] is the text scale factor of the text
-
+  /// The number of font pixels for each logical pixel.
   final TextScaler? textScaler;
 
-  ///[maxLines] is the max lines of the text
-
+  /// An optional maximum number of lines for the text to span.
   final int? maxLines;
 
-  ///[semanticsLabel] is the semantics label of the text
-
+  /// An alternative semantics label for this text.
   final String? semanticsLabel;
 
-  ///[textWidthBasis] is the text width basis of the text
-
+  /// Defines how to measure the width of the rendered text.
   final TextWidthBasis? textWidthBasis;
 
-  ///[textHeightBehavior] is the text height behavior of the text
-
+  /// Defines how the paragraph will apply [TextStyle.height] to the ascent
+  /// of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 
-  ///[selectionColor] is the selection color of the text
-
+  /// The color used to paint the selection.
   final Color? selectionColor;
 
-  ///[strutStyle] is the strut style of the text
-
+  /// The strut style to use. Strut style defines the strut, which set up
+  /// a multi-line paragraph.
   final StrutStyle? strutStyle;
 
-  ///[linkRecognizerBuilder] is the recognizer of the text
-  final GestureRecognizer Function(String linkText, String url)?
-      linkRecognizerBuilder;
-
-  ///[linkStyle] is the style of the link
-  final TextStyle? linkStyle;
-
-  ///[monospaceStyle] is the style of the monospace text
-  final TextStyle? monospaceStyle;
-
-  ///[boldStyle] is the style of the bold text
-  final TextStyle? boldStyle;
+  /// Configuration object containing styling and AutoLink settings.
+  final TypeSetConfig? config;
 
   @override
   Widget build(BuildContext context) {
-    // Use the `RichText` widget to display the text with the correct styles
+    final scopedConfig = TypeSetConfigProvider.of(context);
+    final effectiveConfig =
+        config ?? scopedConfig ?? TypeSetGlobalConfig.instance;
+
+    final children = TypesetRenderer(
+      style: effectiveConfig.style,
+      autoLinkConfig: effectiveConfig.autoLinkConfig,
+    ).render(
+      const TypesetParser().parse(
+        inputText,
+        autoLinkConfig: effectiveConfig.autoLinkConfig,
+      ),
+    );
+
     return Text.rich(
       TextSpan(
-        children: TypesetParser.parser(
-          inputText: inputText,
-          linkRecognizerBuilder: linkRecognizerBuilder,
-          linkStyle: linkStyle,
-          monospaceStyle: monospaceStyle,
-          boldStyle: boldStyle,
-        ),
+        children: children,
       ),
       textAlign: textAlign,
       style: style,
