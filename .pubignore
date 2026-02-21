@@ -1,0 +1,38 @@
+# Legacy/obsolete paths retained in git history
+
+lib/src/core/typeset_controller.dart
+lib/src/core/typeset_parser.dart
+lib/src/core/typeset_reserved.dart
+lib/src/models/style_type_enum.dart
+lib/src/models/style_type_value_model.dart
+test/src/core/typeset_controller_test.dart
+test/src/models/style_type_value_model_test.dart
+
+# Non-standard docs directory (moved to /doc)
+
+docs/
+
+# Flutter/Dart build and tool artifacts
+
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+build/
+coverage/
+pubspec.lock
+
+# IDE/editor metadata
+
+.idea/
+.vscode/
+_.iml
+_.ipr
+\*.iws
+
+# Misc local artifacts
+
+.DS_Store
+_.log
+_.pyc
+\*.swp
