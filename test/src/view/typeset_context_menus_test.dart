@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:typeset/src/models/style_type_enum.dart';
 import 'package:typeset/typeset.dart';
 
 // Mock class for EditableTextState
@@ -79,7 +78,7 @@ void main() {
         editableTextState: mockEditableTextState,
       );
 
-      expect(buttonItems.length, equals(6));
+      expect(buttonItems.length, equals(5));
     });
 
     test('applies bold style when StyleTypeEnum.bold is provided', () {
@@ -158,12 +157,12 @@ void main() {
       // Simulate the user tapping the Underline button
       buttonItems.first.onPressed!();
 
-      // Verify that the text is now styled
+      // Verify that the text is now styled (__ = 2 chars)
       verify(
         () => mockEditableTextState.updateEditingValue(
           const TextEditingValue(
-            text: '#text#',
-            selection: TextSelection.collapsed(offset: 6),
+            text: '__text__',
+            selection: TextSelection.collapsed(offset: 8),
           ),
         ),
       ).called(1);
@@ -223,35 +222,6 @@ void main() {
           const TextEditingValue(
             text: '`text`',
             selection: TextSelection.collapsed(offset: 6),
-          ),
-        ),
-      ).called(1);
-    });
-
-    //link
-    test('applies link style when StyleTypeEnum.link is provided', () {
-      // Simulate the condition where the selected text is not styled
-      when(() => mockEditableTextState.textEditingValue).thenReturn(
-        const TextEditingValue(
-          text: 'text',
-          selection: TextSelection(baseOffset: 0, extentOffset: 4),
-        ),
-      );
-
-      final buttonItems = getTypesetContextMenus(
-        editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.link],
-      );
-
-      // Simulate the user tapping the Link button
-      buttonItems.first.onPressed!();
-
-      // Verify that the text is now styled
-      verify(
-        () => mockEditableTextState.updateEditingValue(
-          const TextEditingValue(
-            text: '§text|https://text§',
-            selection: TextSelection.collapsed(offset: 7),
           ),
         ),
       ).called(1);

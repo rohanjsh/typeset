@@ -16,6 +16,15 @@ class TypeSetTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final config = TypeSetConfig(
+      autoLinkConfig: TypeSetAutoLinkConfig(
+        linkRecognizerBuilder: (linkText, url) => TapGestureRecognizer()
+          ..onTap = () {
+            debugPrint('Link tapped');
+          },
+      ),
+    );
+
     return MaterialApp(
       home: Scaffold(
         body: Center(
@@ -25,15 +34,12 @@ class TypeSetTest extends StatelessWidget {
                 TypeSet(
                   title!,
                   style: style,
-                  linkRecognizerBuilder: (linkText, url) =>
-                      TapGestureRecognizer()
-                        ..onTap = () {
-                          debugPrint('Link tapped');
-                        },
+                  config: config,
                 ),
               if (titleForExt != null)
                 titleForExt!.typeset(
                   style: style,
+                  config: config,
                 ),
             ],
           ),

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:typeset/typeset.dart';
@@ -37,8 +36,7 @@ void main() {
       controller.dispose();
     });
 
-    testWidgets('buildTextSpan returns empty span for empty text',
-        (tester) async {
+    testWidgets('returns empty span for empty text', (tester) async {
       await tester.pumpWidget(Container());
       final span = buildSpan(controller);
       expect(span.children, isNull);
@@ -54,136 +52,158 @@ void main() {
 
     testWidgets('applies bold formatting', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.boldChar}bold${TypesetReserved.boldChar} text';
+      controller.text = 'This is *bold* text';
       final span = buildSpan(controller);
-      expect(span.children?.length, 5);
-      expect((span.children![0] as TextSpan).text, 'This is ');
-      expect((span.children![1] as TextSpan).text, TypesetReserved.boldChar);
-      expect((span.children![2] as TextSpan).text, 'bold');
+      expect(span.children, isNotNull);
+      final children = span.children!;
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'This is *');
+      expect((children[1] as TextSpan).text, 'bold');
       expect(
-        (span.children![2] as TextSpan).style?.fontWeight,
+        (children[1] as TextSpan).style?.fontWeight,
         FontWeight.bold,
       );
-      expect((span.children![3] as TextSpan).text, TypesetReserved.boldChar);
-      expect((span.children![4] as TextSpan).text, ' text');
+      expect((children[2] as TextSpan).text, '* text');
     });
 
     testWidgets('applies italic formatting', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.italicChar}italic'
-          '${TypesetReserved.italicChar} text';
+      controller.text = 'This is _italic_ text';
       final span = buildSpan(controller);
-      expect(span.children?.length, 5);
-      expect((span.children![2] as TextSpan).text, 'italic');
+      final children = span.children!;
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'This is _');
+      expect((children[1] as TextSpan).text, 'italic');
       expect(
-        (span.children![2] as TextSpan).style?.fontStyle,
+        (children[1] as TextSpan).style?.fontStyle,
         FontStyle.italic,
       );
-    });
-
-    testWidgets('applies strikethrough formatting', (tester) async {
-      await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.strikethroughChar}strikethrough'
-          '${TypesetReserved.strikethroughChar} text';
-      final span = buildSpan(controller);
-      expect((span.children![2] as TextSpan).text, 'strikethrough');
-      expect(
-        (span.children![2] as TextSpan).style?.decoration,
-        TextDecoration.lineThrough,
-      );
+      expect((children[2] as TextSpan).text, '_ text');
     });
 
     testWidgets('applies underline formatting', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.underlineChar}underline'
-          '${TypesetReserved.underlineChar} text';
+      controller.text = 'This is __underline__ text';
       final span = buildSpan(controller);
-      expect((span.children![2] as TextSpan).text, 'underline');
+      final children = span.children!;
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'This is __');
+      expect((children[1] as TextSpan).text, 'underline');
       expect(
-        (span.children![2] as TextSpan).style?.decoration,
+        (children[1] as TextSpan).style?.decoration,
         TextDecoration.underline,
       );
+      expect((children[2] as TextSpan).text, '__ text');
     });
 
-    testWidgets('applies monospace formatting', (tester) async {
+    testWidgets('applies strikethrough formatting', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.monospaceChar}monospace'
-          '${TypesetReserved.monospaceChar} text';
+      controller.text = 'This is ~strikethrough~ text';
       final span = buildSpan(controller);
-      expect((span.children![2] as TextSpan).text, 'monospace');
-      expect((span.children![2] as TextSpan).style?.fontFamily, 'Courier');
-    });
-
-    testWidgets('handles link formatting without recognizer', (tester) async {
-      await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.linkChar}link${TypesetReserved.linkSplitChar}'
-          'url${TypesetReserved.linkChar} text';
-      final span = buildSpan(controller);
-      expect(span.children?.length, 5); // Adjusted to match actual behavior
-      expect((span.children![0] as TextSpan).text, 'This is ');
-      expect((span.children![1] as TextSpan).text, TypesetReserved.linkChar);
-      expect((span.children![2] as TextSpan).text, 'link|url');
-      expect((span.children![2] as TextSpan).style?.color, Colors.blue);
+      final children = span.children!;
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'This is ~');
+      expect((children[1] as TextSpan).text, 'strikethrough');
       expect(
-        (span.children![2] as TextSpan).style?.decoration,
+        (children[1] as TextSpan).style?.decoration,
+        TextDecoration.lineThrough,
+      );
+      expect((children[2] as TextSpan).text, '~ text');
+    });
+
+    testWidgets('applies inline code formatting', (tester) async {
+      await tester.pumpWidget(Container());
+      controller.text = 'This is `code` text';
+      final span = buildSpan(controller);
+      final children = span.children!;
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'This is `');
+      expect((children[1] as TextSpan).text, 'code');
+      expect((children[1] as TextSpan).style?.fontFamily, 'Courier');
+      expect((children[2] as TextSpan).text, '` text');
+    });
+
+    testWidgets('handles link formatting', (tester) async {
+      await tester.pumpWidget(Container());
+      controller.text = 'Visit https://example.com now';
+      final span = buildSpan(controller);
+      final children = span.children!;
+      // AutoLink without delimiters: 'Visit ' + link + ' now'
+      expect(children.length, 3);
+      expect((children[0] as TextSpan).text, 'Visit ');
+      // Link is rendered as a TextSpan with recognizer (no brackets)
+      final linkSpan = children[1] as TextSpan;
+      expect(linkSpan.text, isNull); // Link span has children, not direct text
+      expect(linkSpan.children, isNotNull);
+      expect(linkSpan.children!.length, 1);
+      expect((linkSpan.children![0] as TextSpan).text, 'https://example.com');
+      expect(
+        linkSpan.style?.color,
+        const Color(0xFF0000EE),
+      );
+      expect(
+        linkSpan.style?.decoration,
         TextDecoration.underline,
       );
-      expect((span.children![3] as TextSpan).text, TypesetReserved.linkChar);
-      expect((span.children![4] as TextSpan).text, ' text');
+      expect((children[2] as TextSpan).text, ' now');
     });
 
-    testWidgets('handles link formatting with recognizer', (tester) async {
+    testWidgets('handles nested formatting', (tester) async {
       await tester.pumpWidget(Container());
-      controller = TypeSetEditingController(
-        linkRecognizerBuilder: (text, url) => TapGestureRecognizer(),
-      )..text = 'This is '
-          '${TypesetReserved.linkChar}link${TypesetReserved.linkSplitChar}'
-          'url${TypesetReserved.linkChar} text';
+      controller.text = 'This is *bold _and italic_* text';
       final span = buildSpan(controller);
-      expect(span.children?.length, 7); // Adjusted to match actual behavior
-      expect((span.children![0] as TextSpan).text, 'This is ');
-      expect((span.children![1] as TextSpan).text, TypesetReserved.linkChar);
-      expect((span.children![2] as TextSpan).text, 'link');
-      expect((span.children![3] as TextSpan).text, '|');
-      expect((span.children![4] as TextSpan).text, 'url');
-      expect((span.children![5] as TextSpan).text, '§');
-      expect((span.children![6] as TextSpan).text, ' text');
+      expect(span.children, isNotNull);
+      final children = span.children!;
+      // Verify we have at least 3 children
+      expect(children.length, greaterThanOrEqualTo(3));
+      // First child should be 'This is *'
+      expect((children[0] as TextSpan).text, 'This is *');
+      // Last child should be '* text'
+      expect((children.last as TextSpan).text, '* text');
+      // Verify nested formatting is present (italic inside bold)
+      // by checking that some span has italic style
+      final hasItalic = children.any((s) {
+        final ts = s as TextSpan;
+        return ts.style?.fontStyle == FontStyle.italic ||
+            (ts.children?.any((c) {
+                  final cs = c as TextSpan;
+                  return cs.style?.fontStyle == FontStyle.italic;
+                }) ??
+                false);
+      });
+      expect(hasItalic, isTrue);
     });
 
     testWidgets('handles multiple formatting types', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is '
-          '${TypesetReserved.boldChar}bold${TypesetReserved.boldChar} and '
-          '${TypesetReserved.italicChar}italic'
-          '${TypesetReserved.italicChar} text';
+      controller.text = 'This is *bold* and _italic_ text';
       final span = buildSpan(controller);
-      expect(span.children?.length, 9);
-      expect((span.children![2] as TextSpan).text, 'bold');
+      final children = span.children!;
+      expect(children.length, 5);
+      expect((children[0] as TextSpan).text, 'This is *');
+      expect((children[1] as TextSpan).text, 'bold');
       expect(
-        (span.children![2] as TextSpan).style?.fontWeight,
+        (children[1] as TextSpan).style?.fontWeight,
         FontWeight.bold,
       );
-      expect((span.children![6] as TextSpan).text, 'italic');
+      expect((children[2] as TextSpan).text, '* and _');
+      expect((children[3] as TextSpan).text, 'italic');
       expect(
-        (span.children![6] as TextSpan).style?.fontStyle,
+        (children[3] as TextSpan).style?.fontStyle,
         FontStyle.italic,
       );
+      expect((children[4] as TextSpan).text, '_ text');
     });
 
-    testWidgets('handles unpaired markers', (tester) async {
+    testWidgets('handles unmatched markers gracefully', (tester) async {
       await tester.pumpWidget(Container());
-      controller.text = 'This is ${TypesetReserved.boldChar}unpaired text';
+      controller.text = 'This is *unmatched text';
       final span = buildSpan(controller);
-      expect(span.children?.length, 3); // Adjusted to match actual behavior
-      expect((span.children![0] as TextSpan).text, 'This is ');
-      expect((span.children![1] as TextSpan).text, TypesetReserved.boldChar);
-      expect((span.children![2] as TextSpan).text, 'unpaired text');
+      // Unmatched markers should be treated as literal text
+      expect(span.children, isNotNull);
+      final children = span.children!;
+      expect(children.length, 1);
+      expect((children[0] as TextSpan).text, 'This is *unmatched text');
     });
   });
 }
