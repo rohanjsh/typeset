@@ -74,6 +74,10 @@ List<TypesetNode> _autoLinkText(
   var index = 0;
 
   for (final m in matches) {
+    if (!_hasAutoLinkBoundary(text, m.start)) {
+      continue;
+    }
+
     // Add text before the URL
     if (m.start > index) {
       _appendText(out, text.substring(index, m.start));
@@ -148,14 +152,21 @@ bool _isValidAutoLink(String url, TypeSetAutoLinkConfig config) {
 
   while (url.isNotEmpty) {
     final last = url.codeUnitAt(url.length - 1);
-    final isTrim = last == 46 /* . */ ||
-        last == 44 /* , */ ||
-        last == 33 /* ! */ ||
-        last == 63 /* ? */ ||
-        last == 58 /* : */ ||
-        last == 59 /* ; */ ||
-        last == 41 /* ) */ ||
-        last == 93 /* ] */;
+    final isTrim = switch (last) {
+      46 || // .
+      44 || // ,
+      33 || // !
+      63 || // ?
+      58 || // :
+      34 || // "
+      62 || // >
+      59 =>
+        true, // ;
+      41 => _hasExcessClosingDelimiter(url, 40, 41), // )
+      93 => _hasExcessClosingDelimiter(url, 91, 93), // ]
+      125 => _hasExcessClosingDelimiter(url, 123, 125), // }
+      _ => false,
+    };
 
     if (!isTrim) break;
 
@@ -164,6 +175,44 @@ bool _isValidAutoLink(String url, TypeSetAutoLinkConfig config) {
   }
 
   return (url: url, trailing: trailing);
+}
+
+bool _hasExcessClosingDelimiter(String text, int open, int close) {
+  var opens = 0;
+  var closes = 0;
+
+  for (final codeUnit in text.codeUnits) {
+    if (codeUnit == open) {
+      opens += 1;
+    } else if (codeUnit == close) {
+      closes += 1;
+    }
+  }
+
+  return closes > opens;
+}
+
+bool _hasAutoLinkBoundary(String text, int start) {
+  if (start == 0) {
+    return true;
+  }
+
+  return !_isAutoLinkContinuation(text.codeUnitAt(start - 1));
+}
+
+bool _isAutoLinkContinuation(int codeUnit) {
+  final isDigit = codeUnit >= 48 && codeUnit <= 57;
+  final isUpper = codeUnit >= 65 && codeUnit <= 90;
+  final isLower = codeUnit >= 97 && codeUnit <= 122;
+
+  return isDigit ||
+      isUpper ||
+      isLower ||
+      codeUnit == 64 || // @
+      codeUnit == 95 || // _
+      codeUnit == 45 || // -
+      codeUnit == 46 || // .
+      codeUnit == 47; // /
 }
 
 /// Appends text to the output, coalescing adjacent text nodes.

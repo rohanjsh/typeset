@@ -1,5 +1,5 @@
 /// Reserved characters for TypeSet formatting
-final class TypesetReserved {
+abstract final class TypesetReserved {
   TypesetReserved._();
 
   /// The escape character (backslash).

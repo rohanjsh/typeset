@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:typeset/src/models/typeset_autolink_config.dart';
 import 'package:typeset/src/models/typeset_style.dart';
 
-/// Default configuration for TypeSet.
+/// Configuration for TypeSet rendering and editing.
 @immutable
 final class TypeSetConfig {
   /// Creates a TypeSet configuration.
@@ -13,10 +13,28 @@ final class TypeSetConfig {
 
   /// Creates default configuration with http and https AutoLink schemes.
   factory TypeSetConfig.defaults() {
-    return const TypeSetConfig(
-      autoLinkConfig: TypeSetAutoLinkConfig(),
-    );
+    return _defaults;
   }
+
+  /// Resolves the effective config by applying precedence in this order:
+  /// defaults -> global -> scoped -> local.
+  ///
+  /// Resolution is field-level, so partially specified configs inherit the
+  /// remaining values from less-specific layers.
+  factory TypeSetConfig.resolve({
+    TypeSetConfig? local,
+    TypeSetConfig? scoped,
+    TypeSetConfig? global,
+    TypeSetConfig? defaults,
+  }) {
+    return (defaults ?? TypeSetConfig.defaults())
+        .merge(global)
+        .merge(scoped)
+        .merge(local);
+  }
+  static final TypeSetConfig _defaults = TypeSetConfig(
+    autoLinkConfig: TypeSetAutoLinkConfig(),
+  );
 
   /// Styling configuration (null means use renderer defaults).
   final TypeSetStyle? style;
@@ -35,6 +53,21 @@ final class TypeSetConfig {
     );
   }
 
+  /// Creates a merged config where non-null values from [override]
+  /// replace this config's values field by field.
+  TypeSetConfig merge(TypeSetConfig? override) {
+    if (override == null) {
+      return this;
+    }
+
+    return TypeSetConfig(
+      style: style == null ? override.style : style!.merge(override.style),
+      autoLinkConfig: autoLinkConfig == null
+          ? override.autoLinkConfig
+          : autoLinkConfig!.merge(override.autoLinkConfig),
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -44,5 +77,5 @@ final class TypeSetConfig {
           autoLinkConfig == other.autoLinkConfig;
 
   @override
-  int get hashCode => style.hashCode ^ autoLinkConfig.hashCode;
+  int get hashCode => Object.hash(style, autoLinkConfig);
 }

@@ -1,11 +1,13 @@
-import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:typeset/src/models/typeset_config.dart';
+import 'package:typeset/src/models/typeset_document.dart';
 import 'package:typeset/src/view/typeset.dart';
 
 /// TypeSet extension on String to use [typeset] method.
 extension TypeSetExtension on String {
   /// Formats the string as a TypeSet widget.
   TypeSet typeset({
+    Key? key,
     TextStyle? style,
     TextAlign textAlign = TextAlign.start,
     TextDirection? textDirection,
@@ -23,6 +25,7 @@ extension TypeSetExtension on String {
   }) {
     return TypeSet(
       this,
+      key: key,
       style: style,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -39,4 +42,9 @@ extension TypeSetExtension on String {
       config: config,
     );
   }
+
+  /// Returns the plain-text representation that TypeSet would render.
+  ///
+  /// Supported formatting markers are removed while visible content is kept.
+  String stripFormatting() => TypeSetDocument.compile(this).plainText;
 }

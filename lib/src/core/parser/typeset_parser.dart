@@ -20,12 +20,14 @@ final class TypesetParser {
     if (input.isEmpty) return const <TypesetNode>[];
 
     final parsed = _parseInline(input);
-    final config = autoLinkConfig ?? const TypeSetAutoLinkConfig();
+    final config = autoLinkConfig ?? _defaultAutoLinkConfig;
 
     if (config.allowedSchemes.isEmpty) return parsed;
     return typesetAutoLink(parsed, config);
   }
 }
+
+final TypeSetAutoLinkConfig _defaultAutoLinkConfig = TypeSetAutoLinkConfig();
 
 /// Stack frame for tracking open delimiters during parsing.
 final class _Frame {
@@ -72,7 +74,10 @@ List<TypesetNode> _parseInline(String input) {
 
     final delimiter = _readDelimiter(input, i);
     if (delimiter != null) {
-      if (frames.length > 1 && frames.last.delimiter == delimiter) {
+      final canClose = _canCloseDelimiter(input, i, delimiter);
+      final canOpen = _canOpenDelimiter(input, i, delimiter);
+
+      if (frames.length > 1 && frames.last.delimiter == delimiter && canClose) {
         final closing = frames.removeLast();
         if (closing.children.isEmpty) {
           _appendText(frames.last.children, '$delimiter$delimiter');
@@ -88,6 +93,12 @@ List<TypesetNode> _parseInline(String input) {
       final crosses =
           frames.take(frames.length - 1).any((f) => f.delimiter == delimiter);
       if (crosses) {
+        _appendText(current, delimiter);
+        i += delimiter.length;
+        continue;
+      }
+
+      if (!canOpen) {
         _appendText(current, delimiter);
         i += delimiter.length;
         continue;
@@ -137,6 +148,24 @@ String? _readDelimiter(String input, int index) {
         : TypesetReserved.italicChar,
     TypesetReserved.boldChar || TypesetReserved.strikethroughChar => ch,
     _ => null,
+  };
+}
+
+bool _canOpenDelimiter(String input, int index, String delimiter) {
+  final nextIndex = index + delimiter.length;
+  return nextIndex < input.length &&
+      !_isWhitespace(input.codeUnitAt(nextIndex));
+}
+
+bool _canCloseDelimiter(String input, int index, String delimiter) {
+  final previousIndex = index - 1;
+  return previousIndex >= 0 && !_isWhitespace(input.codeUnitAt(previousIndex));
+}
+
+bool _isWhitespace(int codeUnit) {
+  return switch (codeUnit) {
+    0x09 || 0x0A || 0x0B || 0x0C || 0x0D || 0x20 || 0x85 || 0xA0 => true,
+    _ => false,
   };
 }
 

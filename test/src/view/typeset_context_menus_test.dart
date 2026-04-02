@@ -48,6 +48,21 @@ void main() {
       expect(buttonItems, isEmpty);
     });
 
+    test('returns an empty list when the selection is out of bounds', () {
+      when(() => mockEditableTextState.textEditingValue).thenReturn(
+        const TextEditingValue(
+          text: 'text',
+          selection: TextSelection(baseOffset: 0, extentOffset: 99),
+        ),
+      );
+
+      final buttonItems = getTypesetContextMenus(
+        editableTextState: mockEditableTextState,
+      );
+
+      expect(buttonItems, isEmpty);
+    });
+
     test('returns an empty list when the selected text is already styled', () {
       // Simulate the condition where the selected text is already styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
@@ -64,8 +79,7 @@ void main() {
       expect(buttonItems, isEmpty);
     });
 
-    //returns all styles
-    test('returns all styles when no styleTypes are provided', () {
+    test('returns all actions when no actions are provided', () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
         const TextEditingValue(
@@ -81,7 +95,7 @@ void main() {
       expect(buttonItems.length, equals(5));
     });
 
-    test('applies bold style when StyleTypeEnum.bold is provided', () {
+    test('applies bold style when TypesetFormatAction.bold is provided', () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
         const TextEditingValue(
@@ -92,7 +106,7 @@ void main() {
 
       final buttonItems = getTypesetContextMenus(
         editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.bold],
+        actions: [TypesetFormatAction.bold],
       );
 
       // Simulate the user tapping the Bold button
@@ -109,8 +123,60 @@ void main() {
       ).called(1);
     });
 
+    test('escapes existing backslashes before wrapping the selection', () {
+      when(() => mockEditableTextState.textEditingValue).thenReturn(
+        const TextEditingValue(
+          text: r'\',
+          selection: TextSelection(baseOffset: 0, extentOffset: 1),
+        ),
+      );
+
+      final buttonItems = getTypesetContextMenus(
+        editableTextState: mockEditableTextState,
+        actions: [TypesetFormatAction.bold],
+      );
+
+      buttonItems.first.onPressed!();
+
+      verify(
+        () => mockEditableTextState.updateEditingValue(
+          const TextEditingValue(
+            text: r'*\\*',
+            selection: TextSelection.collapsed(offset: 4),
+          ),
+        ),
+      ).called(1);
+    });
+
+    test('clears composing range after applying a format action', () {
+      when(() => mockEditableTextState.textEditingValue).thenReturn(
+        const TextEditingValue(
+          text: 'text',
+          selection: TextSelection(baseOffset: 0, extentOffset: 4),
+          composing: TextRange(start: 0, end: 4),
+        ),
+      );
+
+      final buttonItems = getTypesetContextMenus(
+        editableTextState: mockEditableTextState,
+        actions: [TypesetFormatAction.bold],
+      );
+
+      buttonItems.first.onPressed!();
+
+      verify(
+        () => mockEditableTextState.updateEditingValue(
+          const TextEditingValue(
+            text: '*text*',
+            selection: TextSelection.collapsed(offset: 6),
+          ),
+        ),
+      ).called(1);
+    });
+
     //simulate tapping on all the other buttons
-    test('applies italic style when StyleTypeEnum.italic is provided', () {
+    test('applies italic style when TypesetFormatAction.italic is provided',
+        () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
         const TextEditingValue(
@@ -121,7 +187,7 @@ void main() {
 
       final buttonItems = getTypesetContextMenus(
         editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.italic],
+        actions: [TypesetFormatAction.italic],
       );
 
       // Simulate the user tapping the Italic button
@@ -139,7 +205,8 @@ void main() {
     });
 
     //underline
-    test('applies underline style when StyleTypeEnum.underline is provided',
+    test(
+        'applies underline style when TypesetFormatAction.underline is provided',
         () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
@@ -151,7 +218,7 @@ void main() {
 
       final buttonItems = getTypesetContextMenus(
         editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.underline],
+        actions: [TypesetFormatAction.underline],
       );
 
       // Simulate the user tapping the Underline button
@@ -169,7 +236,7 @@ void main() {
     });
 
     test(
-        'applies strikethrough style when StyleTypeEnum.strikethrough is provided',
+        'applies strikethrough style when TypesetFormatAction.strikethrough is provided',
         () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
@@ -181,7 +248,7 @@ void main() {
 
       final buttonItems = getTypesetContextMenus(
         editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.strikethrough],
+        actions: [TypesetFormatAction.strikethrough],
       );
 
       // Simulate the user tapping the Strikethrough button
@@ -198,7 +265,8 @@ void main() {
       ).called(1);
     });
 
-    test('applies monospace style when StyleTypeEnum.monospace is provided',
+    test(
+        'applies monospace style when TypesetFormatAction.monospace is provided',
         () {
       // Simulate the condition where the selected text is not styled
       when(() => mockEditableTextState.textEditingValue).thenReturn(
@@ -210,7 +278,7 @@ void main() {
 
       final buttonItems = getTypesetContextMenus(
         editableTextState: mockEditableTextState,
-        styleTypes: [StyleTypeEnum.monospace],
+        actions: [TypesetFormatAction.monospace],
       );
 
       // Simulate the user tapping the Monospace button

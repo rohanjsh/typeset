@@ -14,6 +14,32 @@ final class TypeSetStyle {
     this.markerColor,
   });
 
+  /// Creates a theme-derived style that adapts to the active [ThemeData].
+  ///
+  /// Links use `colorScheme.primary`, inline code uses
+  /// `colorScheme.surfaceContainerHighest` as a background with
+  /// `colorScheme.onSurfaceVariant` as text color, and marker color uses
+  /// `colorScheme.outline`.
+  ///
+  /// These values act as sensible defaults that any explicit configuration
+  /// (local, scoped, or global) will override through the normal merge chain.
+  factory TypeSetStyle.fromTheme(ThemeData theme) {
+    final colorScheme = theme.colorScheme;
+    return TypeSetStyle(
+      linkStyle: TextStyle(
+        color: colorScheme.primary,
+        decoration: TextDecoration.underline,
+        decorationColor: colorScheme.primary,
+      ),
+      monospaceStyle: TextStyle(
+        fontFamily: 'Courier',
+        backgroundColor: colorScheme.surfaceContainerHighest,
+        color: colorScheme.onSurfaceVariant,
+      ),
+      markerColor: colorScheme.outline,
+    );
+  }
+
   /// Style applied to bold text (`*text*`).
   final TextStyle? boldStyle;
 
@@ -56,6 +82,24 @@ final class TypeSetStyle {
     );
   }
 
+  /// Creates a merged style where non-null values from [override]
+  /// replace this style's values.
+  TypeSetStyle merge(TypeSetStyle? override) {
+    if (override == null) {
+      return this;
+    }
+
+    return TypeSetStyle(
+      boldStyle: override.boldStyle ?? boldStyle,
+      italicStyle: override.italicStyle ?? italicStyle,
+      underlineStyle: override.underlineStyle ?? underlineStyle,
+      strikethroughStyle: override.strikethroughStyle ?? strikethroughStyle,
+      linkStyle: override.linkStyle ?? linkStyle,
+      monospaceStyle: override.monospaceStyle ?? monospaceStyle,
+      markerColor: override.markerColor ?? markerColor,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -70,12 +114,13 @@ final class TypeSetStyle {
           markerColor == other.markerColor;
 
   @override
-  int get hashCode =>
-      boldStyle.hashCode ^
-      italicStyle.hashCode ^
-      underlineStyle.hashCode ^
-      strikethroughStyle.hashCode ^
-      linkStyle.hashCode ^
-      monospaceStyle.hashCode ^
-      markerColor.hashCode;
+  int get hashCode => Object.hash(
+        boldStyle,
+        italicStyle,
+        underlineStyle,
+        strikethroughStyle,
+        linkStyle,
+        monospaceStyle,
+        markerColor,
+      );
 }

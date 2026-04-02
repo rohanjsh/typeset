@@ -1,4 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:typeset/src/core/typeset_ast.dart';
+import 'package:typeset/src/core/typeset_span_utils.dart';
 import 'package:typeset/src/models/ast/typeset_nodes.dart';
 import 'package:typeset/src/models/typeset_autolink_config.dart';
 import 'package:typeset/src/models/typeset_reserved.dart';
@@ -11,6 +14,7 @@ final class TypesetRenderer {
     this.style,
     this.autoLinkConfig,
     this.showDelimiters = false,
+    this.onLinkRecognizerCreated,
   });
 
   /// Styling configuration.
@@ -22,27 +26,12 @@ final class TypesetRenderer {
   /// Whether to show formatting delimiters (editing mode).
   final bool showDelimiters;
 
+  /// Called when a link recognizer is created during rendering.
+  final void Function(GestureRecognizer recognizer)? onLinkRecognizerCreated;
+
   /// Renders AST nodes into Flutter [InlineSpan]s.
   List<InlineSpan> render(List<TypesetNode> nodes) {
     return _renderNodes(nodes, const TextStyle());
-  }
-
-  /// Extracts plain text from AST nodes.
-  static String plainText(List<TypesetNode> nodes) {
-    final sb = StringBuffer();
-    for (final n in nodes) {
-      switch (n) {
-        case TypesetTextNode():
-          sb.write(n.text);
-        case TypesetCodeNode():
-          sb.write(n.code);
-        case TypesetStyleNode():
-          sb.write(plainText(n.children));
-        case TypesetLinkNode():
-          sb.write(plainText(n.label));
-      }
-    }
-    return sb.toString();
   }
 
   List<InlineSpan> _renderNodes(List<TypesetNode> nodes, TextStyle style) {
@@ -51,27 +40,23 @@ final class TypesetRenderer {
     for (final node in nodes) {
       switch (node) {
         case TypesetTextNode():
-          _appendLeaf(out, TextSpan(text: node.text, style: style));
+          appendTextSpanLeaf(out, text: node.text, style: style);
 
         case TypesetCodeNode():
           final codeStyle = _applyCodeStyle(style);
           if (showDelimiters) {
-            _appendLeaf(
+            appendTextSpanLeaf(
               out,
-              TextSpan(
-                text: TypesetReserved.monospaceChar,
-                style: _markerStyle(style),
-              ),
+              text: TypesetReserved.monospaceChar,
+              style: _markerStyle(style),
             );
           }
-          _appendLeaf(out, TextSpan(text: node.code, style: codeStyle));
+          appendTextSpanLeaf(out, text: node.code, style: codeStyle);
           if (showDelimiters) {
-            _appendLeaf(
+            appendTextSpanLeaf(
               out,
-              TextSpan(
-                text: TypesetReserved.monospaceChar,
-                style: _markerStyle(style),
-              ),
+              text: TypesetReserved.monospaceChar,
+              style: _markerStyle(style),
             );
           }
 
@@ -80,25 +65,30 @@ final class TypesetRenderer {
           final delimiter = _delimiterForStyle(node.style);
 
           if (showDelimiters) {
-            _appendLeaf(
+            appendTextSpanLeaf(
               out,
-              TextSpan(text: delimiter, style: _markerStyle(style)),
+              text: delimiter,
+              style: _markerStyle(style),
             );
           }
 
           out.addAll(_renderNodes(node.children, nextStyle));
 
           if (showDelimiters) {
-            _appendLeaf(
+            appendTextSpanLeaf(
               out,
-              TextSpan(text: delimiter, style: _markerStyle(style)),
+              text: delimiter,
+              style: _markerStyle(style),
             );
           }
 
         case TypesetLinkNode():
-          final labelText = plainText(node.label);
+          final labelText = typesetPlainText(node.label);
           final recognizer =
               autoLinkConfig?.linkRecognizerBuilder?.call(labelText, node.url);
+          if (recognizer != null) {
+            onLinkRecognizerCreated?.call(recognizer);
+          }
           final linkBaseStyle = _applyLinkStyle(style);
 
           out.add(
@@ -126,13 +116,13 @@ final class TypesetRenderer {
         );
       case TypesetStyle.underline:
         final baseStyle = style?.underlineStyle ?? const TextStyle();
-        return _withDecoration(
+        return addTextDecoration(
           current.merge(baseStyle),
           TextDecoration.underline,
         );
       case TypesetStyle.strikethrough:
         final baseStyle = style?.strikethroughStyle ?? const TextStyle();
-        return _withDecoration(
+        return addTextDecoration(
           current.merge(baseStyle),
           TextDecoration.lineThrough,
         );
@@ -183,33 +173,4 @@ final class TypesetRenderer {
     }
     return current.merge(TextStyle(color: markerColor));
   }
-}
-
-TextStyle _withDecoration(TextStyle style, TextDecoration decoration) {
-  final existing = style.decoration;
-  final combined = existing == null
-      ? decoration
-      : TextDecoration.combine([existing, decoration]);
-  return style.copyWith(decoration: combined);
-}
-
-void _appendLeaf(List<InlineSpan> out, TextSpan span) {
-  final text = span.text;
-  if (text == null || text.isEmpty) return;
-
-  final last = out.isEmpty ? null : out.last;
-  if (last is TextSpan &&
-      last.children == null &&
-      span.children == null &&
-      last.recognizer == null &&
-      span.recognizer == null &&
-      last.style == span.style) {
-    out[out.length - 1] = TextSpan(
-      text: (last.text ?? '') + text,
-      style: last.style,
-    );
-    return;
-  }
-
-  out.add(span);
 }

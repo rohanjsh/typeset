@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:typeset/src/models/typeset_reserved.dart';
 
-/// Style types available in the context menu.
-enum StyleTypeEnum {
+/// Formatting actions available in the context menu.
+enum TypesetFormatAction {
   /// Bold formatting.
   bold('Bold'),
 
@@ -18,122 +18,111 @@ enum StyleTypeEnum {
   /// Underline formatting.
   underline('Underline');
 
-  const StyleTypeEnum(this.label);
+  const TypesetFormatAction(this.label);
 
-  /// The display label for this style type.
+  /// The display label for this action.
   final String label;
+
+  /// The delimiter used to wrap selected text with this action.
+  String get delimiter {
+    switch (this) {
+      case TypesetFormatAction.bold:
+        return TypesetReserved.boldChar;
+      case TypesetFormatAction.italic:
+        return TypesetReserved.italicChar;
+      case TypesetFormatAction.strikethrough:
+        return TypesetReserved.strikethroughChar;
+      case TypesetFormatAction.monospace:
+        return TypesetReserved.monospaceChar;
+      case TypesetFormatAction.underline:
+        return TypesetReserved.underlineChar;
+    }
+  }
 }
 
-/// Generates a list of [ContextMenuButtonItem]s for text editing.
-///
-/// Builds context menu items that apply text styling to selected text
-/// within a [TextField].
-/// Supports: Bold (`*text*`), Italic (`_text_`), Underline (`__text__`),
-/// Strikethrough (`~text~`), Monospace (`` `text` ``).
-///
-/// Parameters:
-/// - `editableTextState`: The state of the editable text field.
-/// - `styleTypes`: Optional list of styles to include. If not provided,
-///   all styles are included.
+/// Generates [ContextMenuButtonItem]s that wrap the current selection with
+/// TypeSet delimiters.
 List<ContextMenuButtonItem> getTypesetContextMenus({
   required EditableTextState editableTextState,
-  List<StyleTypeEnum>? styleTypes,
+  List<TypesetFormatAction>? actions,
 }) {
-  final buttonItems = <ContextMenuButtonItem>[];
   final value = editableTextState.textEditingValue;
+  if (!_hasUsableSelection(value)) {
+    return const <ContextMenuButtonItem>[];
+  }
+
   final selectionText = value.selection.textInside(value.text);
 
-  if (selectionText.isEmpty) {
-    return buttonItems;
+  if (selectionText.isEmpty || _isAlreadyWrapped(selectionText)) {
+    return const <ContextMenuButtonItem>[];
   }
 
-  final effectiveStyleTypes = (styleTypes == null || styleTypes.isEmpty)
-      ? StyleTypeEnum.values.toList()
-      : styleTypes;
+  final effectiveActions =
+      actions == null || actions.isEmpty ? TypesetFormatAction.values : actions;
 
-  for (final delim in TypesetReserved.all) {
-    if (selectionText.startsWith(delim) && selectionText.endsWith(delim)) {
-      return buttonItems;
+  return effectiveActions
+      .map(
+        (action) => ContextMenuButtonItem(
+          label: action.label,
+          onPressed: () => editableTextState.updateEditingValue(
+            _applyFormatAction(value, action),
+          ),
+        ),
+      )
+      .toList(growable: false);
+}
+
+bool _isAlreadyWrapped(String text) {
+  for (final delimiter in TypesetReserved.all) {
+    if (text.startsWith(delimiter) && text.endsWith(delimiter)) {
+      return true;
     }
   }
+  return false;
+}
 
-  String escapeReserved(String originalText) {
-    final buf = StringBuffer();
-    for (var i = 0; i < originalText.length; i++) {
-      final ch = originalText[i];
-      if (TypesetReserved.allSingle.contains(ch)) {
-        buf.write(r'\');
-      }
-      buf.write(ch);
+TextEditingValue _applyFormatAction(
+  TextEditingValue value,
+  TypesetFormatAction action,
+) {
+  if (!_hasUsableSelection(value)) {
+    return value;
+  }
+
+  final selectedText = value.selection.textInside(value.text);
+  final escapedText = _escapeReservedCharacters(selectedText);
+  final replacement = '${action.delimiter}$escapedText${action.delimiter}';
+  final newText = value.text.replaceRange(
+    value.selection.start,
+    value.selection.end,
+    replacement,
+  );
+
+  return value.copyWith(
+    text: newText,
+    selection: TextSelection.collapsed(
+      offset: value.selection.start + replacement.length,
+    ),
+    composing: TextRange.empty,
+  );
+}
+
+bool _hasUsableSelection(TextEditingValue value) {
+  final selection = value.selection;
+  return selection.isValid &&
+      selection.start >= 0 &&
+      selection.end <= value.text.length;
+}
+
+String _escapeReservedCharacters(String text) {
+  final buffer = StringBuffer();
+  for (var index = 0; index < text.length; index++) {
+    final character = text[index];
+    if (character == TypesetReserved.escapeChar ||
+        TypesetReserved.allSingle.contains(character)) {
+      buffer.write(String.fromCharCode(0x5c));
     }
-    return buf.toString();
+    buffer.write(character);
   }
-
-  void applyTextStyle(String delimiter) {
-    final text = escapeReserved(
-      value.selection.textInside(value.text),
-    );
-    final newText = value.text.replaceRange(
-      value.selection.start,
-      value.selection.end,
-      '$delimiter$text$delimiter',
-    );
-    editableTextState.updateEditingValue(
-      value.copyWith(
-        text: newText,
-        selection: TextSelection.collapsed(
-          offset: value.selection.start + delimiter.length * 2 + text.length,
-        ),
-      ),
-    );
-  }
-
-  if (effectiveStyleTypes.contains(StyleTypeEnum.bold)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.bold.label,
-        onPressed: () => applyTextStyle(TypesetReserved.boldChar),
-      ),
-    );
-  }
-
-  if (effectiveStyleTypes.contains(StyleTypeEnum.italic)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.italic.label,
-        onPressed: () => applyTextStyle(TypesetReserved.italicChar),
-      ),
-    );
-  }
-
-  if (effectiveStyleTypes.contains(StyleTypeEnum.strikethrough)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.strikethrough.label,
-        onPressed: () => applyTextStyle(
-          TypesetReserved.strikethroughChar,
-        ),
-      ),
-    );
-  }
-
-  if (effectiveStyleTypes.contains(StyleTypeEnum.monospace)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.monospace.label,
-        onPressed: () => applyTextStyle(TypesetReserved.monospaceChar),
-      ),
-    );
-  }
-
-  if (effectiveStyleTypes.contains(StyleTypeEnum.underline)) {
-    buttonItems.add(
-      ContextMenuButtonItem(
-        label: StyleTypeEnum.underline.label,
-        onPressed: () => applyTextStyle(TypesetReserved.underlineChar),
-      ),
-    );
-  }
-
-  return buttonItems;
+  return buffer.toString();
 }

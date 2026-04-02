@@ -1,17 +1,14 @@
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/core/parser/typeset_parser.dart';
-import 'package:typeset/src/core/renderer/typeset_renderer.dart';
-import 'package:typeset/src/core/typeset_config_provider.dart';
+import 'package:typeset/src/core/typeset_runtime.dart';
 import 'package:typeset/src/models/typeset_config.dart';
-import 'package:typeset/src/models/typeset_global_config.dart';
 
 /// {@template typeset}
-/// WhatsApp/Telegram-like text formatting.
+/// Renders inline rich text with familiar chat-style syntax.
 /// {@endtemplate}
 ///
 /// Supports: `*bold*`, `_italic_`, `__underline__`, `~strikethrough~`,
 /// `` `code` ``, AutoLink URLs.
-class TypeSet extends StatelessWidget {
+final class TypeSet extends StatefulWidget {
   /// Creates a TypeSet widget.
   const TypeSet(
     this.inputText, {
@@ -81,38 +78,46 @@ class TypeSet extends StatelessWidget {
   final TypeSetConfig? config;
 
   @override
-  Widget build(BuildContext context) {
-    final scopedConfig = TypeSetConfigProvider.of(context);
-    final effectiveConfig =
-        config ?? scopedConfig ?? TypeSetGlobalConfig.instance;
+  State<TypeSet> createState() => _TypeSetState();
+}
 
-    final children = TypesetRenderer(
-      style: effectiveConfig.style,
-      autoLinkConfig: effectiveConfig.autoLinkConfig,
-    ).render(
-      const TypesetParser().parse(
-        inputText,
-        autoLinkConfig: effectiveConfig.autoLinkConfig,
-      ),
+final class _TypeSetState extends State<TypeSet> {
+  final TypeSetRuntimeSession _runtime = TypeSetRuntimeSession();
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveConfig = resolveTypeSetConfig(
+      context,
+      local: widget.config,
+    );
+    final children = _runtime.render(
+      inputText: widget.inputText,
+      config: effectiveConfig,
     );
 
     return Text.rich(
       TextSpan(
         children: children,
       ),
-      textAlign: textAlign,
-      style: style,
-      textDirection: textDirection,
-      locale: locale,
-      softWrap: softWrap,
-      overflow: overflow,
-      textScaler: textScaler,
-      maxLines: maxLines,
-      semanticsLabel: semanticsLabel,
-      textWidthBasis: textWidthBasis,
-      textHeightBehavior: textHeightBehavior,
-      selectionColor: selectionColor,
-      strutStyle: strutStyle,
+      textAlign: widget.textAlign,
+      style: widget.style,
+      textDirection: widget.textDirection,
+      locale: widget.locale,
+      softWrap: widget.softWrap,
+      overflow: widget.overflow,
+      textScaler: widget.textScaler,
+      maxLines: widget.maxLines,
+      semanticsLabel: widget.semanticsLabel,
+      textWidthBasis: widget.textWidthBasis,
+      textHeightBehavior: widget.textHeightBehavior,
+      selectionColor: widget.selectionColor,
+      strutStyle: widget.strutStyle,
     );
+  }
+
+  @override
+  void dispose() {
+    _runtime.dispose();
+    super.dispose();
   }
 }
