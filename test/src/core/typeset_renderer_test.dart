@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/core/parser/typeset_parser.dart';
-import 'package:typeset/src/core/renderer/typeset_renderer.dart';
+import 'package:typeset/src/parser/parser.dart';
+import 'package:typeset/src/renderer/renderer.dart';
 import 'package:typeset/typeset.dart';
 
 void main() {

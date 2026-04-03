@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/core/typeset_span_utils.dart';
 import 'package:typeset/typeset.dart';
+
+import '../../helpers/span_test_helpers.dart';
 
 void main() {
   group('TypeSetEditingController', () {

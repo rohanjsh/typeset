@@ -1,21 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:typeset/src/core/typeset_config_provider.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
-import 'package:typeset/src/models/typeset_config.dart';
-import 'package:typeset/src/models/typeset_document.dart';
-import 'package:typeset/src/models/typeset_global_config.dart';
-import 'package:typeset/src/models/typeset_style.dart';
+import 'package:typeset/src/config/autolink_config.dart';
+import 'package:typeset/src/config/config.dart';
+import 'package:typeset/src/config/config_provider.dart';
+import 'package:typeset/src/config/global_config.dart';
+import 'package:typeset/src/config/style.dart';
+import 'package:typeset/src/document.dart';
 
-/// Resolves TypeSet configuration using local, scoped, global, theme, and
-/// default layers.
-///
-/// Precedence order (highest wins):
-/// 1. [local] config passed to a widget or controller
-/// 2. nearest [TypeSetConfigProvider] in the tree
-/// 3. [TypeSetGlobalConfig.current]
-/// 4. theme-derived defaults from the active [ThemeData]
-/// 5. library defaults
+/// Resolves config through local, scoped, global, and theme layers.
 TypeSetConfig resolveTypeSetConfig(
   BuildContext context, {
   TypeSetConfig? local,
@@ -32,14 +24,14 @@ TypeSetConfig resolveTypeSetConfig(
   );
 }
 
-/// Shared runtime session for document caching and recognizer lifecycle.
+/// Manages document caching and gesture recognizer lifecycle.
 final class TypeSetRuntimeSession {
   List<GestureRecognizer> _recognizers = <GestureRecognizer>[];
   TypeSetDocument? _cachedDocument;
   String? _cachedInputText;
   TypeSetAutoLinkConfig? _cachedCompileAutoLinkConfig;
 
-  /// Renders the given content with consistent caching and recognizer handling.
+  /// Renders content with caching and recognizer management.
   List<InlineSpan> render({
     required String inputText,
     required TypeSetConfig config,
@@ -62,7 +54,7 @@ final class TypeSetRuntimeSession {
     return spans;
   }
 
-  /// Clears cached documents and disposes active recognizers.
+  /// Clears cache and disposes all recognizers.
   void clear() {
     _cachedDocument = null;
     _cachedInputText = null;
@@ -70,7 +62,7 @@ final class TypeSetRuntimeSession {
     _replaceRecognizers(const <GestureRecognizer>[]);
   }
 
-  /// Releases all runtime resources held by this session.
+  /// Releases all session resources.
   void dispose() {
     clear();
   }
@@ -81,14 +73,12 @@ final class TypeSetRuntimeSession {
   }) {
     final compileConfig = _compileAutoLinkConfig(autoLinkConfig);
 
-    // Fast path: session-level single-entry cache (same widget, same text).
     if (_cachedDocument != null &&
         _cachedInputText == inputText &&
         _cachedCompileAutoLinkConfig == compileConfig) {
       return _cachedDocument!;
     }
 
-    // Slow path: check the global LRU cache before compiling.
     final globalCache = TypeSetGlobalConfig.documentCache;
     final nextDocument = globalCache != null
         ? globalCache.getOrCompile(inputText, autoLinkConfig: compileConfig)
@@ -109,7 +99,6 @@ final class TypeSetRuntimeSession {
   void _replaceRecognizers(List<GestureRecognizer> nextRecognizers) {
     final previousRecognizers = _recognizers;
     _recognizers = nextRecognizers;
-
     for (final recognizer in previousRecognizers) {
       recognizer.dispose();
     }

@@ -1,4 +1,4 @@
-import 'package:typeset/src/models/ast/typeset_nodes.dart';
+import 'package:typeset/src/ast/nodes.dart';
 
 /// Returns the visible plain-text representation of parsed [nodes].
 String typesetPlainText(Iterable<TypesetNode> nodes) {

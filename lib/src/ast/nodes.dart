@@ -1,41 +1,42 @@
-/// Base class for parsed nodes.
+/// Base class for all parsed AST nodes.
 sealed class TypesetNode {
+  /// Creates a node.
   const TypesetNode();
 }
 
-/// Plain text node.
+/// Plain text with no formatting.
 final class TypesetTextNode extends TypesetNode {
-  /// Creates a plain-text node.
+  /// Creates a text node.
   const TypesetTextNode(this.text);
 
-  /// The literal text content.
+  /// The raw text content.
   final String text;
 
   @override
   String toString() => 'Text("$text")';
 }
 
-/// Inline code node (content is literal, no parsing inside).
+/// Inline code — content is treated as literal, never parsed further.
 final class TypesetCodeNode extends TypesetNode {
-  /// Creates an inline-code node.
+  /// Creates a code node.
   const TypesetCodeNode(this.code);
 
-  /// The literal inline-code content.
+  /// The code content (sans backticks).
   final String code;
 
   @override
   String toString() => 'Code("$code")';
 }
 
-/// A link node with a parsed label.
+/// A detected link with a styled label.
 final class TypesetLinkNode extends TypesetNode {
   /// Creates a link node.
   const TypesetLinkNode({required this.url, required this.label});
 
-  /// The link destination URL.
+  /// The resolved URL.
   final String url;
 
-  /// The parsed label nodes (rendered as the clickable text).
+  /// The visible label (may contain nested formatting).
   final List<TypesetNode> label;
 
   @override
@@ -44,28 +45,28 @@ final class TypesetLinkNode extends TypesetNode {
 
 /// Supported inline formatting styles.
 enum TypesetStyle {
-  /// Bold (`*text*`).
+  /// Bold formatting (`*text*`).
   bold,
 
-  /// Italic (`_text_`).
+  /// Italic formatting (`_text_`).
   italic,
 
-  /// Underline (`__text__`).
+  /// Underline formatting (`__text__`).
   underline,
 
-  /// Strikethrough (`~text~`).
+  /// Strikethrough formatting (`~text~`).
   strikethrough,
 }
 
-/// A styled span containing child nodes.
+/// A styled span wrapping child nodes.
 final class TypesetStyleNode extends TypesetNode {
-  /// Creates a style span node.
+  /// Creates a style node.
   const TypesetStyleNode({required this.style, required this.children});
 
-  /// The style applied to children.
+  /// The formatting style applied.
   final TypesetStyle style;
 
-  /// The child nodes inside this styled span.
+  /// The child nodes within this styled span.
   final List<TypesetNode> children;
 
   @override

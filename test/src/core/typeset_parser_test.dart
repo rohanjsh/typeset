@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/core/parser/typeset_parser.dart';
-import 'package:typeset/src/models/ast/typeset_nodes.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
+import 'package:typeset/src/ast/nodes.dart';
+import 'package:typeset/src/config/autolink_config.dart';
+import 'package:typeset/src/parser/parser.dart';
 
 void main() {
   group('TypesetParser behavior', () {

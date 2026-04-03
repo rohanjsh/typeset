@@ -1,26 +1,20 @@
 import 'package:flutter/foundation.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
-import 'package:typeset/src/models/typeset_style.dart';
+import 'package:typeset/src/config/autolink_config.dart';
+import 'package:typeset/src/config/style.dart';
 
 /// Configuration for TypeSet rendering and editing.
 @immutable
 final class TypeSetConfig {
-  /// Creates a TypeSet configuration.
+  /// Creates a config.
   const TypeSetConfig({
     this.style,
     this.autoLinkConfig,
   });
 
-  /// Creates default configuration with http and https AutoLink schemes.
-  factory TypeSetConfig.defaults() {
-    return _defaults;
-  }
+  /// Returns library defaults.
+  factory TypeSetConfig.defaults() => _defaults;
 
-  /// Resolves the effective config by applying precedence in this order:
-  /// defaults -> global -> scoped -> local.
-  ///
-  /// Resolution is field-level, so partially specified configs inherit the
-  /// remaining values from less-specific layers.
+  /// Resolves config: defaults → global → scoped → local.
   factory TypeSetConfig.resolve({
     TypeSetConfig? local,
     TypeSetConfig? scoped,
@@ -32,17 +26,18 @@ final class TypeSetConfig {
         .merge(scoped)
         .merge(local);
   }
+
   static final TypeSetConfig _defaults = TypeSetConfig(
     autoLinkConfig: TypeSetAutoLinkConfig(),
   );
 
-  /// Styling configuration (null means use renderer defaults).
+  /// Style overrides.
   final TypeSetStyle? style;
 
-  /// AutoLink configuration (null means use scoped or global defaults).
+  /// AutoLink detection settings.
   final TypeSetAutoLinkConfig? autoLinkConfig;
 
-  /// Creates a copy with the given fields replaced.
+  /// Returns a copy with the given fields replaced.
   TypeSetConfig copyWith({
     TypeSetStyle? style,
     TypeSetAutoLinkConfig? autoLinkConfig,
@@ -53,12 +48,9 @@ final class TypeSetConfig {
     );
   }
 
-  /// Creates a merged config where non-null values from [override]
-  /// replace this config's values field by field.
+  /// Merges [override] on top of this config.
   TypeSetConfig merge(TypeSetConfig? override) {
-    if (override == null) {
-      return this;
-    }
+    if (override == null) return this;
 
     return TypeSetConfig(
       style: style == null ? override.style : style!.merge(override.style),

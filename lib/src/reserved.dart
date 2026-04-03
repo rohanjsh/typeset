@@ -1,23 +1,23 @@
-/// Reserved characters for TypeSet formatting
+/// Reserved characters and delimiter constants for TypeSet formatting.
 abstract final class TypesetReserved {
   TypesetReserved._();
 
-  /// The escape character (backslash).
+  /// Escape prefix (`\`).
   static const escapeChar = r'\';
 
-  /// The delimiter for bold formatting.
+  /// Bold delimiter (`*`).
   static const boldChar = '*';
 
-  /// The delimiter for italic formatting.
+  /// Italic delimiter (`_`).
   static const italicChar = '_';
 
-  /// The delimiter for strikethrough formatting.
+  /// Strikethrough delimiter (`~`).
   static const strikethroughChar = '~';
 
-  /// The delimiter for monospace/inline code formatting.
+  /// Monospace/code delimiter (`` ` ``).
   static const monospaceChar = '`';
 
-  /// The delimiter for underline formatting (double underscore).
+  /// Underline delimiter (`__`).
   static const underlineChar = '__';
 
   /// All single-character formatting delimiters.

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Configuration for TypeSet formatting styles.
+/// Style overrides for TypeSet formatting.
 @immutable
 final class TypeSetStyle {
-  /// Creates a style configuration with optional text styles and marker color.
+  /// Creates a style config.
   const TypeSetStyle({
     this.boldStyle,
     this.italicStyle,
@@ -15,14 +15,6 @@ final class TypeSetStyle {
   });
 
   /// Creates a theme-derived style that adapts to the active [ThemeData].
-  ///
-  /// Links use `colorScheme.primary`, inline code uses
-  /// `colorScheme.surfaceContainerHighest` as a background with
-  /// `colorScheme.onSurfaceVariant` as text color, and marker color uses
-  /// `colorScheme.outline`.
-  ///
-  /// These values act as sensible defaults that any explicit configuration
-  /// (local, scoped, or global) will override through the normal merge chain.
   factory TypeSetStyle.fromTheme(ThemeData theme) {
     final colorScheme = theme.colorScheme;
     return TypeSetStyle(
@@ -40,28 +32,28 @@ final class TypeSetStyle {
     );
   }
 
-  /// Style applied to bold text (`*text*`).
+  /// Style applied to `*bold*` text.
   final TextStyle? boldStyle;
 
-  /// Style applied to italic text (`_text_`).
+  /// Style applied to `_italic_` text.
   final TextStyle? italicStyle;
 
-  /// Style applied to underline text (`__text__`).
+  /// Style applied to `__underline__` text.
   final TextStyle? underlineStyle;
 
-  /// Style applied to strikethrough text (`~text~`).
+  /// Style applied to `~strikethrough~` text.
   final TextStyle? strikethroughStyle;
 
-  /// Style applied to links (AutoLink URLs).
+  /// Style applied to AutoLinked URLs.
   final TextStyle? linkStyle;
 
-  /// Style applied to inline code (`` `text` ``).
+  /// Style applied to `` `code` `` text.
   final TextStyle? monospaceStyle;
 
-  /// Color for formatting markers/delimiters (only used in editing mode).
+  /// Color for formatting markers (editing mode only).
   final Color? markerColor;
 
-  /// Creates a copy of this style with the given fields replaced.
+  /// Returns a copy with the given fields replaced.
   TypeSetStyle copyWith({
     TextStyle? boldStyle,
     TextStyle? italicStyle,
@@ -82,12 +74,9 @@ final class TypeSetStyle {
     );
   }
 
-  /// Creates a merged style where non-null values from [override]
-  /// replace this style's values.
+  /// Merges [override] on top of this style.
   TypeSetStyle merge(TypeSetStyle? override) {
-    if (override == null) {
-      return this;
-    }
+    if (override == null) return this;
 
     return TypeSetStyle(
       boldStyle: override.boldStyle ?? boldStyle,

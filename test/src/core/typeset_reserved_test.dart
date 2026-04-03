@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/models/typeset_reserved.dart';
+import 'package:typeset/src/reserved.dart';
 
 void main() {
   group('TypesetReserved Tests', () {

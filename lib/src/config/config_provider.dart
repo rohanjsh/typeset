@@ -1,19 +1,19 @@
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/models/typeset_config.dart';
+import 'package:typeset/src/config/config.dart';
 
 /// Provides TypeSet configuration to a widget subtree.
 final class TypeSetConfigProvider extends InheritedWidget {
-  /// Creates a TypeSet configuration provider.
+  /// Creates a config provider.
   const TypeSetConfigProvider({
     required this.config,
     required super.child,
     super.key,
   });
 
-  /// The configuration provided to the subtree.
+  /// The config to provide to descendants.
   final TypeSetConfig config;
 
-  /// Gets the configuration from the nearest ancestor provider.
+  /// Returns the nearest ancestor config, or throws.
   static TypeSetConfig of(BuildContext context) {
     final provider =
         context.dependOnInheritedWidgetOfExactType<TypeSetConfigProvider>();
@@ -33,7 +33,7 @@ final class TypeSetConfigProvider extends InheritedWidget {
     return provider.config;
   }
 
-  /// Gets the configuration from the nearest ancestor provider, if present.
+  /// Returns the nearest ancestor config, or null.
   static TypeSetConfig? maybeOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<TypeSetConfigProvider>()

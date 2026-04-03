@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/core/typeset_span_utils.dart';
-import 'package:typeset/src/models/typeset_document.dart';
+import 'package:typeset/src/document.dart';
 import 'package:typeset/typeset.dart';
+
+import '../../helpers/span_test_helpers.dart';
 
 void main() {
   group('TypeSetDocument', () {

@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/core/typeset_ast.dart';
-import 'package:typeset/src/core/typeset_span_utils.dart';
-import 'package:typeset/src/models/ast/typeset_nodes.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
-import 'package:typeset/src/models/typeset_reserved.dart';
-import 'package:typeset/src/models/typeset_style.dart';
+import 'package:typeset/src/ast/nodes.dart';
+import 'package:typeset/src/ast/plain_text.dart';
+import 'package:typeset/src/config/autolink_config.dart';
+import 'package:typeset/src/config/style.dart';
+import 'package:typeset/src/renderer/span_utils.dart';
+import 'package:typeset/src/reserved.dart';
 
 /// Renders AST nodes into Flutter [InlineSpan]s.
 final class TypesetRenderer {
-  /// Creates a renderer for AST nodes.
+  /// Creates a renderer.
   const TypesetRenderer({
     this.style,
     this.autoLinkConfig,
@@ -17,19 +17,19 @@ final class TypesetRenderer {
     this.onLinkRecognizerCreated,
   });
 
-  /// Styling configuration.
+  /// Styling overrides.
   final TypeSetStyle? style;
 
-  /// AutoLink behavior configuration.
+  /// AutoLink config for building link recognizers.
   final TypeSetAutoLinkConfig? autoLinkConfig;
 
-  /// Whether to show formatting delimiters (editing mode).
+  /// Whether to show delimiter markers (editing mode).
   final bool showDelimiters;
 
-  /// Called when a link recognizer is created during rendering.
+  /// Called each time a link recognizer is created.
   final void Function(GestureRecognizer recognizer)? onLinkRecognizerCreated;
 
-  /// Renders AST nodes into Flutter [InlineSpan]s.
+  /// Renders [nodes] into [InlineSpan]s.
   List<InlineSpan> render(List<TypesetNode> nodes) {
     return _renderNodes(nodes, const TextStyle());
   }
@@ -135,7 +135,6 @@ final class TypesetRenderer {
       decoration: TextDecoration.underline,
       decorationColor: Color(0xFF0000EE),
     );
-
     return current.merge(style?.linkStyle ?? defaultLink);
   }
 
@@ -151,7 +150,6 @@ final class TypesetRenderer {
         );
   }
 
-  /// Returns the delimiter string for a given style.
   String _delimiterForStyle(TypesetStyle style) {
     switch (style) {
       case TypesetStyle.bold:
@@ -165,12 +163,9 @@ final class TypesetRenderer {
     }
   }
 
-  /// Returns a TextStyle for markers/delimiters with the marker color.
   TextStyle _markerStyle(TextStyle current) {
     final markerColor = style?.markerColor;
-    if (markerColor == null) {
-      return current;
-    }
+    if (markerColor == null) return current;
     return current.merge(TextStyle(color: markerColor));
   }
 }

@@ -1,20 +1,12 @@
-/// TypeSet public API.
-///
-/// Provides:
-/// - TypeSet widget for rendering inline-formatted text.
-/// - TypeSetEditingController for editing with live formatting markers.
-/// - String extensions for ergonomic rendering and plain-text extraction.
-/// - getTypesetContextMenus helper for text selection actions.
-/// - Configuration models for style and AutoLink behavior.
 library typeset;
 
-export 'src/core/typeset_config_provider.dart';
-export 'src/models/typeset_autolink_config.dart';
-export 'src/models/typeset_config.dart';
-export 'src/models/typeset_document_cache.dart';
-export 'src/models/typeset_global_config.dart';
-export 'src/models/typeset_style.dart';
-export 'src/view/typeset.dart';
-export 'src/view/typeset_context_menus.dart';
-export 'src/view/typeset_editing_controller.dart';
-export 'src/view/typeset_ext.dart';
+export 'src/config/autolink_config.dart';
+export 'src/config/config.dart';
+export 'src/config/config_provider.dart';
+export 'src/config/global_config.dart';
+export 'src/config/style.dart';
+export 'src/document_cache.dart';
+export 'src/widgets/context_menus.dart';
+export 'src/widgets/editing_controller.dart';
+export 'src/widgets/extensions.dart';
+export 'src/widgets/typeset.dart';

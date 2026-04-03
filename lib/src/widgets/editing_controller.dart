@@ -1,40 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:typeset/src/core/typeset_runtime.dart';
-import 'package:typeset/src/core/typeset_span_utils.dart';
-import 'package:typeset/src/models/typeset_config.dart';
+import 'package:typeset/src/config/config.dart';
+import 'package:typeset/src/renderer/span_utils.dart';
+import 'package:typeset/src/runtime.dart';
 
 /// A [TextEditingController] that renders TypeSet formatting while editing.
-///
-/// It uses the same parser and config model as `TypeSet`, while keeping the
-/// raw markers visible so text can still be edited normally.
-///
-/// Example usage:
-/// ```dart
-/// final controller = TypeSetEditingController();
-/// TextField(controller: controller);
-/// ```
-///
-/// Supported formatting:
-/// - Bold: `*text*`
-/// - Italic: `_text_`
-/// - Strikethrough: `~text~`
-/// - Underline: `__text__`
-/// - Inline code: `` `text` ``
-/// - Links: Raw URLs (https://example.com, http://example.com,
-///   www.example.com)
-///
-/// The controller automatically renders formatted text while preserving
-/// the raw text with markers for editing.
+/// Shows formatting markers and renders styles live in the text field.
 final class TypeSetEditingController extends TextEditingController {
-  /// Creates a controller with TypeSet formatting capabilities.
-  ///
-  /// When [maxLiveFormattingLength] is set, live formatting is automatically
-  /// disabled once the text length exceeds this threshold. The field continues
-  /// to work as a normal plain-text input — no freeze, no crash. Formatting
-  /// resumes automatically when the text length drops back below the limit.
-  ///
-  /// Defaults to [defaultMaxLiveFormattingLength] (5000 characters).
-  /// Pass `null` to disable the guard entirely.
+  /// [maxLiveFormattingLength] (default 5000) prevents UI freezes on very
+  /// long inputs by disabling formatting when the text exceeds this limit.
   TypeSetEditingController({
     super.text,
     this.config,
@@ -49,19 +22,14 @@ final class TypeSetEditingController extends TextEditingController {
     }
   }
 
-  /// Default character limit for live formatting (5000).
+  /// Default character threshold for live formatting.
   static const int defaultMaxLiveFormattingLength = 5000;
 
-  /// Configuration object containing styling and AutoLink settings.
+  /// Config for styling and AutoLink behavior.
   final TypeSetConfig? config;
 
-  /// Maximum text length for live formatting.
-  ///
-  /// When the text exceeds this length, the controller renders plain text
-  /// instead of applying formatting, preventing UI freezes on very long
-  /// inputs (e.g. pasted logs or large blocks of text).
-  ///
-  /// Set to `null` to disable the guard entirely.
+  /// Formatting is disabled once text exceeds this limit.
+  /// Set to `null` to disable entirely.
   final int? maxLiveFormattingLength;
 
   final TypeSetRuntimeSession _runtime = TypeSetRuntimeSession();
@@ -77,17 +45,13 @@ final class TypeSetEditingController extends TextEditingController {
       return TextSpan(style: style);
     }
 
-    // Large text protection: skip formatting when text exceeds the threshold.
     if (maxLiveFormattingLength != null &&
         text.length > maxLiveFormattingLength!) {
       _runtime.clear();
       return TextSpan(text: text, style: style);
     }
 
-    final effectiveConfig = resolveTypeSetConfig(
-      context,
-      local: config,
-    );
+    final effectiveConfig = resolveTypeSetConfig(context, local: config);
     final spans = _applyComposingRange(
       _runtime.render(
         inputText: text,

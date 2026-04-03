@@ -6,7 +6,7 @@ import 'package:flutter/gestures.dart';
 /// Configuration for AutoLink URL detection and behavior.
 @immutable
 final class TypeSetAutoLinkConfig {
-  /// Creates an AutoLink configuration with optional scheme/domain validation.
+  /// Creates an AutoLink config.
   TypeSetAutoLinkConfig({
     Set<String>? allowedSchemes,
     this.allowedDomains,
@@ -21,34 +21,30 @@ final class TypeSetAutoLinkConfig {
 
   final Set<String>? _allowedSchemes;
 
-  /// Allowed URL schemes.
-  ///
-  /// When this config is used standalone, omitted schemes default to
-  /// `http` and `https`. During config merging, an omitted value inherits
-  /// the less-specific configuration.
+  /// Defaults to http and https when omitted.
   Set<String> get allowedSchemes => _allowedSchemes ?? _defaultAllowedSchemes;
 
-  /// Optional regex pattern for domain allowlisting.
+  /// Regex filter for allowed host names.
   final RegExp? allowedDomains;
 
-  /// Custom validation function for URLs.
+  /// Additional validation callback for parsed URIs.
   final bool Function(Uri uri)? customValidator;
 
-  /// Builder function for link gesture recognizers.
-  final GestureRecognizer Function(String linkText, String url)? //
+  /// Builds a recognizer for each detected link.
+  final GestureRecognizer Function(String linkText, String url)?
       linkRecognizerBuilder;
 
-  /// Predefined config: HTTPS only (no HTTP).
+  /// Preset: only `https` links.
   static final httpsOnly = TypeSetAutoLinkConfig(
     allowedSchemes: const <String>{'https'},
   );
 
-  /// Predefined config: Disable autolink entirely.
+  /// Preset: no AutoLink detection.
   static final disabled = TypeSetAutoLinkConfig(
     allowedSchemes: const <String>{},
   );
 
-  /// Creates a copy with the given fields replaced.
+  /// Returns a copy with the given fields replaced.
   TypeSetAutoLinkConfig copyWith({
     Object? allowedSchemes = _unset,
     Object? allowedDomains = _unset,
@@ -74,12 +70,9 @@ final class TypeSetAutoLinkConfig {
     );
   }
 
-  /// Creates a merged config where non-null values from [override]
-  /// replace this config's values.
+  /// Merges [override] on top of this config.
   TypeSetAutoLinkConfig merge(TypeSetAutoLinkConfig? override) {
-    if (override == null) {
-      return this;
-    }
+    if (override == null) return this;
 
     return TypeSetAutoLinkConfig(
       allowedSchemes: override._allowedSchemes ?? _allowedSchemes,
@@ -112,12 +105,8 @@ final class TypeSetAutoLinkConfig {
 }
 
 bool _regExpEquals(RegExp? left, RegExp? right) {
-  if (identical(left, right)) {
-    return true;
-  }
-  if (left == null || right == null) {
-    return false;
-  }
+  if (identical(left, right)) return true;
+  if (left == null || right == null) return false;
 
   return left.pattern == right.pattern &&
       left.isCaseSensitive == right.isCaseSensitive &&
@@ -127,9 +116,7 @@ bool _regExpEquals(RegExp? left, RegExp? right) {
 }
 
 int? _regExpHash(RegExp? value) {
-  if (value == null) {
-    return null;
-  }
+  if (value == null) return null;
 
   return Object.hash(
     value.pattern,

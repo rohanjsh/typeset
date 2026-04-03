@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/src/core/typeset_span_utils.dart';
 import 'package:typeset/typeset.dart';
+
+import '../../helpers/span_test_helpers.dart';
 
 import 'typeset_widget.dart';
 
@@ -85,17 +86,17 @@ void main() {
       expect(find.byKey(const Key('typeset-extension-key')), findsOneWidget);
     });
 
-    test('stripFormatting returns rendered plain text', () {
+    test('plainText returns rendered plain text', () {
       expect(
-        'Hello *world* and __underlined__ text'.stripFormatting(),
+        'Hello *world* and __underlined__ text'.plainText,
         'Hello world and underlined text',
       );
       expect(
-        r'\*literal\* and _open'.stripFormatting(),
+        r'\*literal\* and _open'.plainText,
         '*literal* and _open',
       );
       expect(
-        'Keep * spaced* literal in v3'.stripFormatting(),
+        'Keep * spaced* literal in v3'.plainText,
         'Keep * spaced* literal in v3',
       );
     });

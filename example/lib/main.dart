@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:typeset/typeset.dart';
 
 void main() {
+  // Set global config once at startup — every TypeSet widget inherits this.
+  TypeSetGlobalConfig.current = TypeSetConfig(
+    autoLinkConfig: TypeSetAutoLinkConfig(
+      linkRecognizerBuilder: (linkText, url) => TapGestureRecognizer()
+        ..onTap = () => debugPrint('Global link tap: $linkText -> $url'),
+    ),
+  );
+
   runApp(const MyApp());
 }
 
@@ -41,6 +49,9 @@ class _TypeSetExampleState extends State<TypeSetExample> {
   late final TypeSetConfig _customConfig;
   static const _softSurfaceColor = Color(0xFFF7F9FE);
   static const _borderColor = Color(0xFFDDE4F2);
+  static const _announcementText =
+      'Pinned update: read https://flutter.dev for docs. '
+      'https://example.com stays plain text under this feature policy.';
 
   @override
   void initState() {
@@ -100,109 +111,192 @@ class _TypeSetExampleState extends State<TypeSetExample> {
           ),
         ),
         child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              const _HeaderBlock(),
-              const SizedBox(height: 16),
-              const _SectionCard(
-                title: 'Simple usage',
-                subtitle: 'Use TypeSet like a regular Text widget.',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _CodeBlock(
-                      code:
-                          "const TypeSet('Hello *TypeSet*! Keep it _simple_.');",
-                    ),
-                    SizedBox(height: 10),
-                    TypeSet(
-                      'Hello *TypeSet*! Keep it _simple_, __readable__, and ~clean~.',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
+          child: TypeSetConfigProvider(
+            config: _customConfig,
+            child: ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                const _HeaderBlock(),
+                const SizedBox(height: 16),
+                const _SectionCard(
+                  title: 'Simple usage',
+                  subtitle:
+                      'Start with a plain widget. No app-wide setup required.',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _CodeBlock(
+                        code:
+                            "const TypeSet('Hello *TypeSet*! Keep it _simple_.');",
+                      ),
+                      SizedBox(height: 10),
+                      TypeSet(
+                        'Hello *TypeSet*! Keep it _simple_, __readable__, and ~clean~.',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 14),
-              _SectionCard(
-                title: 'Live editing',
-                subtitle: 'Edit formatted text and preview it below.',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextField(
-                      controller: _controller,
-                      minLines: 2,
-                      maxLines: 5,
-                      style: const TextStyle(height: 1.35),
-                      decoration: InputDecoration(
-                        hintText: 'Write with *bold* and __underline__',
-                        filled: true,
-                        fillColor: _softSurfaceColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: _borderColor),
+                const SizedBox(height: 14),
+                const _SectionCard(
+                  title: 'Scoped config',
+                  subtitle:
+                      'This subtree shares one style system and an explicit flutter.dev-only link policy.',
+                  child: TypeSet(
+                    'Inside this feature, https://flutter.dev becomes interactive while https://example.com stays plain text.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const _SectionCard(
+                  title: 'String extension',
+                  subtitle:
+                      'Use .typeset() on any string, or .plainText to get plain text.',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _CodeBlock(
+                        code:
+                            "'*Hello* _world_'.typeset(style: TextStyle(fontSize: 16))",
+                      ),
+                      SizedBox(height: 10),
+                      _ExtensionDemo(),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const _SectionCard(
+                  title: 'Escape characters',
+                  subtitle:
+                      r'Use backslash to show literal delimiters: \* \_ \~ \`',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _CodeBlock(
+                        code:
+                            r"const TypeSet(r'Price is 5\*3 = 15, not *bold*')",
+                      ),
+                      SizedBox(height: 10),
+                      TypeSet(
+                        'Price is 5\\*3 = 15, not *bold*',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const _SectionCard(
+                  title: 'Inline code',
+                  subtitle:
+                      'Wrap text in backticks for monospace. No parsing inside.',
+                  child: TypeSet(
+                    'Use `const TypeSet()` for *formatted* display with `inline code`.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                _SectionCard(
+                  title: 'Repeated content',
+                  subtitle:
+                      'Just reuse the same text. TypeSet caches parsed documents automatically.',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TypeSet(
+                        _announcementText,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: _softSurfaceColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: _borderColor),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: _borderColor),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF7A93F5),
-                            width: 1.4,
+                        child: const TypeSet(
+                          _announcementText,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF3557A8),
                           ),
                         ),
                       ),
-                      contextMenuBuilder: (context, editableTextState) {
-                        return AdaptiveTextSelectionToolbar.buttonItems(
-                          anchors: editableTextState.contextMenuAnchors,
-                          buttonItems: [
-                            ...getTypesetContextMenus(
-                              editableTextState: editableTextState,
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                _SectionCard(
+                  title: 'Live editing',
+                  subtitle:
+                      'Editing uses the same config model as display, so the preview stays aligned.',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: _controller,
+                        minLines: 2,
+                        maxLines: 5,
+                        style: const TextStyle(height: 1.35),
+                        decoration: InputDecoration(
+                          hintText: 'Write with *bold* and __underline__',
+                          filled: true,
+                          fillColor: _softSurfaceColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: _borderColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: _borderColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF7A93F5),
+                              width: 1.4,
                             ),
-                            ...editableTextState.contextMenuButtonItems,
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Rendered preview',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: _softSurfaceColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: _borderColor),
+                          ),
+                        ),
+                        contextMenuBuilder: (context, editableTextState) {
+                          return AdaptiveTextSelectionToolbar.buttonItems(
+                            anchors: editableTextState.contextMenuAnchors,
+                            buttonItems: [
+                              ...getTypesetContextMenus(
+                                editableTextState: editableTextState,
+                              ),
+                              ...editableTextState.contextMenuButtonItems,
+                            ],
+                          );
+                        },
                       ),
-                      child: TypeSet(
-                        _controller.text,
-                        style: const TextStyle(fontSize: 16),
-                        config: _customConfig,
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Rendered preview',
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: _softSurfaceColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: _borderColor),
+                        ),
+                        child: TypeSet(
+                          _controller.text,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 14),
-              _SectionCard(
-                title: 'Custom config',
-                subtitle: 'Customize styles and link rules.',
-                child: TypeSet(
-                  'This card uses custom styles and allows links only from https://flutter.dev',
-                  style: const TextStyle(fontSize: 16),
-                  config: _customConfig,
-                ),
-              ),
-              const SizedBox(height: 14),
-              const _SyntaxCard(),
-            ],
+                const SizedBox(height: 14),
+                const _SyntaxCard(),
+              ],
+            ),
           ),
         ),
       ),
@@ -246,7 +340,7 @@ class _HeaderBlock extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            'A simple demo for text formatting in Flutter',
+            'Drop it in, scope config per feature, and keep editing aligned.',
             style: TextStyle(color: Color(0xFF5D6F98)),
           ),
         ],
@@ -319,6 +413,7 @@ class _SyntaxCard extends StatelessWidget {
           _Pill(text: '__underline__'),
           _Pill(text: '~strikethrough~'),
           _Pill(text: '`monospace`'),
+          _Pill(text: r'\*escape\*'),
           _Pill(text: 'https://flutter.dev'),
         ],
       ),
@@ -348,6 +443,30 @@ class _Pill extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+}
+
+class _ExtensionDemo extends StatelessWidget {
+  const _ExtensionDemo();
+
+  @override
+  Widget build(BuildContext context) {
+    const source = '*Hello* _world_ with `code`';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        source.typeset(style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 8),
+        Text(
+          '.plainText → "${source.plainText}"',
+          style: const TextStyle(
+            fontSize: 13,
+            color: Color(0xFF5D6F98),
+            fontFamily: 'Courier',
+          ),
+        ),
+      ],
     );
   }
 }

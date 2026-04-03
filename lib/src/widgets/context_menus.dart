@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:typeset/src/models/typeset_reserved.dart';
+import 'package:typeset/src/reserved.dart';
 
 /// Formatting actions available in the context menu.
 enum TypesetFormatAction {
-  /// Bold formatting.
+  /// Bold (`*text*`).
   bold('Bold'),
 
-  /// Italic formatting.
+  /// Italic (`_text_`).
   italic('Italic'),
 
-  /// Strikethrough formatting.
+  /// Strikethrough (`~text~`).
   strikethrough('Strikethrough'),
 
-  /// Monospace/inline code formatting.
+  /// Monospace (`` `text` ``).
   monospace('Monospace'),
 
-  /// Underline formatting.
+  /// Underline (`__text__`).
   underline('Underline');
 
   const TypesetFormatAction(this.label);
 
-  /// The display label for this action.
+  /// User-facing label for this action.
   final String label;
 
-  /// The delimiter used to wrap selected text with this action.
+  /// The delimiter string that wraps the selected text.
   String get delimiter {
     switch (this) {
       case TypesetFormatAction.bold:
@@ -74,7 +74,9 @@ List<ContextMenuButtonItem> getTypesetContextMenus({
 
 bool _isAlreadyWrapped(String text) {
   for (final delimiter in TypesetReserved.all) {
-    if (text.startsWith(delimiter) && text.endsWith(delimiter)) {
+    if (text.length > delimiter.length * 2 &&
+        text.startsWith(delimiter) &&
+        text.endsWith(delimiter)) {
       return true;
     }
   }
@@ -85,9 +87,7 @@ TextEditingValue _applyFormatAction(
   TextEditingValue value,
   TypesetFormatAction action,
 ) {
-  if (!_hasUsableSelection(value)) {
-    return value;
-  }
+  if (!_hasUsableSelection(value)) return value;
 
   final selectedText = value.selection.textInside(value.text);
   final escapedText = _escapeReservedCharacters(selectedText);
@@ -120,7 +120,7 @@ String _escapeReservedCharacters(String text) {
     final character = text[index];
     if (character == TypesetReserved.escapeChar ||
         TypesetReserved.allSingle.contains(character)) {
-      buffer.write(String.fromCharCode(0x5c));
+      buffer.write(TypesetReserved.escapeChar);
     }
     buffer.write(character);
   }

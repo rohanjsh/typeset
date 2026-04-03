@@ -1,18 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/core/parser/typeset_parser.dart';
-import 'package:typeset/src/core/renderer/typeset_renderer.dart';
-import 'package:typeset/src/core/typeset_ast.dart';
-import 'package:typeset/src/models/ast/typeset_nodes.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
-import 'package:typeset/src/models/typeset_style.dart';
+import 'package:typeset/src/ast/nodes.dart';
+import 'package:typeset/src/ast/plain_text.dart';
+import 'package:typeset/src/config/autolink_config.dart';
+import 'package:typeset/src/config/style.dart';
+import 'package:typeset/src/parser/parser.dart';
+import 'package:typeset/src/renderer/renderer.dart';
 
 /// A compiled TypeSet document for repeated rendering.
 ///
-/// The parsing and AutoLink detection work happen when the document is created.
-/// Rendering can then be repeated with different text styles or recognizers.
-///
-/// If you need different AutoLink detection rules, compile a new document.
+/// Parsing and AutoLink detection happen at compile time.
+/// Rendering can then be repeated with different styles or recognizers.
 @immutable
 final class TypeSetDocument {
   TypeSetDocument._({
@@ -22,7 +20,7 @@ final class TypeSetDocument {
   })  : _nodes = List<TypesetNode>.unmodifiable(nodes),
         _plainText = typesetPlainText(nodes);
 
-  /// Compiles [input] into a reusable parsed document.
+  /// Parses and compiles [input] into a renderable document.
   factory TypeSetDocument.compile(
     String input, {
     TypeSetAutoLinkConfig? autoLinkConfig,
@@ -36,23 +34,18 @@ final class TypeSetDocument {
 
   static const TypesetParser _parser = TypesetParser();
 
-  /// The original source text used to compile this document.
+  /// The original source text.
   final String inputText;
 
-  /// The AutoLink policy used when this document was compiled.
+  /// The AutoLink config used at compile time.
   final TypeSetAutoLinkConfig? autoLinkConfig;
-
   final List<TypesetNode> _nodes;
   final String _plainText;
 
-  /// Returns the rendered content with formatting markers removed.
+  /// Plain text with formatting stripped.
   String get plainText => _plainText;
 
-  /// Renders the compiled document into Flutter [InlineSpan]s.
-  ///
-  /// The document's link boundaries are fixed at compile time. Providing a
-  /// [linkRecognizerBuilder] here only controls whether compiled links are
-  /// interactive during rendering.
+  /// Renders this document into [InlineSpan]s with the given style.
   List<InlineSpan> render({
     TypeSetStyle? style,
     bool showDelimiters = false,

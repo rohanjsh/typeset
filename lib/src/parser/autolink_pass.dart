@@ -1,11 +1,8 @@
-import 'package:typeset/src/models/ast/typeset_nodes.dart';
-import 'package:typeset/src/models/typeset_autolink_config.dart';
+import 'package:typeset/src/ast/ast_utils.dart';
+import 'package:typeset/src/ast/nodes.dart';
+import 'package:typeset/src/config/autolink_config.dart';
 
 /// Post-processing pass that detects and linkifies raw URLs in plain text.
-///
-/// Scans [TypesetTextNode]s for URLs matching `http://`, `https://`, or `www.` patterns.
-/// Converts matching URLs to [TypesetLinkNode]s based on [config].
-/// Skips URLs inside existing links and inline code blocks.
 List<TypesetNode> typesetAutoLink(
   List<TypesetNode> nodes,
   TypeSetAutoLinkConfig config,
@@ -13,16 +10,8 @@ List<TypesetNode> typesetAutoLink(
   return _autoLinkNodes(nodes, config);
 }
 
-/// Regex pattern for detecting URLs in plain text.
-///
-/// Matches: `http://...`, `https://...`, or `www...` (normalized to https).
 final RegExp _urlRegex = RegExp(r'(https?:\/\/[^\s]+|www\.[^\s]+)');
 
-/// Recursively applies AutoLink to all text nodes in the AST.
-///
-/// [TypesetTextNode]: Scanned for URLs and linkified.
-/// [TypesetStyleNode]: Recursively processes children.
-/// [TypesetCodeNode] and [TypesetLinkNode]: Skipped.
 List<TypesetNode> _autoLinkNodes(
   List<TypesetNode> nodes,
   TypeSetAutoLinkConfig config,
@@ -50,17 +39,6 @@ List<TypesetNode> _autoLinkNodes(
   return out;
 }
 
-/// Scans plain text for URLs and converts them to link nodes.
-///
-/// **Algorithm:**
-/// 1. Find all URL matches using [_urlRegex]
-/// 2. For each match:
-///    - Trim trailing punctuation
-///    - Validate the URL against [config]
-///    - Create a [TypesetLinkNode] if valid, otherwise keep as text
-/// 3. Coalesce adjacent text nodes
-///
-/// **Returns:** List of text and link nodes (never null, may be empty)
 List<TypesetNode> _autoLinkText(
   String text,
   TypeSetAutoLinkConfig config,
@@ -74,16 +52,12 @@ List<TypesetNode> _autoLinkText(
   var index = 0;
 
   for (final m in matches) {
-    if (!_hasAutoLinkBoundary(text, m.start)) {
-      continue;
-    }
+    if (!_hasAutoLinkBoundary(text, m.start)) continue;
 
-    // Add text before the URL
     if (m.start > index) {
-      _appendText(out, text.substring(index, m.start));
+      appendTextNode(out, text.substring(index, m.start));
     }
 
-    // Extract and process URL
     final raw = m.group(0)!;
     final trimmed = _trimTrailingPunctuation(raw);
     final urlText = trimmed.url;
@@ -98,54 +72,58 @@ List<TypesetNode> _autoLinkText(
         ),
       );
     } else {
-      _appendText(out, raw);
+      appendTextNode(out, raw);
     }
 
     if (trailing.isNotEmpty) {
-      _appendText(out, trailing);
+      appendTextNode(out, trailing);
     }
 
     index = m.end;
   }
 
   if (index < text.length) {
-    _appendText(out, text.substring(index));
+    appendTextNode(out, text.substring(index));
   }
 
   return out;
 }
 
-/// Normalizes a URL: converts `www.example.com` to `https://www.example.com`.
 String _normalizeAutolinkUrl(String display) {
   if (display.startsWith('www.')) return 'https://$display';
   return display;
 }
 
-/// Validates that a URL is safe to use in a link node.
-///
-/// Checks: scheme allowed, host not empty, domain matches allowlist
-/// (if provided), passes custom validator.
 bool _isValidAutoLink(String url, TypeSetAutoLinkConfig config) {
   final uri = Uri.tryParse(url);
   if (uri == null) return false;
-
   if (!config.allowedSchemes.contains(uri.scheme)) return false;
-
   if (uri.host.isEmpty) return false;
-
   if (config.allowedDomains != null) {
     if (!config.allowedDomains!.hasMatch(uri.host)) return false;
   }
-
   if (config.customValidator != null) {
     if (!config.customValidator!(uri)) return false;
   }
-
   return true;
 }
 
-/// Trims trailing punctuation from a detected URL.
-/// (`.`, `,`, `!`, `?`, `:`, `;`, `)`, `]`)
+// Characters stripped from the trailing end of detected URLs.
+const _dot = 0x2E; // .
+const _comma = 0x2C; // ,
+const _excl = 0x21; // !
+const _question = 0x3F; // ?
+const _colon = 0x3A; // :
+const _quote = 0x22; // "
+const _gt = 0x3E; // >
+const _semi = 0x3B; // ;
+const _lparen = 0x28; // (
+const _rparen = 0x29; // )
+const _lbracket = 0x5B; // [
+const _rbracket = 0x5D; // ]
+const _lbrace = 0x7B; // {
+const _rbrace = 0x7D; // }
+
 ({String url, String trailing}) _trimTrailingPunctuation(String raw) {
   var url = raw;
   var trailing = '';
@@ -153,23 +131,22 @@ bool _isValidAutoLink(String url, TypeSetAutoLinkConfig config) {
   while (url.isNotEmpty) {
     final last = url.codeUnitAt(url.length - 1);
     final isTrim = switch (last) {
-      46 || // .
-      44 || // ,
-      33 || // !
-      63 || // ?
-      58 || // :
-      34 || // "
-      62 || // >
-      59 =>
-        true, // ;
-      41 => _hasExcessClosingDelimiter(url, 40, 41), // )
-      93 => _hasExcessClosingDelimiter(url, 91, 93), // ]
-      125 => _hasExcessClosingDelimiter(url, 123, 125), // }
+      _dot ||
+      _comma ||
+      _excl ||
+      _question ||
+      _colon ||
+      _quote ||
+      _gt ||
+      _semi =>
+        true,
+      _rparen => _hasExcessClosingDelimiter(url, _lparen, _rparen),
+      _rbracket => _hasExcessClosingDelimiter(url, _lbracket, _rbracket),
+      _rbrace => _hasExcessClosingDelimiter(url, _lbrace, _rbrace),
       _ => false,
     };
 
     if (!isTrim) break;
-
     trailing = String.fromCharCode(last) + trailing;
     url = url.substring(0, url.length - 1);
   }
@@ -180,7 +157,6 @@ bool _isValidAutoLink(String url, TypeSetAutoLinkConfig config) {
 bool _hasExcessClosingDelimiter(String text, int open, int close) {
   var opens = 0;
   var closes = 0;
-
   for (final codeUnit in text.codeUnits) {
     if (codeUnit == open) {
       opens += 1;
@@ -188,41 +164,24 @@ bool _hasExcessClosingDelimiter(String text, int open, int close) {
       closes += 1;
     }
   }
-
   return closes > opens;
 }
 
 bool _hasAutoLinkBoundary(String text, int start) {
-  if (start == 0) {
-    return true;
-  }
-
+  if (start == 0) return true;
   return !_isAutoLinkContinuation(text.codeUnitAt(start - 1));
 }
 
 bool _isAutoLinkContinuation(int codeUnit) {
-  final isDigit = codeUnit >= 48 && codeUnit <= 57;
-  final isUpper = codeUnit >= 65 && codeUnit <= 90;
-  final isLower = codeUnit >= 97 && codeUnit <= 122;
-
+  final isDigit = codeUnit >= 0x30 && codeUnit <= 0x39; // 0-9
+  final isUpper = codeUnit >= 0x41 && codeUnit <= 0x5A; // A-Z
+  final isLower = codeUnit >= 0x61 && codeUnit <= 0x7A; // a-z
   return isDigit ||
       isUpper ||
       isLower ||
-      codeUnit == 64 || // @
-      codeUnit == 95 || // _
-      codeUnit == 45 || // -
-      codeUnit == 46 || // .
-      codeUnit == 47; // /
-}
-
-/// Appends text to the output, coalescing adjacent text nodes.
-void _appendText(List<TypesetNode> out, String text) {
-  if (text.isEmpty) return;
-
-  final last = out.isEmpty ? null : out.last;
-  if (last is TypesetTextNode) {
-    out[out.length - 1] = TypesetTextNode(last.text + text);
-  } else {
-    out.add(TypesetTextNode(text));
-  }
+      codeUnit == 0x40 || // @
+      codeUnit == 0x5F || // _
+      codeUnit == 0x2D || // -
+      codeUnit == 0x2E || // .
+      codeUnit == 0x2F; // /
 }

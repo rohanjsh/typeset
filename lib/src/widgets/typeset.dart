@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:typeset/src/core/typeset_runtime.dart';
-import 'package:typeset/src/models/typeset_config.dart';
+import 'package:typeset/src/config/config.dart';
+import 'package:typeset/src/runtime.dart';
 
-/// {@template typeset}
-/// Renders inline rich text with familiar chat-style syntax.
-/// {@endtemplate}
-///
+/// Renders inline rich text with chat-style syntax.
 /// Supports: `*bold*`, `_italic_`, `__underline__`, `~strikethrough~`,
 /// `` `code` ``, AutoLink URLs.
 final class TypeSet extends StatefulWidget {
@@ -29,52 +26,49 @@ final class TypeSet extends StatefulWidget {
     this.config,
   });
 
-  /// Base text style applied to all text.
+  /// Base text style applied to all rendered text.
   final TextStyle? style;
 
-  /// The text to format.
+  /// The markup text to format.
   final String inputText;
 
-  /// How the text should be aligned horizontally.
+  /// {@macro flutter.widgets.Text.textAlign}
   final TextAlign textAlign;
 
-  /// The directionality of the text.
+  /// {@macro flutter.widgets.Text.textDirection}
   final TextDirection? textDirection;
 
-  /// Used to select a font when the same Unicode character can be
-  /// rendered differently.
+  /// {@macro flutter.widgets.Text.locale}
   final Locale? locale;
 
-  /// Whether the text should break at soft line breaks.
+  /// {@macro flutter.widgets.Text.softWrap}
   final bool? softWrap;
 
-  /// How visual overflow should be handled.
+  /// {@macro flutter.widgets.Text.overflow}
   final TextOverflow? overflow;
 
-  /// The number of font pixels for each logical pixel.
+  /// {@macro flutter.widgets.Text.textScaler}
   final TextScaler? textScaler;
 
-  /// An optional maximum number of lines for the text to span.
+  /// {@macro flutter.widgets.Text.maxLines}
   final int? maxLines;
 
-  /// An alternative semantics label for this text.
+  /// {@macro flutter.widgets.Text.semanticsLabel}
   final String? semanticsLabel;
 
-  /// Defines how to measure the width of the rendered text.
+  /// {@macro flutter.widgets.Text.textWidthBasis}
   final TextWidthBasis? textWidthBasis;
 
-  /// Defines how the paragraph will apply [TextStyle.height] to the ascent
-  /// of the first line and descent of the last line.
+  /// {@macro flutter.widgets.Text.textHeightBehavior}
   final TextHeightBehavior? textHeightBehavior;
 
-  /// The color used to paint the selection.
+  /// {@macro flutter.widgets.Text.selectionColor}
   final Color? selectionColor;
 
-  /// The strut style to use. Strut style defines the strut, which set up
-  /// a multi-line paragraph.
+  /// {@macro flutter.widgets.Text.strutStyle}
   final StrutStyle? strutStyle;
 
-  /// Configuration object containing styling and AutoLink settings.
+  /// TypeSet config (style + AutoLink settings).
   final TypeSetConfig? config;
 
   @override
@@ -96,9 +90,7 @@ final class _TypeSetState extends State<TypeSet> {
     );
 
     return Text.rich(
-      TextSpan(
-        children: children,
-      ),
+      TextSpan(children: children),
       textAlign: widget.textAlign,
       style: widget.style,
       textDirection: widget.textDirection,
