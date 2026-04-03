@@ -34,13 +34,11 @@ TypeSet brings **WhatsApp / Telegram-style** inline formatting to Flutter with t
 - 🎨 Theme-aware styles with `TypeSetStyle.fromTheme()`
 - ⚡ AST-based parser with LRU document caching
 - 🧪 95%+ test coverage
-
+  
 ---
-
-## 📱 Preview
-
-<!-- TODO: Replace with your own demo video / GIF / screenshots -->
 <div align="center">
+  
+## 📱 TypeSet in action!
 
 <img width="346" alt="TypeSet Widget" src="https://github.com/user-attachments/assets/08ea94b9-820a-4ec0-aca1-c1a742b8e00f">
 
