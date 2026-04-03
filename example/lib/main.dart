@@ -71,6 +71,7 @@ class _TypeSetExampleState extends State<TypeSetExample> {
         linkStyle: TextStyle(
           color: Color(0xFF0B5FFF),
           decoration: TextDecoration.underline,
+          decorationColor: Color(0xFF0B5FFF),
         ),
         markerColor: Color(0xFF8D8D8D),
       ),

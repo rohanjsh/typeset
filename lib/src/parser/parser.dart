@@ -42,39 +42,52 @@ List<TypesetNode> _parseInline(String input) {
   final frames = <_Frame>[_Frame(delimiter: null, style: null)];
   var i = 0;
 
+  // Track contiguous plain-text runs by start index.
+  // Flushed as a single substring instead of char-by-char concatenation.
+  var textRunStart = -1;
+
+  void flushTextRun() {
+    if (textRunStart >= 0) {
+      appendTextNode(frames.last.children, input.substring(textRunStart, i));
+      textRunStart = -1;
+    }
+  }
+
   while (i < input.length) {
-    final current = frames.last.children;
     final ch = input[i];
 
     // Only consume backslash when the next char is a reserved delimiter.
     // A backslash before a non-reserved char is kept as a literal backslash
     // to avoid silently eating user content like file paths.
     if (ch == TypesetReserved.escapeChar) {
+      flushTextRun();
       if (i + 1 < input.length && _isEscapable(input[i + 1])) {
-        appendTextNode(current, input[i + 1]);
+        appendTextNode(frames.last.children, input[i + 1]);
         i += 2;
       } else {
-        appendTextNode(current, TypesetReserved.escapeChar);
+        appendTextNode(frames.last.children, TypesetReserved.escapeChar);
         i += 1;
       }
       continue;
     }
 
     if (ch == TypesetReserved.monospaceChar) {
+      flushTextRun();
       final end = input.indexOf(TypesetReserved.monospaceChar, i + 1);
       if (end == -1) {
-        appendTextNode(current, TypesetReserved.monospaceChar);
+        appendTextNode(frames.last.children, TypesetReserved.monospaceChar);
         i += 1;
         continue;
       }
       final code = input.substring(i + 1, end);
-      current.add(TypesetCodeNode(code));
+      frames.last.children.add(TypesetCodeNode(code));
       i = end + 1;
       continue;
     }
 
     final delimiter = _readDelimiter(input, i);
     if (delimiter != null) {
+      flushTextRun();
       final canClose = _canCloseDelimiter(input, i, delimiter);
       final canOpen = _canOpenDelimiter(input, i, delimiter);
 
@@ -97,13 +110,13 @@ List<TypesetNode> _parseInline(String input) {
       final crosses =
           frames.take(frames.length - 1).any((f) => f.delimiter == delimiter);
       if (crosses) {
-        appendTextNode(current, delimiter);
+        appendTextNode(frames.last.children, delimiter);
         i += delimiter.length;
         continue;
       }
 
       if (!canOpen) {
-        appendTextNode(current, delimiter);
+        appendTextNode(frames.last.children, delimiter);
         i += delimiter.length;
         continue;
       }
@@ -118,9 +131,12 @@ List<TypesetNode> _parseInline(String input) {
       continue;
     }
 
-    appendTextNode(current, ch);
+    // Plain character — start or continue a text run.
+    if (textRunStart < 0) textRunStart = i;
     i += 1;
   }
+
+  flushTextRun();
 
   while (frames.length > 1) {
     final unclosed = frames.removeLast();

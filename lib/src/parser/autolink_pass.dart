@@ -125,11 +125,10 @@ const _lbrace = 0x7B; // {
 const _rbrace = 0x7D; // }
 
 ({String url, String trailing}) _trimTrailingPunctuation(String raw) {
-  var url = raw;
-  var trailing = '';
+  var end = raw.length;
 
-  while (url.isNotEmpty) {
-    final last = url.codeUnitAt(url.length - 1);
+  while (end > 0) {
+    final last = raw.codeUnitAt(end - 1);
     final isTrim = switch (last) {
       _dot ||
       _comma ||
@@ -140,24 +139,30 @@ const _rbrace = 0x7D; // }
       _gt ||
       _semi =>
         true,
-      _rparen => _hasExcessClosingDelimiter(url, _lparen, _rparen),
-      _rbracket => _hasExcessClosingDelimiter(url, _lbracket, _rbracket),
-      _rbrace => _hasExcessClosingDelimiter(url, _lbrace, _rbrace),
+      _rparen => _hasExcessClosingDelimiter(raw, end, _lparen, _rparen),
+      _rbracket => _hasExcessClosingDelimiter(raw, end, _lbracket, _rbracket),
+      _rbrace => _hasExcessClosingDelimiter(raw, end, _lbrace, _rbrace),
       _ => false,
     };
 
     if (!isTrim) break;
-    trailing = String.fromCharCode(last) + trailing;
-    url = url.substring(0, url.length - 1);
+    end--;
   }
 
-  return (url: url, trailing: trailing);
+  if (end == raw.length) return (url: raw, trailing: '');
+  return (url: raw.substring(0, end), trailing: raw.substring(end));
 }
 
-bool _hasExcessClosingDelimiter(String text, int open, int close) {
+bool _hasExcessClosingDelimiter(
+  String text,
+  int endIndex,
+  int open,
+  int close,
+) {
   var opens = 0;
   var closes = 0;
-  for (final codeUnit in text.codeUnits) {
+  for (var i = 0; i < endIndex; i++) {
+    final codeUnit = text.codeUnitAt(i);
     if (codeUnit == open) {
       opens += 1;
     } else if (codeUnit == close) {

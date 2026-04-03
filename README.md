@@ -1,110 +1,209 @@
-# TypeSet
+<div align="center">
+
+# ✨ TypeSet
+
+**Chat-style inline text formatting for Flutter**
 
 [![pub package](https://img.shields.io/pub/v/typeset.svg)](https://pub.dev/packages/typeset)
+![pub points](https://img.shields.io/pub/points/typeset)
 [![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
 [![build status](https://img.shields.io/github/actions/workflow/status/rohanjsh/typeset/main.yaml)](https://github.com/rohanjsh/typeset/issues)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/rohanjsh/typeset/blob/main/LICENSE)
 
-TypeSet is a Flutter text-formatting package for chat-style inline markup.
+[Getting Started](#-getting-started) · [Usage](#-usage) · [Configuration](#%EF%B8%8F-configuration) · [Editing](#-editing) · [Migration](MIGRATION.md)
 
-It is designed around two goals:
+</div>
 
-- **Plug-and-play adoption**: start with one widget.
-- **Granular control**: tune rendering, linking, and editing behavior when needed.
+---
 
-## Why TypeSet
+## 📖 Overview
 
-- Familiar inline formatting syntax.
-- Works for backend-driven message rendering.
-- Consistent API for display and editing.
-- Configurable AutoLink policy for safer link handling.
+TypeSet brings **WhatsApp / Telegram-style** inline formatting to Flutter with two design goals:
 
-## Install
+| Goal                 | What it means                                                       |
+| -------------------- | ------------------------------------------------------------------- |
+| **Plug-and-play**    | Drop in one widget — zero config needed                             |
+| **Granular control** | Tune styles, AutoLink policy, and editing behavior when you need it |
+
+### Why TypeSet?
+
+- 🔤 Familiar `*bold*` / `_italic_` syntax users already know
+- 🌐 Backend-driven — style text from your server without app updates
+- 🔗 Configurable **AutoLink** with scheme & domain allowlists
+- ✏️ Real-time editing preview via `TypeSetEditingController`
+- 🎨 Theme-aware styles with `TypeSetStyle.fromTheme()`
+- ⚡ AST-based parser with LRU document caching
+- 🧪 95%+ test coverage
+
+---
+
+## 📱 Preview
+
+<!-- TODO: Replace with your own demo video / GIF / screenshots -->
+
+<table>
+  <tr>
+    <th><code>TypeSet</code> widget</th>
+    <th><code>TypeSetEditingController</code></th>
+  </tr>
+  <tr>
+    <td><em><!-- TODO: Add screenshot/GIF for TypeSet widget --></em></td>
+    <td><em><!-- TODO: Add screenshot/GIF for TypeSetEditingController --></em></td>
+  </tr>
+</table>
+
+---
+
+## 🚀 Getting Started
+
+### Installation
 
 ```yaml
 dependencies:
-  typeset: ^3.0.0-beta.1
+  typeset: ^3.0.0
 ```
 
 ```bash
 flutter pub get
 ```
 
-> This is currently a pre-release build (`beta`). Use stable constraints for production once `3.0.0` is published.
+### Minimum Requirements
 
-## Quick start (plug-and-play)
+| Requirement | Version          |
+| ----------- | ---------------- |
+| Dart SDK    | `>=3.0.0 <4.0.0` |
+| Flutter     | `>=3.10.0`       |
+
+> **Coming from v2.x?** See the [Migration Guide](MIGRATION.md) for step-by-step upgrade instructions.
+
+---
+
+## 💡 Usage
+
+### Quick Start
 
 ```dart
 import 'package:typeset/typeset.dart';
 
+// That's it — one widget, zero config
 const TypeSet('Hello *world* from _TypeSet_.');
 ```
 
-## Formatting syntax
+### Formatting Syntax
 
-| Style         | Syntax                 |
-| ------------- | ---------------------- |
-| Bold          | `*text*`               |
-| Italic        | `_text_`               |
-| Underline     | `__text__`             |
-| Strikethrough | `~text~`               |
-| Monospace     | `` `text` ``           |
-| Escape        | `\*literal asterisk\*` |
+| Style                | Syntax        | Output          |
+| -------------------- | ------------- | --------------- |
+| **Bold**             | `*text*`      | **text**        |
+| _Italic_             | `_text_`      | _text_          |
+| <ins>Underline</ins> | `__text__`    | <ins>text</ins> |
+| ~~Strikethrough~~    | `~text~`      | ~~text~~        |
+| `Monospace`          | `` `text` ``  | `text`          |
+| Escape               | `\*literal\*` | \*literal\*     |
 
-> Note on link behavior:
+### AutoLink (URL Detection)
+
+Raw URLs like `https://flutter.dev` and `www.example.com` are **automatically detected** and rendered as links when AutoLink is enabled (default).
+
+> [!NOTE]
 >
-> - Raw URLs such as `https://flutter.dev` and `www.example.com` are detected and rendered with link style when AutoLink is enabled.
-> - Tap/click handling is opt-in through `TypeSetAutoLinkConfig.linkRecognizerBuilder`.
-> - If no recognizer is provided, links are rendered as styled text without interaction.
+> - Tap handling is **opt-in** via `TypeSetAutoLinkConfig.linkRecognizerBuilder`.
+> - Without a recognizer, links are styled but not interactive.
+> - AutoLink respects `allowedSchemes` and `allowedDomains` for safety.
 
-## Under the hood
+### String Extension
 
-For parser/rendering internals and algorithm details, see [doc/UNDER_THE_HOOD.md](doc/UNDER_THE_HOOD.md).
+```dart
+// Use the .typeset() extension for inline usage
+'Hello *world*'.typeset(style: myTextStyle);
 
-## Custom configuration
+// Extract plain text (markers removed)
+final plain = 'Hello *world*'.plainText; // "Hello world"
+```
 
-TypeSet uses `TypeSetConfig` to centralize behavior.
+---
+
+## ⚙️ Configuration
+
+TypeSet uses a layered config system with clear precedence:
+
+```
+Local config  →  Scoped provider  →  Global config  →  Library defaults
+(highest priority)                                      (lowest priority)
+```
+
+### `TypeSetConfig`
+
+Centralizes all style and AutoLink behavior:
 
 ```dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:typeset/typeset.dart';
 
-final customConfig = TypeSetConfig(
+final config = TypeSetConfig(
   style: const TypeSetStyle(
     boldStyle: TextStyle(fontWeight: FontWeight.w900),
     italicStyle: TextStyle(fontStyle: FontStyle.italic, color: Color(0xFF6A1B9A)),
     underlineStyle: TextStyle(decorationThickness: 3),
+    monospaceStyle: TextStyle(fontFamily: 'Courier', backgroundColor: Color(0xFFEFF3FF)),
+    linkStyle: TextStyle(color: Color(0xFF0B5FFF), decoration: TextDecoration.underline),
     markerColor: Color(0xFF8D8D8D),
-    linkStyle: TextStyle(
-      color: Color(0xFF0B5FFF),
-      decoration: TextDecoration.underline,
-    ),
-    monospaceStyle: TextStyle(
-      fontFamily: 'Courier',
-      backgroundColor: Color(0xFFEFF3FF),
-    ),
   ),
   autoLinkConfig: TypeSetAutoLinkConfig(
     allowedSchemes: {'https'},
-    allowedDomains: RegExp(r'^flutter\\.dev$'),
+    allowedDomains: RegExp(r'^flutter\.dev$'),
     linkRecognizerBuilder: (text, url) =>
-        TapGestureRecognizer()..onTap = () {
-          // Route the URL with your app's navigation/link strategy.
-        },
+        TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(url)),
   ),
 );
 
-TypeSet(
-  'Read *docs* at https://flutter.dev',
-  config: customConfig,
-);
+TypeSet('Read *docs* at https://flutter.dev', config: config);
 ```
 
-## Set defaults (scoped or app-wide)
+### Theme-Aware Styles
 
-TypeSet starts with `TypeSetConfig.defaults()`.
+```dart
+// Automatically adapts to your app's ColorScheme
+final style = TypeSetStyle.fromTheme(Theme.of(context));
+```
 
-Use scoped defaults for part of the widget tree:
+<details>
+<summary><strong>📋 Full <code>TypeSetStyle</code> properties</strong></summary>
+
+| Property             | Type         | Description                                 |
+| -------------------- | ------------ | ------------------------------------------- |
+| `boldStyle`          | `TextStyle?` | Style for `*bold*` text                     |
+| `italicStyle`        | `TextStyle?` | Style for `_italic_` text                   |
+| `underlineStyle`     | `TextStyle?` | Style for `__underline__` text              |
+| `strikethroughStyle` | `TextStyle?` | Style for `~strikethrough~` text            |
+| `linkStyle`          | `TextStyle?` | Style for AutoLinked URLs                   |
+| `monospaceStyle`     | `TextStyle?` | Style for `` `code` `` text                 |
+| `markerColor`        | `Color?`     | Color for formatting markers (editing mode) |
+
+</details>
+
+<details>
+<summary><strong>🔗 Full <code>TypeSetAutoLinkConfig</code> properties</strong></summary>
+
+| Property                | Type                                          | Description                                        |
+| ----------------------- | --------------------------------------------- | -------------------------------------------------- |
+| `allowedSchemes`        | `Set<String>?`                                | Allowed URL schemes (default: `{'http', 'https'}`) |
+| `allowedDomains`        | `RegExp?`                                     | Regex filter for allowed hostnames                 |
+| `customValidator`       | `bool Function(Uri)?`                         | Additional URI validation callback                 |
+| `linkRecognizerBuilder` | `GestureRecognizer Function(String, String)?` | Builds a recognizer for each link                  |
+
+**Presets:**
+
+| Preset                            | Description           |
+| --------------------------------- | --------------------- |
+| `TypeSetAutoLinkConfig.httpsOnly` | Only `https` links    |
+| `TypeSetAutoLinkConfig.disabled`  | No AutoLink detection |
+
+</details>
+
+### Scoped Configuration
+
+Apply config to a subtree using `TypeSetConfigProvider`:
 
 ```dart
 TypeSetConfigProvider(
@@ -115,17 +214,29 @@ TypeSetConfigProvider(
 );
 ```
 
-You can also set global defaults at app startup:
+### Global Configuration
+
+Set app-wide defaults at startup:
 
 ```dart
-TypeSetGlobalConfig.instance = TypeSetConfig.defaults();
+void main() {
+  TypeSetGlobalConfig.current = TypeSetConfig(
+    autoLinkConfig: TypeSetAutoLinkConfig.httpsOnly,
+  );
+  runApp(const MyApp());
+}
 ```
 
-`TypeSet(config: ...)` and `TypeSetEditingController(config: ...)` always allow per-usage overrides when needed.
+> [!TIP]
+> Per-widget `config:` always takes the highest priority, so you can override any default locally.
 
-## Editing experience
+---
 
-Use `TypeSetEditingController` for real-time formatted previews in `TextField`.
+## ✏️ Editing
+
+### `TypeSetEditingController`
+
+Drop-in replacement for `TextEditingController` with live formatting preview:
 
 ```dart
 final controller = TypeSetEditingController(
@@ -134,9 +245,23 @@ final controller = TypeSetEditingController(
     style: const TypeSetStyle(markerColor: Color(0xFF9E9E9E)),
   ),
 );
+
+TextField(
+  controller: controller,
+  maxLines: 5,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: 'Type formatted text…',
+  ),
+);
 ```
 
-Add context menu actions:
+> [!NOTE]
+> Live formatting automatically disables when text exceeds `maxLiveFormattingLength` (default: 5000 chars) to prevent UI jank.
+
+### Context Menu Integration
+
+Add formatting buttons to the text selection toolbar:
 
 ```dart
 TextField(
@@ -147,39 +272,98 @@ TextField(
       buttonItems: [
         ...getTypesetContextMenus(
           editableTextState: editableTextState,
-          styleTypes: const [
-            StyleTypeEnum.bold,
-            StyleTypeEnum.italic,
-            StyleTypeEnum.underline,
+          actions: [
+            TypesetFormatAction.bold,
+            TypesetFormatAction.italic,
+            TypesetFormatAction.underline,
           ],
         ),
         ...editableTextState.contextMenuButtonItems,
       ],
     );
   },
-)
+);
 ```
 
-## Migration
+<details>
+<summary><strong>Available <code>TypesetFormatAction</code> values</strong></summary>
 
-Version `3.0.0` includes breaking changes.
+| Action          | Wraps with   |
+| --------------- | ------------ |
+| `bold`          | `*text*`     |
+| `italic`        | `_text_`     |
+| `strikethrough` | `~text~`     |
+| `monospace`     | `` `text` `` |
+| `underline`     | `__text__`   |
 
-- Read [MIGRATION.md](MIGRATION.md)
-- Review [CHANGELOG.md](CHANGELOG.md)
+</details>
 
-## Example app
+---
 
-Run the package example:
+## 🏗️ Architecture
+
+<details>
+<summary><strong>Parser pipeline (under the hood)</strong></summary>
+
+TypeSet uses a deterministic **3-stage pipeline**:
+
+```
+Input string  →  Parser (AST)  →  AutoLink pass  →  Renderer (InlineSpans)
+```
+
+1. **Parse** — Single left-to-right pass with a frame stack → typed AST nodes
+2. **AutoLink** — Transforms URL-like text nodes into link nodes (config-driven)
+3. **Render** — Maps AST nodes to Flutter `InlineSpan`s
+
+**Performance:** ~O(n) for all stages. An LRU cache (`TypeSetDocumentCache`) avoids re-parsing identical inputs.
+
+For full details, see [`doc/UNDER_THE_HOOD.md`](doc/UNDER_THE_HOOD.md).
+
+</details>
+
+---
+
+## 🔄 Migration from v2.x
+
+Version `3.0.0` includes breaking changes. The upgrade is straightforward — see the full guide:
+
+👉 **[MIGRATION.md](MIGRATION.md)** — step-by-step instructions with before/after code
+
+Quick summary of what changed:
+
+| Area               | v2.x                                              | v3.0                                    |
+| ------------------ | ------------------------------------------------- | --------------------------------------- |
+| Underline syntax   | `#text#`                                          | `__text__`                              |
+| Escape character   | `¦` (broken bar)                                  | `\` (backslash)                         |
+| Widget styling     | Individual params (`linkStyle`, `boldStyle`, …)   | `TypeSetConfig` object                  |
+| Controller styling | Individual params (`markerColor`, `linkStyle`, …) | `TypeSetConfig` object                  |
+| Link syntax        | `§text\|url§` (explicit marker)                   | AutoLink detection (URLs auto-detected) |
+| Context menu link  | `StyleTypeEnum.link`                              | Removed (use AutoLink instead)          |
+| Font size syntax   | `text<24>`                                        | Removed                                 |
+| Dependency         | `url_launcher` required                           | No external dependencies                |
+| Config scope       | Per-widget only                                   | Global → Scoped → Local cascade         |
+
+---
+
+## 📂 Example App
 
 ```bash
 cd example
 flutter run
 ```
 
-## Contributing
+---
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution and release guidelines.
+## 🤝 Contributing
 
-## License
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Apache-2.0. See [LICENSE](LICENSE).
+- 🐛 [Report a bug](https://github.com/rohanjsh/typeset/issues/new)
+- 💡 [Request a feature](https://github.com/rohanjsh/typeset/issues/new)
+- 💬 [Discussions](https://github.com/rohanjsh/typeset/discussions)
+
+---
+
+## 📝 License
+
+Apache-2.0 — see [LICENSE](LICENSE).
