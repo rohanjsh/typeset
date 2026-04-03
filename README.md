@@ -40,11 +40,12 @@ TypeSet brings **WhatsApp / Telegram-style** inline formatting to Flutter with t
 ## 📱 Preview
 
 <!-- TODO: Replace with your own demo video / GIF / screenshots -->
-
 <div align="center">
 
-https://github.com/user-attachments/assets/8318ffb6-662f-404c-9862-bd31cdd3fb7c
+<img width="346" alt="TypeSet Widget" src="https://github.com/user-attachments/assets/08ea94b9-820a-4ec0-aca1-c1a742b8e00f">
+
 </div>
+
 
 ---
 
