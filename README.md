@@ -41,16 +41,10 @@ TypeSet brings **WhatsApp / Telegram-style** inline formatting to Flutter with t
 
 <!-- TODO: Replace with your own demo video / GIF / screenshots -->
 
-<table>
-  <tr>
-    <th><code>TypeSet</code> widget</th>
-    <th><code>TypeSetEditingController</code></th>
-  </tr>
-  <tr>
-    <td><em><!-- TODO: Add screenshot/GIF for TypeSet widget --></em></td>
-    <td><em><!-- TODO: Add screenshot/GIF for TypeSetEditingController --></em></td>
-  </tr>
-</table>
+<div align="center">
+
+https://github.com/user-attachments/assets/8318ffb6-662f-404c-9862-bd31cdd3fb7c
+</div>
 
 ---
 
