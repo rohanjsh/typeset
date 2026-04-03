@@ -1,48 +1,41 @@
-// ignore_for_file: lines_longer_than_80_chars
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:typeset/typeset.dart';
+import 'package:typeset/src/reserved.dart';
 
 void main() {
-  group(
-    'TypesetReserved Tests',
-    () {
-      test('Accessing all constants', testAccessAllConstants);
-      test('Escape Literal', testEscapeLiteral);
-      test('Bold Character Formatting', testBoldCharFormatting);
-      test('Font Size Regex Matching', testFontSizeRegexMatching);
-    },
-  );
-}
+  group('TypesetReserved Tests', () {
+    test('constants have expected values', () {
+      expect(TypesetReserved.escapeChar, equals(r'\'));
+      expect(TypesetReserved.boldChar, equals('*'));
+      expect(TypesetReserved.italicChar, equals('_'));
+      expect(TypesetReserved.strikethroughChar, equals('~'));
+      expect(TypesetReserved.monospaceChar, equals('`'));
+      expect(TypesetReserved.underlineChar, equals('__'));
+    });
 
-// Accessing all the constants should return the expected values.
-void testAccessAllConstants() {
-  expect(TypesetReserved.escapeLiteral, equals('¦'));
-  expect(TypesetReserved.boldChar, equals('*'));
-  expect(TypesetReserved.italicChar, equals('_'));
-  expect(TypesetReserved.strikethroughChar, equals('~'));
-  expect(TypesetReserved.monospaceChar, equals('`'));
-  expect(TypesetReserved.underlineChar, equals('#'));
-  expect(TypesetReserved.linkChar, equals('§'));
-  expect(TypesetReserved.linkSplitChar, equals('|'));
-}
+    test('allSingle contains only single-char delimiters', () {
+      expect(
+        TypesetReserved.allSingle,
+        equals({'*', '_', '~', '`'}),
+      );
+    });
 
-void testEscapeLiteral() {
-  const text =
-      'This is an example of ${TypesetReserved.escapeLiteral}escaping${TypesetReserved.escapeLiteral} character.';
-  expect(text, equals('This is an example of ¦escaping¦ character.'));
-}
+    test('all contains all delimiters', () {
+      expect(
+        TypesetReserved.all,
+        equals({'*', '_', '~', '`', '__'}),
+      );
+    });
 
-void testBoldCharFormatting() {
-  const text =
-      'This is an ${TypesetReserved.boldChar}example${TypesetReserved.boldChar} of bold formatting.';
-  expect(text, equals('This is an *example* of bold formatting.'));
-}
+    test('bold char formatting', () {
+      const text = 'This is an ${TypesetReserved.boldChar}example'
+          '${TypesetReserved.boldChar} of bold formatting.';
+      expect(text, equals('This is an *example* of bold formatting.'));
+    });
 
-void testFontSizeRegexMatching() {
-  final regex = RegExp(TypesetReserved.fontSizeRegex);
-  expect(regex.hasMatch('This is an example<12>'), isTrue);
-  expect(regex.hasMatch('This is another example<24>'), isTrue);
-  expect(regex.hasMatch('This is a third example<36>'), isTrue);
-  expect(regex.hasMatch('This is not an example'), isFalse);
+    test('underline uses double underscore', () {
+      const text = 'This is ${TypesetReserved.underlineChar}underlined'
+          '${TypesetReserved.underlineChar} text.';
+      expect(text, equals('This is __underlined__ text.'));
+    });
+  });
 }

@@ -1,11 +1,13 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/painting.dart';
-import 'package:typeset/src/view/typeset.dart';
+import 'package:flutter/widgets.dart';
+import 'package:typeset/src/config/config.dart';
+import 'package:typeset/src/document.dart';
+import 'package:typeset/src/widgets/typeset.dart';
 
-///TypeSet extension on String to use [typeset] method
+/// String extension for ergonomic TypeSet usage.
 extension TypeSetExtension on String {
-  ///[typeset] method to format the text with different styles
+  /// Renders this string as a [TypeSet] widget.
   TypeSet typeset({
+    Key? key,
     TextStyle? style,
     TextAlign textAlign = TextAlign.start,
     TextDirection? textDirection,
@@ -19,13 +21,11 @@ extension TypeSetExtension on String {
     TextHeightBehavior? textHeightBehavior,
     Color? selectionColor,
     StrutStyle? strutStyle,
-    GestureRecognizer Function(String linkText, String url)? recognizerBuilder,
-    TextStyle? linkStyle,
-    TextStyle? boldStyle,
-    TextStyle? monospaceStyle,
+    TypeSetConfig? config,
   }) {
     return TypeSet(
       this,
+      key: key,
       style: style,
       textAlign: textAlign,
       textDirection: textDirection,
@@ -39,10 +39,10 @@ extension TypeSetExtension on String {
       textHeightBehavior: textHeightBehavior,
       selectionColor: selectionColor,
       strutStyle: strutStyle,
-      linkRecognizerBuilder: recognizerBuilder,
-      linkStyle: linkStyle,
-      boldStyle: boldStyle,
-      monospaceStyle: monospaceStyle,
+      config: config,
     );
   }
+
+  /// Returns the plain-text representation with formatting markers removed.
+  String get plainText => TypeSetDocument.compile(this).plainText;
 }

@@ -1,23 +1,31 @@
 name: typeset
-description: Whatsapp like text styling for you! -- Bold, Italic, Underline and more -- Drive your text style through Backend!
-version: 2.3.0
+description: Flutter inline text formatter for chat-style markup with plug-and-play usage and granular configuration for rendering, links, and editing.
+version: 3.0.0-beta.2
+homepage: https://github.com/rohanjsh/typeset
 repository: https://github.com/rohanjsh/typeset/
+issue_tracker: https://github.com/rohanjsh/typeset/issues
+documentation: https://pub.dev/packages/typeset
+topics:
+  - text
+  - rich-text
+  - markdown
+  - formatter
+  - messaging
+  - chat
 screenshots:
   - description: "Examples of the typeset formatters"
     path: demo.png
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.3.7"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: ^6.3.1
-
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
-  very_good_analysis: ">=3.1.0 <10.0.0"
+  very_good_analysis: ">=3.1.0 <11.0.0"

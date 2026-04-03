@@ -1,9 +1,12 @@
-/// This supports the input from backend to be formatted
-/// with different formatters
 library typeset;
 
-export 'src/core/typeset_reserved.dart';
-export 'src/view/typeset.dart';
-export 'src/view/typeset_context_menus.dart';
-export 'src/view/typeset_editing_controller.dart';
-export 'src/view/typeset_ext.dart';
+export 'src/config/autolink_config.dart';
+export 'src/config/config.dart';
+export 'src/config/config_provider.dart';
+export 'src/config/global_config.dart';
+export 'src/config/style.dart';
+export 'src/document_cache.dart';
+export 'src/widgets/context_menus.dart';
+export 'src/widgets/editing_controller.dart';
+export 'src/widgets/extensions.dart';
+export 'src/widgets/typeset.dart';
